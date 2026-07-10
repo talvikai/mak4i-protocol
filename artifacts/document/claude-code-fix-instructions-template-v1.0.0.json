@@ -1,0 +1,16 @@
+{
+  "id": "claude-code-fix-instructions-template",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "template",
+  "name": "Claude Code Fix Instructions Template",
+  "description": "Reusable template for generating Claude Code fix instruction documents. Covers triage format, priority classification (P0/P1/P2/P3), code examples, commit order, and testing checklist structure. Eliminates reformatting fix docs each session.",
+  "token_estimate": 300,
+  "ai_platforms": ["claude"],
+  "injection_hint": "inline",
+  "tags": ["claude-code", "fix", "template", "instructions", "triage"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-06-25",
+  "updated_at": "2026-06-25"
+}

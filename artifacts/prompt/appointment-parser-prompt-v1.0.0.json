@@ -1,0 +1,16 @@
+{
+  "id": "appointment-parser-prompt",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "prompt",
+  "name": "Appointment Parser Prompt",
+  "description": "Reusable Claude prompt for parsing appointment details from natural language text and MMS photos. Extracts business_name, date, time, location, notes with confidence level. Returns structured JSON. Used in Reminder AI app for SMS-based appointment reminder parsing.",
+  "token_estimate": 250,
+  "ai_platforms": ["claude"],
+  "injection_hint": "system",
+  "tags": ["appointment", "parser", "prompt", "sms", "reminder", "claude"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-06-25",
+  "updated_at": "2026-06-25"
+}

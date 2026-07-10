@@ -1,0 +1,16 @@
+{
+  "id": "multitenant-slug-auth-pattern",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "code",
+  "name": "Multi-tenant Slug Auth Pattern",
+  "description": "Reusable authentication pattern for multi-tenant SaaS applications using slug-based subdomains (slug.domain.com). Covers Firebase Auth + custom slug resolution, requireAuth middleware, post-login role-based routing, and session management. Built for Schedovia architecture.",
+  "token_estimate": 600,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "inline",
+  "tags": ["auth", "multitenant", "slug", "firebase", "nodejs", "saas"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-06-25",
+  "updated_at": "2026-06-25"
+}

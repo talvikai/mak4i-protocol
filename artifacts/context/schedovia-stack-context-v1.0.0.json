@@ -1,0 +1,16 @@
+{
+  "id": "schedovia-stack-context",
+  "version": "1.0.0",
+  "type": "episodic",
+  "layer": "context",
+  "name": "Schedovia Stack Context",
+  "description": "Full stack context for Schedovia appointment scheduling SaaS. Eliminates re-explaining architecture, business rules, and patterns each session. Covers Firebase Auth, React, Node.js, GCP Cloud Run us-east5, Cloud SQL PostgreSQL, Memorystore Redis, Twilio SMS, Resend email, Square payments. Includes pricing model, pilot strategy, and fix round history.",
+  "token_estimate": 1500,
+  "ai_platforms": ["claude", "chatgpt", "any"],
+  "injection_hint": "prepend",
+  "tags": ["schedovia", "stack", "context", "wdtech", "saas", "gcp"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-06-23",
+  "updated_at": "2026-06-25"
+}

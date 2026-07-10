@@ -1,0 +1,16 @@
+{
+  "id": "wd-docx-framework",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "framework",
+  "name": "WD Technology DOCX Framework",
+  "description": "Reusable Node.js framework for generating professional DOCX documents. Eliminates rebuilding document generation logic each session. Includes helpers, styles, tables, template, and PDF generator. Command: node run.js --format docx --content content/my_content.js",
+  "token_estimate": 1200,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "inline",
+  "tags": ["docx", "document", "framework", "nodejs", "wdtech"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-06-23",
+  "updated_at": "2026-06-25"
+}

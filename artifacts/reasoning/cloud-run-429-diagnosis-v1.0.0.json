@@ -1,0 +1,16 @@
+{
+  "id": "cloud-run-429-diagnosis",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "reasoning",
+  "name": "GCP Cloud Run 429 Error Diagnosis",
+  "description": "Reusable diagnosis pattern for 429 Too Many Requests errors on GCP Cloud Run. Covers concurrency limits, min/max instances, CPU throttling, connection pool exhaustion, and Redis rate limiting. Includes fix patterns for each root cause.",
+  "token_estimate": 350,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "inline",
+  "tags": ["gcp", "cloud-run", "429", "diagnosis", "rate-limit"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-06-25",
+  "updated_at": "2026-06-25"
+}
