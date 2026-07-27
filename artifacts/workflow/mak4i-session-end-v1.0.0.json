@@ -1,0 +1,73 @@
+{
+  "id": "mak4i-session-end",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "workflow",
+  "name": "MAK4I Session End — Daily Repo Sync Skill",
+  "description": "Run this skill at the END of every productive Claude session. Captures new artifacts created during the session, updates the artifact index and savings log, packages the repo zip, and pushes to GitHub. This ensures no session output is lost and the repo stays current. The daily habit that compounds MAK4I value over time.",
+  "token_estimate": 200,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "inline",
+  "tags": ["daily", "session-end", "repo-sync", "github", "skill", "workflow"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-07-09",
+  "updated_at": "2026-07-09",
+  "content": {
+    "steps": [
+      {
+        "step": 1,
+        "action": "Identify new artifacts from this session",
+        "detail": "Ask Claude to list everything new that was produced this session that should be saved as a MAK4I artifact.",
+        "command": "Review this session. What new artifacts, skills, decisions, or context was produced that should be saved to the MAK4I repo? List them by type: procedural (skills), semantic (knowledge), episodic (history).",
+        "verify": "Claude lists new artifacts with suggested IDs and types"
+      },
+      {
+        "step": 2,
+        "action": "Create new artifact JSON files",
+        "detail": "For each new artifact identified, create a properly formatted JSON file following MAK-0001 schema.",
+        "command": "Create MAK4I artifact JSON files for each item in the list. Follow MAK-0001 schema. Place in the correct artifacts/ subdirectory by type. Include honest token_estimate.",
+        "verify": "All new artifact JSON files created in correct directories"
+      },
+      {
+        "step": 3,
+        "action": "Update ARTIFACT_INDEX.md",
+        "detail": "Add all new artifacts to the index with their description and token savings.",
+        "command": "Update ARTIFACT_INDEX.md to include all new artifacts from this session. Add to the summary table and the detailed section.",
+        "verify": "ARTIFACT_INDEX.md reflects all artifacts including today's new ones"
+      },
+      {
+        "step": 4,
+        "action": "Update SAVINGS_LOG",
+        "detail": "Record today's session token savings in the log.",
+        "command": "Update docs/MAK4I_SAVINGS_LOG.md with today's session. Add: date, artifacts used, estimated tokens saved, new artifacts created.",
+        "verify": "SAVINGS_LOG updated with today's entry"
+      },
+      {
+        "step": 5,
+        "action": "Update SESSION_STARTER if significant changes",
+        "detail": "If major decisions were made or milestones hit, update the SESSION_STARTER.md so next session has current state.",
+        "command": "Does the SESSION_STARTER.md need updating based on today's work? If yes, update the relevant sections: current status, completed items, next steps.",
+        "verify": "SESSION_STARTER reflects current state of all three tracks"
+      },
+      {
+        "step": 6,
+        "action": "Package the repo zip",
+        "detail": "Create an updated mak4i-protocol.zip with all new and updated files.",
+        "command": "cd /home/claude && rm -f mak4i-protocol.zip && zip -r mak4i-protocol.zip mak4i-protocol/ --exclude '*/.DS_Store' --exclude '*.zip' --exclude '*/node_modules/*' && cp mak4i-protocol.zip /mnt/user-data/outputs/mak4i-protocol.zip",
+        "verify": "mak4i-protocol.zip created and copied to outputs"
+      },
+      {
+        "step": 7,
+        "action": "Push to GitHub",
+        "detail": "Push all changes to the private repo. Goes public July 31.",
+        "command": "cd ~/path/to/mak4i-protocol\n# Copy updated files from zip\ngit add .\ngit commit -m 'feat: [describe what was added today]\n\n- [new artifact 1]\n- [updated file 2]\n- [savings log updated]'\ngit push origin main",
+        "verify": "GitHub repo updated. Confirm at github.com/talvikai/mak4i-protocol"
+      }
+    ],
+    "expected_outcome": "All session outputs captured. Repo updated. Savings log current. SESSION_STARTER ready for tomorrow. GitHub synced. Zero session work lost.",
+    "time_required": "5-10 minutes",
+    "frequency": "Every productive Claude session — daily",
+    "skip_if": "Session was purely exploratory with no new artifacts, decisions, or significant context changes"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "mak4i-session-start",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "workflow",
+  "name": "MAK4I Session Start — Daily Injection Skill",
+  "description": "Run this skill at the START of every Claude session. Loads all relevant MAK4I artifacts before work begins. Eliminates re-explaining context, stack, skills, and history every session. This is the core MAK4I daily habit.",
+  "token_estimate": 5000,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "prepend",
+  "tags": ["daily", "session-start", "injection", "skill", "workflow"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-07-09",
+  "updated_at": "2026-07-09",
+  "content": {
+    "steps": [
+      {
+        "step": 1,
+        "action": "Upload mak4i-protocol.zip to Claude session",
+        "detail": "Drag and drop /mnt/user-data/outputs/mak4i-protocol.zip or the local copy into the Claude chat window. This makes all artifacts available in the session.",
+        "command": null,
+        "verify": "Claude confirms the zip is uploaded and visible"
+      },
+      {
+        "step": 2,
+        "action": "Instruct Claude to unzip and load artifacts",
+        "detail": "Paste this instruction at the start of the session:",
+        "command": "Please unzip the mak4i-protocol.zip and read the following files before we start:\n1. ARTIFACT_INDEX.md — full list of all artifacts\n2. artifacts/context/schedovia-stack-context-v1.0.0.json — Schedovia project context\n3. docs/MAK4I_SAVINGS_LOG.md — current token savings\n4. SESSION_STARTER.md if present — current project state\nConfirm when loaded and summarize what's available.",
+        "verify": "Claude confirms artifacts loaded and summarizes key context"
+      },
+      {
+        "step": 3,
+        "action": "Load track-specific artifacts based on today's work",
+        "detail": "Tell Claude which track you're working on today so it loads the right artifacts:",
+        "command": "Today I am working on: [Schedovia / MAK4I / Reminder App / All three]\nPlease also load the relevant artifacts for that track.",
+        "verify": "Claude confirms track context loaded"
+      },
+      {
+        "step": 4,
+        "action": "Confirm session is ready",
+        "detail": "Claude should confirm what's loaded before any work begins.",
+        "command": "Confirm: what context do you have loaded for this session? What can you help me with immediately without re-explanation?",
+        "verify": "Claude lists loaded artifacts and confirms it knows the stack, current state, and open tasks"
+      }
+    ],
+    "expected_outcome": "Claude session starts with full context. No re-explaining needed. Continue work immediately from where last session ended.",
+    "time_required": "2-3 minutes",
+    "frequency": "Every Claude session — daily"
+  }
+}

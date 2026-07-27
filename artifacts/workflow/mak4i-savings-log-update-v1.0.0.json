@@ -1,0 +1,46 @@
+{
+  "id": "mak4i-savings-log-update",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "workflow",
+  "name": "MAK4I Savings Log Update Skill",
+  "description": "Run at the end of every session to record token savings in the SAVINGS_LOG. Tracks what was reused, what was new, and the running total. This log is the production evidence that powers the MAK4I pre-seed pitch. Every entry is real data, not projections.",
+  "token_estimate": 50,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "inline",
+  "tags": ["daily", "savings-log", "tracking", "evidence", "skill"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-07-09",
+  "updated_at": "2026-07-09",
+  "content": {
+    "trigger": "End of every Claude session",
+    "file_location": "docs/MAK4I_SAVINGS_LOG.md",
+    "command": "Update docs/MAK4I_SAVINGS_LOG.md with today's session. Ask Claude:\n\n'Review this session. For the savings log, tell me:\n1. Which existing artifacts were REUSED and how many tokens each saved\n2. Which artifacts were ADAPTED and approximate tokens saved\n3. Which NEW artifacts were created and their estimated future token savings per use\n4. Today's session total tokens saved\n5. New running total (previous total + today)\n\nFormat as a table row for the log.'",
+    "log_format": {
+      "session_entry_template": "| [DATE] | [TRACK] | REUSED: [artifact-id] x[N uses] | [tokens saved] | [notes] |",
+      "new_artifact_template": "| [DATE] | [TRACK] | NEW: [artifact-id] | 0 (future: ~[N]/use) | [description] |",
+      "summary_update": "Update the Summary table at the top of the log with new totals"
+    },
+    "what_to_track": {
+      "reused": {
+        "what": "Existing artifact loaded and used without changes",
+        "tokens_saved": "Full token_estimate from artifact JSON",
+        "example": "Loaded schedovia-stack-context → saved 1,500 tokens"
+      },
+      "adapted": {
+        "what": "Existing artifact used as a base but modified",
+        "tokens_saved": "Approximately 50-70% of token_estimate",
+        "example": "Adapted gcp-wildcard-cert workflow → saved ~350 tokens"
+      },
+      "new": {
+        "what": "Built from scratch — no existing artifact found",
+        "tokens_saved": "0 this session",
+        "future_savings": "token_estimate per future use",
+        "example": "Created mak4i-check-before-create → 0 saved today, ~100/future use"
+      }
+    },
+    "why_this_matters": "The SAVINGS_LOG is Talvik's pre-seed evidence. Real numbers from real production use. Every logged session adds to the proof that MAK4I delivers measurable value. The goal: 12 months of data before the pre-seed pitch in late 2027.",
+    "honesty_rule": "Never inflate token savings. Be conservative. An honest lower number is more credible than an optimistic higher one. Investors will scrutinize these numbers."
+  }
+}

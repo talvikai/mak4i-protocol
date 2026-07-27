@@ -1,0 +1,115 @@
+{
+  "id": "mak4i-check-before-create",
+  "version": "1.0.0",
+  "type": "procedural",
+  "layer": "workflow",
+  "name": "MAK4I Check Before Create — DRY Enforcement Skill",
+  "description": "Run this skill BEFORE creating any document, artifact, code pattern, workflow, or prompt. Checks if the work was done before, reuses existing artifacts if found, stores new artifacts when first created, and logs token savings after every use. This is the skill that makes MAK4I self-compounding. The more you use it, the more tokens you save.",
+  "token_estimate": 100,
+  "ai_platforms": ["claude", "any"],
+  "injection_hint": "system",
+  "tags": ["daily", "dry", "reuse", "check", "skill", "core", "savings-log"],
+  "author": "aswin@wdtechnologysolutions.com",
+  "license": "MIT",
+  "created_at": "2026-07-09",
+  "updated_at": "2026-07-09",
+  "content": {
+    "trigger": "Before creating ANY document, artifact, code pattern, workflow, or prompt",
+    "principle": "Don't Repeat Yourself (DRY) applied to AI sessions. Never rebuild something that already exists as a MAK4I artifact.",
+    "phases": [
+      {
+        "phase": "BEFORE — Check first",
+        "step": 1,
+        "action": "Search ARTIFACT_INDEX for similar work",
+        "detail": "Before building anything, always ask Claude to check the artifact index first.",
+        "command": "Before we build [DESCRIBE WHAT YOU NEED], check the ARTIFACT_INDEX.md. Has anything similar been built before? Search by: purpose, type, tags, and keywords. List any matches with their artifact IDs.",
+        "decision_tree": {
+          "found_exact_match": {
+            "action": "Reuse directly",
+            "command": "Use [ARTIFACT_ID] as the base. Load it and apply it directly. Record: artifact reused = [ID], tokens saved = [token_estimate from artifact JSON].",
+            "log_entry": "REUSED existing artifact [ID] — saved [N] tokens"
+          },
+          "found_partial_match": {
+            "action": "Adapt existing artifact",
+            "command": "Use [ARTIFACT_ID] as the starting point. Adapt it for the current need. Record what changed. After adapting, ask: should this become a new version (v1.1.0) or a new artifact?",
+            "log_entry": "ADAPTED artifact [ID] — saved approximately [N * 0.7] tokens (partial reuse)"
+          },
+          "no_match_found": {
+            "action": "Build new — then store",
+            "command": "No existing artifact found. Build from scratch. After completing, follow Phase 2 to store as a new MAK4I artifact.",
+            "log_entry": "NEW artifact created [ID] — 0 tokens saved this session, future savings: [N] per use"
+          }
+        }
+      },
+      {
+        "phase": "DURING — Build or reuse",
+        "step": 2,
+        "action": "Execute the work",
+        "detail": "Either reuse the existing artifact, adapt it, or build new. Track what was actually done.",
+        "track": {
+          "reuse": "Load artifact → apply directly → note any gaps for future improvement",
+          "adapt": "Load artifact → modify for current need → note what changed",
+          "new": "Build from scratch → produce the output → prepare to store"
+        }
+      },
+      {
+        "phase": "AFTER — Store if new, log always",
+        "step": 3,
+        "action": "Store new artifacts",
+        "condition": "Only if this was built for the first time (no existing artifact found)",
+        "command": "This was built from scratch. Create a MAK4I artifact JSON file for it:\n- Assign an id (kebab-case, descriptive)\n- Set version: 1.0.0\n- Set type: procedural | semantic | episodic\n- Write a clear description\n- Estimate tokens_saved per future use honestly\n- Add to artifacts/ directory in correct subfolder\n- Add to ARTIFACT_INDEX.md",
+        "artifact_types_guide": {
+          "procedural": "A repeatable process or skill — how to do something consistently",
+          "semantic": "Knowledge about a project, system, or domain — what is true",
+          "episodic": "A decision made, incident resolved, or history recorded — why something happened"
+        }
+      },
+      {
+        "phase": "AFTER — Log always",
+        "step": 4,
+        "action": "Write to SAVINGS_LOG",
+        "detail": "After every session, write what was reused, what was new, and tokens saved/invested.",
+        "command": "Update docs/MAK4I_SAVINGS_LOG.md with this session's entry:\n- Date\n- Artifacts REUSED: [list with token savings each]\n- Artifacts ADAPTED: [list with approximate savings]\n- Artifacts NEW: [list — tokens invested this session, estimated future savings per use]\n- Session total tokens saved: [sum of reused + adapted]\n- Running total: [previous total + today's savings]",
+        "log_format": "| Date | Action | Artifact ID | Tokens Saved | Notes |\n|------|--------|-------------|--------------|-------|"
+      }
+    ],
+    "examples": {
+      "example_1_reuse": {
+        "scenario": "Need to generate a Claude Code fix requirements document",
+        "check": "Search ARTIFACT_INDEX → found: claude-code-fix-instructions-template",
+        "action": "Load template → apply to current round's issues",
+        "result": "Saved 300 tokens. Log: REUSED claude-code-fix-instructions-template — 300 tokens saved"
+      },
+      "example_2_adapt": {
+        "scenario": "Need a deployment workflow for a new GCP service",
+        "check": "Search ARTIFACT_INDEX → found: gcp-wildcard-cert-godaddy (similar but not exact)",
+        "action": "Adapt the GCP workflow pattern for the new service",
+        "result": "Saved ~350 tokens (partial reuse). Log: ADAPTED gcp-wildcard-cert-godaddy — ~350 tokens saved"
+      },
+      "example_3_new": {
+        "scenario": "Need a Terraform module scaffold — never done before",
+        "check": "Search ARTIFACT_INDEX → no match found",
+        "action": "Build from scratch → store as terraform-module-scaffold-v1.0.0",
+        "result": "0 tokens saved this session. Stored for future use. Log: NEW terraform-module-scaffold — 0 saved today, ~800 per future use"
+      }
+    },
+    "anti_patterns": {
+      "never_do": [
+        "Build something without checking the index first",
+        "Rebuild a document format that already exists as an artifact",
+        "Complete a session without updating the SAVINGS_LOG",
+        "Create a new artifact without adding it to ARTIFACT_INDEX",
+        "Estimate token savings dishonestly — be conservative, not optimistic"
+      ]
+    },
+    "the_compound_effect": {
+      "description": "Each stored artifact saves tokens on every future use. The more artifacts stored, the more tokens saved per session. This compounds over time.",
+      "example": {
+        "month_1": "11 artifacts stored. ~900 tokens saved per session average.",
+        "month_3": "25 artifacts stored. ~2,000 tokens saved per session average.",
+        "month_6": "50 artifacts stored. ~4,000 tokens saved per session average.",
+        "month_12": "100+ artifacts stored. ~8,000+ tokens saved per session average."
+      }
+    }
+  }
+}
