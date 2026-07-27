@@ -2,7 +2,7 @@
 
 **Status:** Draft  
 **Version:** 0.1  
-**Created:** July 2026  
+**Created:** August 2026  
 
 ---
 

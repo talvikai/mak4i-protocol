@@ -165,7 +165,7 @@ and between every model upgrade.
 ## Real Production Evidence
 
 This is not theoretical. WD Technology Solutions LLC has been tracking
-MAK4I usage across three production products since June 23, 2026.
+MAK4I usage across three production products since July 2026.
 
 | Metric | Value | Period |
 |--------|-------|--------|

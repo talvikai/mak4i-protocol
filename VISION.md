@@ -269,7 +269,7 @@ Talvik pitch to a Fortune 500:
  Now imagine that across your 500 internal AI tools."
 ```
 
-Production evidence from WD Technology (as of July 2026):
+Production evidence from WD Technology (as of August 2026):
 - 25,100+ tokens saved across 27 sessions
 - 9 artifacts across 6 types in production
 - 3 products using MAK4I
@@ -304,7 +304,7 @@ Similar to CNCF conformance for Kubernetes.
 
 | Phase | When | Key Output |
 |-------|------|-----------|
-| 0 — Foundation | Jul 2026 | Public repo, spec, problem statement ← **YOU ARE HERE** |
+| 0 — Foundation | Aug 2026 | Public repo, spec, problem statement ← **YOU ARE HERE** |
 | 1 — Protocol Spec | Aug-Sep 2026 | SPEC.md v1.0, community RFC open |
 | 2 — Reference Impl | Oct-Nov 2026 | Python + Node.js SDK, CLI |
 | 3 — First Artifacts | Dec 2026 | 10+ community artifacts open source |

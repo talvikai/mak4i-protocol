@@ -3,7 +3,7 @@
 **Version:** 0.1 (Draft)  
 **Status:** Work in Progress  
 **Author:** Talvik, Inc.  
-**Created:** July 2026  
+**Created:** August 2026  
 **License:** MIT  
 
 > This specification is in active development.
