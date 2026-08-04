@@ -1,8 +1,24 @@
 # MAK4I — Memory, Artifacts & Knowledge for Intelligence
 
-> Open protocol for portable AI intelligence across models, platforms, and organizations.
+> The protocol for not rebuilding what your AI already built.
 
 **Built by [Talvik, Inc.](https://talvik.ai)**
+
+---
+
+## How MAK4I Is Different
+
+The AI memory space is crowded — [Mem0](https://mem0.ai), [Google's Open Knowledge Format](https://github.com/google/okf), [Open Memory Protocol](https://github.com/SMJAI/open-memory-protocol), and every major platform's native memory all solve some version of "the AI doesn't remember." We read the landscape closely before writing a line of this README. See [COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
+
+MAK4I isn't trying to out-remember them. It solves a narrower, different problem:
+
+| If your problem is... | Look at |
+|---|---|
+| "The AI doesn't remember my preferences" | Mem0, native platform memory |
+| "Our knowledge should live in files, not a vendor's database" | Google's OKF |
+| "We keep paying to regenerate things we already built, and can't prove how much it costs" | **MAK4I** |
+
+MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger from production use.
 
 ---
 

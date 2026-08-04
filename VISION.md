@@ -10,6 +10,87 @@ MAK4I standardizes knowledge continuity for AI.
 
 ---
 
+## Architecture — Where MAK4I Sits
+
+MAK4I is not another memory format competing with [OKF](https://github.com/google/okf)
+or another memory store competing with [Mem0](https://mem0.ai). It's the runtime layer
+that sits *above* formats and stores, deciding who gets to read, write, and trust memory —
+regardless of which format or store it lives in.
+
+```
+                          Applications
+   Cursor | Claude Code | Bedrock | ChatGPT | Gemini | Internal agents
+                              │
+                        MCP / SDK / API
+                              │
+                     MAK4I Memory Runtime
+            ┌─────────────────┼─────────────────┐
+            │  Identity       │  Authorization   │
+            │  Retrieval      │  Write policy    │
+            │  Provenance     │  Lifecycle       │
+            │  Sync           │  Audit           │
+            │  Conflicts      │  Revocation      │
+            └─────────────────┼─────────────────┘
+                              │
+                  Format and storage adapters
+            ┌─────────────────┼─────────────────┐
+            │  OKF bundles    │  SQL / vector DB │
+            │  Git repos      │  AgentCore       │
+            │  Knowledge APIs │  Enterprise KBs  │
+            └─────────────────────────────────────┘
+```
+
+**In one line:** OKF is a format. Mem0 is a store. MAK4I is the runtime that
+governs memory access, trust, and reuse across all of them.
+
+This placement matters for one specific reason: it's the honest answer to
+*"why not just use OKF"* or *"how is this different from Mem0."* MAK4I doesn't
+ask a team to abandon their format or store — it sits above whatever they
+already chose and adds the discipline (check-before-create, provenance,
+audit) that none of those layers enforce on their own. See
+[COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
+
+### What v0.1 Actually Ships (August 2026)
+
+The diagram above is the target architecture — the destination, not the
+starting point. Being direct about the gap between the two is part of how
+this protocol earns trust. Here is the thin vertical slice that exists today:
+
+```
+                          Applications
+                   Claude Code | Claude.ai (via CLI)
+                              │
+                         CLI / local API
+                              │
+                     MAK4I Runtime (v0.1)
+            ┌─────────────────────────────────────┐
+            │  Retrieval        ✓ implemented      │
+            │  Provenance       ✓ implemented      │
+            │  Check-before-create discipline  ✓   │
+            │  Savings log (audit-lite)        ✓   │
+            │  ─────────────────────────────────   │
+            │  Identity          spec'd, not built │
+            │  Authorization     spec'd, not built │
+            │  Sync / Conflicts  roadmap (Phase 3+) │
+            │  Write policy      roadmap (Phase 4)  │
+            │  Revocation        roadmap (Phase 4+) │
+            └─────────────────────────────────────┘
+                              │
+                  Format and storage adapters
+            ┌─────────────────────────────────────┐
+            │  Local JSON artifacts    ✓ v0.1      │
+            │  Git repo (this repo)    ✓ v0.1      │
+            │  OKF bundle adapter      roadmap      │
+            │  SQL / vector DB adapter roadmap      │
+            └─────────────────────────────────────┘
+```
+
+Every box marked `roadmap` has a target phase in the [Roadmap](#roadmap)
+section below. Nothing on this page claims to be built unless it is built —
+if you clone this repo today, the `✓ implemented` boxes are what you get.
+
+---
+
 ## Start Here — Three Things You Already Know
 
 If you use Claude, you already understand this:
@@ -347,3 +428,352 @@ Write once. Use anywhere. Never start from zero.
 ---
 
 *© 2026 Talvik, Inc. — talvik.ai*
+
+---
+
+## Developer Tools
+
+MAK4I is not just for AI models. It is a complete developer ecosystem.
+
+There are two distinct users of MAK4I:
+
+```
+AI Models (via MCP server):
+  Claude, Cursor, Copilot connect automatically
+  They use artifacts without developer intervention
+  The AI "knows things" because MAK4I injected them
+
+Developers (via dev tools):
+  Humans who BUILD with MAK4I
+  They create, publish, and manage artifacts
+  They integrate MAK4I into their products and pipelines
+```
+
+### Tool 1 — MAK4I CLI
+
+The primary developer interface. Works from any terminal.
+
+```bash
+mak4i init                          # set up MAK4I in a project
+mak4i inject                        # inject all relevant artifacts
+mak4i install company/standards     # install an artifact pack
+mak4i publish ./my-artifact.json    # publish to registry
+mak4i search "fastapi deployment"   # search the registry
+mak4i list                          # list installed artifacts
+mak4i validate                      # validate against MAK-0001
+mak4i diff v1.0 v1.1               # compare artifact versions
+mak4i logs                          # view token savings
+```
+
+Comparable to: npm CLI, pip, git
+
+---
+
+### Tool 2 — MAK4I SDK
+
+For developers who want to integrate MAK4I into their own code.
+
+```python
+# Python SDK (Phase 2)
+from mak4i import MAK4IClient
+
+client = MAK4IClient(api_key="...")
+
+# Inject context before an AI call
+context = client.inject(project="schedovia")
+
+# Publish a new artifact programmatically
+client.artifacts.publish({
+    "id": "my-fastapi-scaffold",
+    "type": "procedural",
+    "content": scaffold_template,
+    "token_estimate": 800
+})
+
+# Search the registry
+results = client.artifacts.search("kubernetes deployment")
+```
+
+Node.js, Go, and Rust SDKs follow in later phases.
+
+Comparable to: Stripe SDK, Twilio SDK, Anthropic SDK
+
+---
+
+### Tool 3 — MAK4I Registry UI
+
+Web dashboard at registry.talvik.ai (Phase 4)
+
+- Browse and search published artifacts
+- Manage organization artifact packs
+- View team token savings analytics
+- Create and manage teams
+- One-click install to any project
+
+Comparable to: npmjs.com, Docker Hub, PyPI
+
+---
+
+### Tool 4 — MAK4I VS Code Extension
+
+Right inside the editor (Phase 4+)
+
+- Search and install artifacts without leaving VS Code
+- See which artifacts are loaded for the current project
+- View token savings in real time
+- One-click inject before opening Claude Code
+- Create new artifacts from selected code
+
+Comparable to: GitLens, Prettier, ESLint plugins
+
+---
+
+### Tool 5 — MAK4I GitHub Action
+
+Automate artifact management in CI/CD pipelines (Phase 4+)
+
+```yaml
+name: MAK4I Sync
+on: [push]
+jobs:
+  sync:
+    steps:
+      - uses: talvikai/mak4i-action@v1
+        with:
+          api_key: ${{ secrets.MAK4I_KEY }}
+          project: my-project
+```
+
+What it does:
+- Auto-publishes new artifacts on merge
+- Validates artifacts against MAK-0001 on every PR
+- Posts token savings summary to PR comments
+- Keeps team artifact registry in sync with codebase
+
+---
+
+### The Developer Day-to-Day Experience
+
+**Without MAK4I:**
+```
+Developer opens Claude Code.
+"Before we start, our stack is Node.js,
+ we use PostgreSQL, our API follows REST,
+ here are our naming conventions..."
+
+Next day, new session: same explanation again.
+New team member joins: weeks of onboarding.
+```
+
+**With MAK4I:**
+```bash
+mak4i inject
+# Claude Code already knows your stack,
+# standards, patterns, and conventions.
+# Start building immediately.
+
+# New team member joins:
+mak4i install company/*
+# Productive in hours, not weeks.
+```
+
+---
+
+### Why Developers Adopt MAK4I
+
+```
+Problem they recognize immediately:
+  "I explain my stack to Claude every single day"
+  "AI suggestions don't follow our team standards"
+  "New hires take weeks to get productive with AI tools"
+
+Solution that's immediately obvious:
+  mak4i inject     → never explain your stack again
+  mak4i install    → AI follows your team standards
+  mak4i publish    → share knowledge across the team
+
+Proof they can verify:
+  mak4i logs       → real token savings, measured honestly
+```
+
+---
+
+### MAK4I for Enterprise Development Teams
+
+When an organization adopts MAK4I:
+
+```
+Platform/IT team publishes once:
+  company/security-policies
+  company/coding-standards
+  company/api-contracts
+  company/deployment-runbooks
+  company/incident-playbooks
+
+Every developer installs once:
+  mak4i install company/*
+
+Result:
+  Every developer's AI tool knows all company
+  standards automatically.
+  AI suggestions are always compliant.
+  New hire onboards in hours not weeks.
+  Token savings are measurable and reportable.
+```
+
+This is the enterprise value proposition:
+not just developer productivity — organizational AI alignment.
+
+---
+
+### The npm Parallel
+
+```
+npm:                          MAK4I:
+  Reusable code packages        Reusable AI knowledge
+  npm registry                  MAK4I Registry
+  npm CLI                       mak4i CLI
+  package.json                  mak4i.json
+  npm install lodash            mak4i install company/standards
+  npm publish                   mak4i publish
+
+npm standardized how developers share code.
+MAK4I standardizes how developers share AI knowledge.
+```
+
+---
+
+## How MAK4I Relates to MCP
+
+A common question: **Is MAK4I competing with MCP?**
+
+No. They solve different problems at different layers.
+
+```
+MCP defines:    How AI models connect to external tools
+                (the transport and communication layer)
+
+MAK4I defines:  What AI knowledge IS and how it's stored
+                (the content and memory layer)
+
+They work together:
+  MAK4I Registry → exposed as MCP server
+  AI tools connect to MAK4I via MCP
+  MAK4I artifacts flow through MCP to the AI
+
+MCP without MAK4I:  a connection with nothing persistent to transfer
+MAK4I without MCP:  knowledge stored with no standard delivery method
+Together:           persistent, portable AI memory delivered anywhere
+```
+
+### The Anthropic/MCP — Talvik/MAK4I Parallel
+
+| | Anthropic + MCP | Talvik + MAK4I |
+|---|---|---|
+| Created | MCP protocol | MAK4I protocol |
+| License | Apache 2.0 (open) | MIT (open) |
+| Directly commercialize the protocol? | No | No |
+| How they benefit | Claude API revenue grows as MCP drives more Claude usage | MAK4I Registry revenue grows as protocol adoption grows |
+| What's paid | Claude API + Claude.ai subscriptions | Hosted Registry, Enterprise, Cloud API |
+| Model-dependent? | Yes — MCP benefits Anthropic mainly when Claude is used | No — MAK4I earns revenue regardless of which AI model is used |
+| Governance | Anthropic owned | Talvik owned (community steering committee planned) |
+
+### The Key Difference
+
+```
+Anthropic with MCP:
+  MCP makes Claude more useful
+  Anthropic earns money from Claude — not from MCP
+  If someone uses MCP with GPT-4 instead of Claude
+  → Anthropic gets nothing from that usage
+
+Talvik with MAK4I:
+  MAK4I is model-agnostic by design
+  Talvik earns money from the Registry — not from any AI model
+  If someone uses MAK4I with GPT-4 instead of Claude
+  → Talvik still earns Registry revenue
+
+This makes Talvik's model more durable than Anthropic's MCP model.
+MAK4I captures value from the memory layer
+regardless of which AI model sits on top.
+```
+
+### The Closer Parallel — Git and GitHub
+
+```
+Git (protocol):
+  Linus Torvalds created it
+  Open source, free forever
+  Linux Foundation governs it
+  No direct commercialization of Git itself
+
+GitHub (platform):
+  Microsoft built the hosted platform on top
+  Free for public repos
+  Paid for private repos, teams, enterprise
+  $7.5B acquisition by Microsoft in 2018
+
+MAK4I (protocol):      Git equivalent
+  Talvik created it
+  Open source, MIT licensed, free forever
+  Talvik governs it (community steering coming)
+
+Talvik Registry (platform):   GitHub equivalent
+  Talvik builds the hosted platform on top
+  Free community tier
+  Paid Pro, Team, Enterprise tiers
+  The protocol drives adoption
+  The platform captures the value
+```
+
+### Why Keeping the Protocol Open Is Rational
+
+```
+If MAK4I had a paid protocol:
+  → Developers avoid it
+  → Less adoption
+  → Less registry revenue
+  → Talvik fails
+
+If MAK4I is free forever:
+  → Developers adopt it freely
+  → More adoption
+  → More registry users
+  → More enterprise customers
+  → Talvik wins
+
+The protocol being open is not a weakness.
+It is the growth engine for the commercial platform.
+
+This is why Git is free and GitHub is worth billions.
+This is why Linux is free and Red Hat sold for $34B.
+This is why Kubernetes is free and GKE generates
+hundreds of millions for Google annually.
+
+MAK4I will follow the same pattern.
+```
+
+### What Prevents a Fork from Competing?
+
+A legitimate question: if MAK4I is open source,
+can someone fork it and build a competing registry?
+
+Yes. And that is fine.
+
+```
+A fork of MAK4I has:
+  The protocol code ✓
+  
+A fork of MAK4I does NOT have:
+  The community artifacts ✗
+  The production evidence ✗
+  The enterprise trust built over time ✗
+  The first-mover brand recognition ✗
+  The MAK4I Certified conformance ecosystem ✗
+
+GitHub won not because it owned Git
+but because it built the best platform,
+the largest community, and the most trust.
+
+Talvik wins the same way.
+```
