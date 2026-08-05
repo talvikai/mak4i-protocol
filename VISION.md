@@ -318,7 +318,8 @@ integration work.
 ## Two Companies, One Protocol
 
 Talvik, Inc. builds MAK4I — the open protocol and enterprise platform.
-WD Technology Solutions builds products on MAK4I — the first commercial adopter.
+WD Technology Solutions is Talvik's design partner and intended first
+production adopter, once the Phase 2 reference API is live.
 
 ```
 Talvik, Inc.
@@ -326,35 +327,31 @@ Talvik, Inc.
     Talvik Registry (hosted)
       Talvik Enterprise (commercial)
 
-WD Technology Solutions (first customer + design partner)
+WD Technology Solutions (planned first adopter, Phase 2+)
   Schedovia    — appointment scheduling SaaS
   Reminder AI  — SMS appointment reminders
-  AIOps        — AI operations platform (coming 2027)
+  AIOps        — AI operations platform, planned as a
+                 MAK4I-native product from the start
 ```
 
-WD Technology products are not just revenue.
-They are Talvik's best sales material.
+**Talvik, Inc. is incorporated in Delaware, and trademark applications for
+Talvik and MAK4I have been filed.** No product revenue or production
+integrations exist yet — those are Phase 2 and later milestones, tracked
+below.
 
-**The AIOps connection:**
+**The planned AIOps connection:**
 
-WD Technology's AIOps Platform is the most powerful proof point for Talvik's
-enterprise story. AIOps powered by MAK4I — where AI agents know your
-infrastructure, alert history, runbooks, and incident patterns without being
-re-briefed every session — becomes the case study that sells MAK4I to enterprises.
+AIOps is planned as a MAK4I-native product — not an existing product being
+retrofitted, but one designed from the start to read infrastructure
+context, incident history, and runbooks from MAK4I. If that plan holds,
+AIOps becomes the clearest case study for MAK4I's enterprise pitch: AI
+agents that don't need re-briefing on your infrastructure every session.
+This is a roadmap intention, not a result — it will only be claimed as
+evidence once it's actually built and measured.
 
-```
-Talvik pitch to a Fortune 500:
-"WD Technology's AIOps platform runs on MAK4I.
- Engineers stopped re-explaining their infrastructure
- to the AI every session. Diagnosis time dropped 60%.
- Now imagine that across your 500 internal AI tools."
-```
-
-Production evidence from WD Technology (as of August 2026):
-- 25,100+ tokens saved across 27 sessions
-- 9 artifacts across 6 types in production
-- 3 products using MAK4I
-- Projected 12-month savings: ~3,000,000 tokens
+Early, development-time reuse observations (not production data):
+- 25,100+ tokens saved across 27 sessions, during MAK4I's own development
+- 9 artifacts across 6 types created so far
 
 ---
 
@@ -392,6 +389,66 @@ Similar to CNCF conformance for Kubernetes.
 | 4 — Hosted Registry | Jan-Feb 2027 | Public registry, free tier live |
 | 5 — MCP Integration | Feb-Mar 2027 | Native Claude Code + Cursor support |
 | 6 — Funding | Apr-Jun 2027 | Pre-seed conversations with production data |
+
+---
+
+## The Multi-Tool Workflow: Phase 2 vs. Phase 5
+
+MAK4I's founding use case is a workflow gap its own builders live with
+today: architecture and requirements decisions get made in one AI tool
+(Claude.ai), get manually re-explained to a second tool to implement
+(Claude Code), and get manually re-explained again to document (Claude
+Cowork or similar). Nothing persists between them automatically. MAK4I is
+designed to close that gap — but not all at once, and not for every tool
+on the same timeline. The two phases below are deliberately split, based
+on what each integration actually requires.
+
+### Phase 2 (Oct-Nov 2026) — Claude.ai and Claude Code, direct API, no MCP required
+
+```
+Claude.ai (decisions made)
+       │  written to MAK4I via REST API
+       ▼
+MAK4I  (artifact stored: architecture decision, requirement, spec)
+       │  read by Claude Code via REST API
+       ▼
+Claude Code (implements from stored context)
+```
+
+This works in Phase 2 because Claude Code can call a REST API directly —
+no MCP server is required for this specific integration. The MAK4I
+endpoints this depends on (`POST /api/v1/artifacts`, `GET
+/api/v1/artifacts/search`, `POST /api/v1/inject`) are already scoped for
+the Phase 2 reference implementation.
+
+Documentation is planned as a third leg of the same loop: decisions stored
+in MAK4I would also be readable by Claude Cowork to produce formal
+documentation and presentations — *if* Cowork supports direct API calls by
+then. That capability has not been confirmed. Until it is, this remains a
+Phase 5 item (see below), not a Phase 2 claim.
+
+### Phase 5 (Feb-Mar 2027) — ChatGPT and Claude Cowork, via MCP (or direct API if viable sooner)
+
+```
+ChatGPT / Claude Cowork
+       │  via MCP server (mcp.talvik.ai), OR
+       │  via direct REST API, if that proves viable first
+       ▼
+MAK4I
+```
+
+ChatGPT does not currently have a confirmed direct-API-during-conversation
+pattern equivalent to Claude Code's, so its integration is planned around
+MCP, which Phase 5 builds. The same applies to Claude Cowork unless it
+turns out to support direct API access sooner — in which case that piece
+could move earlier than Phase 5. Neither assumption is treated as
+confirmed until tested against the real Phase 2 API.
+
+**Why the split matters:** claiming all of this works today, or claiming
+it all depends on MCP, would both be inaccurate. Claude.ai → MAK4I →
+Claude Code needs no new infrastructure and is realistic for Phase 2.
+Broader multi-tool support has a real dependency (MCP, or unconfirmed
+direct-API support) and is scoped to Phase 5 accordingly.
 
 ---
 

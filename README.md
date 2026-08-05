@@ -103,16 +103,21 @@ mak4i inject
 
 ## Proof of Concept
 
-MAK4I is not theoretical. [WD Technology Solutions](https://western-digital.net)
-is the design partner and first production user.
+MAK4I's core reuse mechanism — checking for and reusing existing artifacts
+instead of regenerating them — was demonstrated during MAK4I's own
+development process, before any API existed. Early figures below reflect
+that development-time observation, not production traffic.
 
 | Metric | Value |
 |--------|-------|
-| Tokens saved | 25,100+ |
+| Tokens saved (dev-time observation) | 25,100+ |
 | Sessions tracked | 27 |
 | Days of tracking | 3 |
 | Artifacts registered | 9 across 6 types |
-| Products using MAK4I | 3 |
+
+[WD Technology Solutions](https://western-digital.net) is Talvik's design
+partner and the intended first production adopter, once the Phase 2 API is
+live. See [Roadmap](VISION.md#roadmap) for the integration plan.
 
 ---
 

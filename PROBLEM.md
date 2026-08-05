@@ -162,18 +162,20 @@ and between every model upgrade.
 
 ---
 
-## Real Production Evidence
+## Early Evidence, and What's Next
 
-This is not theoretical. WD Technology Solutions LLC has been tracking
-MAK4I usage across three production products since July 2026.
+MAK4I's reuse mechanism was first demonstrated informally during its own
+development: rather than regenerating documents, code patterns, and other
+artifacts from scratch each time a similar need came up, existing artifacts
+were checked for and reused. The figures below come from that development
+process — not from a live API or production traffic, since the API does
+not yet exist (see [Roadmap](VISION.md#roadmap), Phase 2).
 
 | Metric | Value | Period |
 |--------|-------|--------|
-| Tokens saved | 25,100+ | 3 days |
+| Tokens saved (dev-time observation) | 25,100+ | 3 days |
 | Sessions tracked | 27 | 3 days |
 | Artifacts registered | 9 | across 6 types |
-| Products using MAK4I | 3 | Schedovia, Reminder AI, MAK4I itself |
-| Projected 12-month savings | ~3,000,000 tokens | extrapolated |
 
 ### What was saved and how:
 
@@ -187,7 +189,10 @@ MAK4I usage across three production products since July 2026.
 | multitenant-slug-auth-pattern | Skill — reusable auth pattern for SaaS | 600 |
 | appointment-parser-prompt | Skill — how to parse appointments from SMS | 250 |
 
-These are measured production savings — not projections.
+These are development-time observations, not measured production savings.
+Production validation is planned for Phase 2, once the reference API exists
+and WD Technology Solutions (Schedovia, and AIOps, a MAK4I-native product
+in planning) becomes the first real integration target.
 
 ---
 
