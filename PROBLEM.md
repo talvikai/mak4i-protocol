@@ -1,6 +1,22 @@
 # The Problem MAK4I Solves
 
-## Start Here — What You Already Know
+## Every AI Platform Solves This Differently
+
+Every AI tool has its own way to represent reusable knowledge.
+
+```
+Claude has Projects, Artifacts, and Skills.
+Cursor has Rules.
+ChatGPT has Memory.
+GitHub Copilot has Instructions.
+```
+
+Every platform invents its own format. None of them are portable.
+
+To make this concrete, the rest of this document uses Claude's
+terminology — Projects, Artifacts, Skills — as a worked example. Every
+term below has an equivalent in every other platform above, under a
+different name and a different, incompatible format.
 
 If you use Claude, you already understand three things:
 
@@ -20,6 +36,23 @@ Skills      Repeatable processes that use Artifacts to produce
 These three things are powerful.
 
 **But they only work inside Claude.ai.**
+
+---
+
+## Why a Protocol?
+
+Today's AI platforms all represent reusable knowledge differently.
+
+Claude has Skills. Cursor has Rules. ChatGPT has Memory. GitHub Copilot
+has Instructions. Every platform invents its own format.
+
+MAK4I does not replace those systems. It standardizes how reusable AI
+artifacts are packaged, identified, versioned, shared, discovered, and
+reused across tools — regardless of which platform's native format they
+started in.
+
+Just as Git standardized source control, MAK4I standardizes reusable AI
+artifacts.
 
 ---
 
@@ -61,26 +94,8 @@ Project context re-established:
   "We use Square for payments and Twilio for SMS..."
 ```
 
-This is not just annoying. It is measurable waste.
-
----
-
-## The Scale of the Problem
-
-```
-1,000,000 AI sessions per day
-× 1,000 tokens wasted per session re-establishing context
-= 1,000,000,000 tokens per day in avoidable generation
-```
-
-**1 billion tokens per day. Every day.**
-
-As AI moves toward metered compute billing — Sam Altman has stated
-publicly that AI will eventually be billed like electricity — that waste
-becomes a direct dollar cost for every business running AI at scale.
-
-It is also an environmental cost. Measurable electricity. Measurable water.
-Measurable carbon. Generated to reproduce knowledge that already existed.
+This is not just annoying. It is measurable waste, at a scale covered in
+the [Appendix: Economic Impact](#appendix-economic-impact) below.
 
 ---
 
@@ -141,19 +156,23 @@ Example:
 
 ## The Portability Gap
 
-Claude has Projects, Artifacts, and Skills.
-Cursor has Rules. ChatGPT has Memories. GitHub Copilot has context.
+Every AI platform has created its own representation of reusable
+knowledge — Claude, Cursor, Copilot, Gemini, ChatGPT, and every platform
+that comes after them.
 
-**Every AI tool has its own version of this. None of them talk to each other.**
+**None of those formats are interoperable. Teams end up rebuilding the
+same knowledge for every platform.**
 
 ```
-Claude Skill    →  can't use in Claude Code
-Claude Artifact →  can't inject into Cursor
-Claude Project  →  can't share with ChatGPT
+Claude Skill    →  can't use in Cursor
+Cursor Rule     →  can't use in Claude Code
+Claude Artifact →  can't inject into ChatGPT
+Claude Project  →  can't share with a Copilot user
 
 Your team member uses Cursor.
 You use Claude Code.
-Neither of you has access to the other's Skills.
+Neither of you has access to the other's reusable knowledge —
+even when it describes the exact same project.
 ```
 
 You're not just losing context between sessions.
@@ -169,13 +188,13 @@ development: rather than regenerating documents, code patterns, and other
 artifacts from scratch each time a similar need came up, existing artifacts
 were checked for and reused. The figures below come from that development
 process — not from a live API or production traffic, since the API does
-not yet exist (see [Roadmap](VISION.md#roadmap), Phase 2).
+not yet exist (see [ROADMAP.md](ROADMAP.md), Phase 2).
 
-| Metric | Value | Period |
-|--------|-------|--------|
-| Tokens saved (dev-time observation) | 25,100+ | 3 days |
-| Sessions tracked | 27 | 3 days |
-| Artifacts registered | 9 | across 6 types |
+| Metric | Value |
+|--------|-------|
+| Tokens saved (dev-time observation) | 38,400+ |
+| Sessions tracked | 29 |
+| Artifacts registered | 9 across 6 types |
 
 ### What was saved and how:
 
@@ -251,7 +270,34 @@ With MAK4I:
 
 Write once. Use anywhere. Never start from zero.
 
+MAK4I standardizes reusable AI artifacts the same way Git standardized
+source code and npm standardized package distribution. The protocol lets
+artifacts move between models, IDEs, organizations, and future AI
+platforms — without rewriting or regenerating them.
+
 [Read the specification →](SPEC.md)
+
+---
+
+## Appendix: Economic Impact
+
+```
+1,000,000 AI sessions per day
+× 1,000 tokens wasted per session re-establishing context
+= 1,000,000,000 tokens per day in avoidable generation
+```
+
+**1 billion tokens per day. Every day.**
+
+As AI moves toward metered compute billing — Sam Altman has stated
+publicly that AI will eventually be billed like electricity — that waste
+becomes a direct dollar cost for every business running AI at scale.
+
+It is also an environmental cost. Measurable electricity. Measurable water.
+Measurable carbon. Generated to reproduce knowledge that already existed.
+
+This calculation illustrates scale; it is not a measurement of any
+specific organization's usage.
 
 ---
 

@@ -1,0 +1,14 @@
+{
+  "name": "wd-docx-framework",
+  "version": "1.0.0",
+  "description": "Reusable Node.js framework for generating professional DOCX documents (and PDF via LibreOffice conversion). See README.md for usage.",
+  "main": "run.js",
+  "scripts": {
+    "example": "node run.js --format docx --content content/example_content.js"
+  },
+  "dependencies": {
+    "docx": "^9.0.0"
+  },
+  "license": "MIT",
+  "author": "aswin@wdtechnologysolutions.com"
+}

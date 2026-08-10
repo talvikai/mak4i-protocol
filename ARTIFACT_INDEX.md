@@ -23,10 +23,11 @@ Last updated: July 9, 2026
 
 ## Artifacts
 
-### wd-docx-framework v1.0.0
+### wd-docx-framework v1.1.0
 **File:** `artifacts/document/wd-docx-framework-v1.0.0.json`
+**Source:** `frameworks/wd-docx-framework/` — tested, working code, not just a description
 **Token savings:** ~1,200 per session
-**What it is:** Reusable Node.js framework for generating professional DOCX documents. Covers helpers, styles, tables, template, and PDF generator.
+**What it is:** Reusable Node.js framework for generating professional DOCX documents. Covers helpers, styles, tables, template, and PDF generator (via LibreOffice).
 **Used in:** Every document generation session
 
 ### claude-code-fix-instructions-template v1.0.0

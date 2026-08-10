@@ -1,10 +1,11 @@
 {
   "id": "wd-docx-framework",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "procedural",
   "layer": "framework",
   "name": "WD Technology DOCX Framework",
-  "description": "Reusable Node.js framework for generating professional DOCX documents. Eliminates rebuilding document generation logic each session. Includes helpers, styles, tables, template, and PDF generator. Command: node run.js --format docx --content content/my_content.js",
+  "description": "Reusable Node.js framework for generating professional DOCX documents. Eliminates rebuilding document generation logic each session. Includes helpers, styles, tables, template, and PDF generator. Command: node run.js --format docx --content content/my_content.js. Source: frameworks/wd-docx-framework/ (this repo).",
+  "source_path": "frameworks/wd-docx-framework/",
   "token_estimate": 1200,
   "ai_platforms": ["claude", "any"],
   "injection_hint": "inline",
@@ -12,5 +13,18 @@
   "author": "aswin@wdtechnologysolutions.com",
   "license": "MIT",
   "created_at": "2026-06-23",
-  "updated_at": "2026-06-25"
+  "updated_at": "2026-08-07",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-06-23",
+      "note": "Original artifact registered. Metadata only — source code from this version was not present in a later session (2026-08-07), likely due to being built in a separate working environment."
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-08-07",
+      "note": "Framework rebuilt from the documented interface (helpers, styles, tables, template, PDF generator via LibreOffice). Tested end-to-end: docx and PDF generation both confirmed working. Source now lives in this repo at frameworks/wd-docx-framework/ so it can be genuinely reused rather than re-described."
+    }
+  ]
 }
+

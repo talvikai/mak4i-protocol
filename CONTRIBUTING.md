@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to MAK4I — the open protocol for portable AI intelligence.
 
-MAK4I is stewardarded by [Talvik, Inc.](https://talvik.ai) and developed in the open.
+MAK4I is stewarded by [Talvik, Inc.](https://talvik.ai) and developed in the open.
 All contributions are welcome: protocol standards, artifacts, documentation, and feedback.
 
 ---

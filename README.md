@@ -4,6 +4,66 @@
 
 **Built by [Talvik, Inc.](https://talvik.ai)**
 
+**Status: Phase 0 — Foundation.** This repo currently contains the protocol
+design, specification draft, and documentation. The reference API
+implementation (backend, CLI, SDK) has not been built yet — that's Phase 2.
+See [ROADMAP.md](ROADMAP.md) for what exists today versus what's planned.
+
+---
+
+## What MAK4I Is
+
+MAK4I is an open protocol for packaging, identifying, versioning, sharing,
+injecting, and reusing AI artifacts across models, platforms, and
+organizations.
+
+A MAK4I artifact can represent:
+
+- Project context
+- Procedural knowledge (how to do something, consistently)
+- Prompts
+- Workflows
+- Architecture and API contracts
+- Historical decisions and rationale
+- Reusable outputs (documents, code, templates)
+
+**Memory is one artifact type — not the entire protocol.** Just as Git
+standardized source control and npm standardized package distribution,
+MAK4I standardizes how reusable AI artifacts move between tools instead of
+being rebuilt from scratch in each one.
+
+```
+Claude Code, Cursor, ChatGPT, Gemini, Bedrock, Copilot, internal agents
+                              │
+                        MCP / SDK / API
+                              │
+                            MAK4I
+                              │
+              Registry · Artifacts · Knowledge · Context
+```
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the full
+architecture, including what's actually implemented today versus planned.
+
+---
+
+## Protocol Philosophy
+
+> MAK4I is the protocol. Talvik builds the platform.
+
+```
+MAK4I Protocol (open, MIT licensed)
+    ↓
+Talvik Registry (hosted)
+Talvik Enterprise (commercial)
+Talvik SDK (Python, Node.js, Go, Rust)
+Talvik CLI (mak4i install, inject, publish)
+```
+
+**Open protocol forever. Commercial ecosystem on top.**
+
+The same model that gave the world Git and GitHub.
+
 ---
 
 ## How MAK4I Is Different
@@ -42,17 +102,6 @@ As AI moves toward metered compute billing, that waste becomes
 a direct dollar cost for every business running AI at scale.
 
 **MAK4I fixes this.**
-
----
-
-## What MAK4I Is
-
-MAK4I enables portable AI memory across every model, platform, and organization.
-
-Instead of every session starting from zero — every session starts with context.
-
-Just as Git standardized source control and npm standardized package distribution,
-**MAK4I standardizes knowledge continuity for AI.**
 
 ---
 
@@ -110,14 +159,16 @@ that development-time observation, not production traffic.
 
 | Metric | Value |
 |--------|-------|
-| Tokens saved (dev-time observation) | 25,100+ |
-| Sessions tracked | 27 |
-| Days of tracking | 3 |
+| Tokens saved (dev-time observation) | 38,400+ |
+| Sessions tracked | 29 |
 | Artifacts registered | 9 across 6 types |
+
+See [docs/MAK4I_SAVINGS_LOG.md](docs/MAK4I_SAVINGS_LOG.md) for the full,
+dated session-by-session breakdown.
 
 [WD Technology Solutions](https://western-digital.net) is Talvik's design
 partner and the intended first production adopter, once the Phase 2 API is
-live. See [Roadmap](VISION.md#roadmap) for the integration plan.
+live. See [ROADMAP.md](ROADMAP.md) for the integration plan.
 
 ---
 
@@ -128,25 +179,6 @@ MAK4I uses the **MAK-XXXX** convention for protocol standards.
 | Standard | Title | Status |
 |----------|-------|--------|
 | [MAK-0001](standards/MAK-0001.md) | Artifact Metadata Schema | Draft |
-
----
-
-## Protocol Philosophy
-
-> MAK4I is the protocol. Talvik builds the platform.
-
-```
-MAK4I Protocol (open, MIT licensed)
-    ↓
-Talvik Registry (hosted)
-Talvik Enterprise (commercial)
-Talvik SDK (Python, Node.js, Go, Rust)
-Talvik CLI (mak4i install, inject, publish)
-```
-
-**Open protocol forever. Commercial ecosystem on top.**
-
-The same model that gave the world Git and GitHub.
 
 ---
 

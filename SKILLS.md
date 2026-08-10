@@ -255,7 +255,9 @@ Repo:
 Content:
 □ Write Dev.to launch article:
   "What is MAK4I and why we built it"
-  Include WD Tech production data (25,100+ tokens)
+  Include current dev-time savings figure from
+  docs/MAK4I_SAVINGS_LOG.md (38,400+ as of Aug 7, 2026 —
+  check the log for the current number before publishing)
 □ Write X/Twitter launch thread (10-12 posts)
 □ Write LinkedIn announcement for Talvik page
 □ Build token savings calculator as Claude Artifact
