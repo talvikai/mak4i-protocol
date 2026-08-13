@@ -93,6 +93,9 @@ If you find a bug in:
 
 Open a GitHub Issue with the label `bug` and a clear description of the problem.
 
+**If the bug is a security issue, do not open a public issue — see
+[SECURITY.md](SECURITY.md) for how to report it privately instead.**
+
 ---
 
 ### 5. Share production evidence
@@ -171,14 +174,9 @@ Talvik, Inc. is the steward of the MAK4I protocol. We are committed to:
 
 ## Code of Conduct
 
-MAK4I is an open project. We expect contributors to:
-
-- Be respectful in all interactions
-- Focus feedback on ideas, not people
-- Welcome contributors of all backgrounds and experience levels
-- Acknowledge what others have built before proposing changes
-
-Violations can be reported to hello@talvik.ai.
+MAK4I is an open project. Participants are expected to follow the
+[Code of Conduct](CODE_OF_CONDUCT.md). Violations can be reported to
+hello@talvik.ai.
 
 ---
 

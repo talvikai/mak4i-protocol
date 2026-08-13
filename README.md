@@ -78,17 +78,16 @@ MAK4I isn't trying to out-remember them. It solves a narrower, different problem
 | "Our knowledge should live in files, not a vendor's database" | Google's OKF |
 | "We keep paying to regenerate things we already built, and can't prove how much it costs" | **MAK4I** |
 
-MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger from production use.
+MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Proof of Concept](#proof-of-concept) below).
 
 ---
 
 ## The Problem
 
-Every AI session starts cold.
-
-Claude doesn't remember what you built last session.
-ChatGPT doesn't remember your preferences.
-Switch tools and you start from zero.
+Every AI tool represents reusable knowledge differently — Claude has
+Projects, Artifacts, and Skills; Cursor has Rules; ChatGPT has Memory;
+GitHub Copilot has Instructions. None of those representations travel
+between tools. Switch tools and you start from zero.
 
 You re-explain your stack, regenerate code that already exists,
 re-establish context that was already shared.

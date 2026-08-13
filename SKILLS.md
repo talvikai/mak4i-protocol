@@ -205,11 +205,15 @@ This is MAK4I working as designed.
 
 All tasks required before flipping the repo to public.
 
+**Status update (Aug 11, 2026): Talvik, Inc. is incorporated as a Delaware
+C-Corp, and trademark intent-to-use applications for both TALVIK and MAK4I
+have been filed. The Week 1-2 items below are kept for historical record —
+see the checked items for what's actually done.**
+
 ### Week 1 — July 28 to August 3 (Legal Foundation)
 
 ```
-□ Call Andrew Bosin — 201-446-9643 (VM left July 27)
-□ Decide: incorporate first or file trademark personally
+☑ Decide: incorporate first, then file trademark under Talvik, Inc.
 □ Schedovia pilot calls — Brenda's LLC, Massage 44, Hoosier Barbershop
 □ Confirm Reminder App running on GCP Cloud Run
 □ Confirm A2P SMS approved — test with real phone
@@ -219,38 +223,45 @@ All tasks required before flipping the repo to public.
 
 ```
 Legal:
-□ Incorporate Talvik, Inc. as Delaware C-Corp
-  → Stripe Atlas ($500) or Clerky ($799)
-□ File 83(b) election within 30 days — DO NOT MISS
-□ File trademark intent-to-use: TALVIK (word mark)
+☑ Incorporate Talvik, Inc. as Delaware C-Corp
+☑ File trademark intent-to-use: TALVIK (word mark)
   → Classes 9 + 42
-□ File trademark intent-to-use: MAK4I (word mark)
-  → If Andrew recommends
+☑ File trademark intent-to-use: MAK4I (word mark)
+□ File 83(b) election within 30 days of incorporation — confirm this is
+  still within the window or already filed
 □ Transfer GitHub org to Talvik, Inc. formally
+  → Currently under abalakrishnan@western-digital.net;
+    move planned once talvik.ai-linked GitHub account exists
 □ Set up CLA Assistant on mak4i-protocol repo
 □ Inter-company agreement: WD Technology ↔ Talvik
   → License + versioned API contract
 
 MAK4I Repo:
-□ Complete Claude 101 certificate → add to LinkedIn ← ALMOST DONE
-□ Complete MCP course → add to LinkedIn
-□ Update README with incorporation status
-□ Add "Talvik, Inc." as legal owner throughout docs
+☑ Complete Claude 101 certificate → added to LinkedIn (Aug 11, 2026)
+☑ Complete MCP course → added to LinkedIn (Aug 11, 2026)
+☑ Update README with incorporation status
+  → See BUSINESS_MODEL.md for the accurate current statement
+☑ Add "Talvik, Inc." as legal owner throughout docs
+  → LICENSE file, BUSINESS_MODEL.md
 ```
 
 ### Week 3 — August 11 to 17 (Content + Community)
 
 ```
 Repo:
-□ Final review: README, PROBLEM, VISION, SPEC, CONTRIBUTING
-□ MAK-0001 content review — ensure it's launch-ready
+☑ Final review: README, PROBLEM, VISION, SPEC, CONTRIBUTING
+  → Reviewed and corrected Aug 10-11, 2026 (overclaiming language,
+    stale figures, broken links, LICENSE, templates — see
+    docs/MAK4I_SAVINGS_LOG.md for detail)
+☑ MAK-0001 content review — ensure it's launch-ready
+  → All 14 artifact JSON files validated against MAK-0001, zero errors
 □ Add CHANGELOG.md (even if just v0.1 entry)
-□ Set up GitHub Discussions for RFC proposals
-□ Add GitHub issue templates:
+☑ Set up GitHub Discussions for RFC proposals
+☑ Add GitHub issue templates (tested end-to-end, all auto-populate correctly):
     Bug report
     MAK standard proposal
-    Artifact contribution
-□ Add GitHub PR template
+    Production evidence
+☑ Add GitHub PR template
 
 Content:
 □ Write Dev.to launch article:
@@ -280,9 +291,12 @@ Technical:
 ```
 Review:
 □ Share repo with 2-3 developer friends for honest feedback
-□ Check all links in README work correctly
+☑ Check all links in README work correctly
+  → 42 relative links verified locally; anchor links spot-checked
+    live on GitHub (ARCHITECTURE.md, MCP.md, BUSINESS_MODEL.md)
 □ Verify MAK-0001 renders correctly on GitHub
-□ Verify all artifact JSON files are valid
+☑ Verify all artifact JSON files are valid
+  → All 14 validated against MAK-0001, zero errors
 □ Final spell-check all markdown files
 
 Social:
