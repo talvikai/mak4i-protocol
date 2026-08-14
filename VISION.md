@@ -144,13 +144,13 @@ What is true about your project right now.
 
 ```
 Examples:
-  schedovia-stack-context     Your full tech stack and architecture
   mak4i-artifact-schema       The MAK4I data model
   company-api-contracts       Your internal API specifications
   domain-glossary             Your business terminology
+  database-schema             Your current table structure
 
 Once stored as a MAK4I artifact:
-  mak4i inject schedovia-stack-context
+  mak4i inject company-api-contracts
   → Claude knows your entire stack instantly
   → No re-explaining Firebase Auth, GCP, Twilio, Square
   → Start building immediately

@@ -91,8 +91,6 @@ this repo today, the `✓ implemented` boxes are what you get.
 
 ## The Registry Model
 
-## The Registry Model
-
 Skills, Knowledge, and History become reusable dependencies —
 just like npm packages.
 

@@ -171,27 +171,12 @@ live. See [ROADMAP.md](ROADMAP.md) for the integration plan.
 
 ---
 
-## Standards
-
-MAK4I uses the **MAK-XXXX** convention for protocol standards.
-
-| Standard | Title | Status |
-|----------|-------|--------|
-| [MAK-0001](standards/MAK-0001.md) | Artifact Metadata Schema | Draft |
-
----
-
 ## Roadmap
 
-| Phase | When | Milestone |
-|-------|------|-----------|
-| 0 — Foundation | Jul 2026 | Public repo, spec outline, problem statement |
-| 1 — Protocol Spec | Aug–Sep 2026 | MAK4I-SPEC.md v1.0, RFC open |
-| 2 — Reference Impl | Oct–Nov 2026 | Python + Node.js SDK, CLI |
-| 3 — First Artifacts | Dec 2026 | 10+ artifacts published, open source |
-| 4 — Hosted Registry | Jan–Feb 2027 | Public registry, free tier |
-| 5 — MCP Integration | Feb–Mar 2027 | Works natively with Claude Code, Cursor |
-| 6 — Funding | Apr–Jun 2027 | Pre-seed conversations |
+MAK4I uses the **MAK-XXXX** convention for protocol standards. See
+[ROADMAP.md](ROADMAP.md) for the full phase-by-phase roadmap and
+[VISION.md](VISION.md#standards-process) for the standards list —
+this repo is currently **Phase 0 — Foundation** (Aug 2026).
 
 ---
 

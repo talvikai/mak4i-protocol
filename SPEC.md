@@ -14,15 +14,28 @@
 ## Overview
 
 MAK4I (Memory, Artifacts & Knowledge for Intelligence) is an open,
-platform-independent protocol that enables portable AI intelligence
-across models, platforms, and organizations.
+platform-independent protocol for packaging, identifying, versioning,
+sharing, and reusing AI artifacts — across models, platforms, and
+organizations.
+
+**Memory is one artifact type this protocol handles — not the whole
+protocol.** MAK4I also covers procedural knowledge, project context,
+prompts, workflows, and historical decisions. See
+[README.md](README.md#what-mak4i-is) for the full picture and
+[COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for why this
+distinction matters relative to memory-focused alternatives.
 
 ### Core Principle
 
-> Every AI session should start with context, not from zero.
+> Don't rebuild what already exists. Check the registry, reuse or
+> adapt what's there, and only generate something new when nothing
+> matches.
 
-MAK4I defines how AI knowledge is:
+This is a **reuse discipline**, specified as protocol behavior rather
+than left to individual client implementations. MAK4I defines how AI
+artifacts are:
 - **Structured** — using a standard artifact schema (MAK-0001)
+- **Discovered** — searched before anything new is generated
 - **Versioned** — using semantic versioning
 - **Injected** — into any AI session before work begins
 - **Shared** — via public and private registries
@@ -41,9 +54,11 @@ MAK4I defines how AI knowledge is:
 
 ---
 
-## Memory Types
+## Artifact Types
 
-MAK4I defines three memory types. Every artifact must declare its type.
+MAK4I defines three artifact types. Every artifact must declare its type.
+(These correspond to what README.md and VISION.md call Skills, Knowledge,
+and History when explaining the same three types by analogy.)
 
 ### Procedural (How)
 Knowledge describing how work is performed.

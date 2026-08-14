@@ -56,7 +56,7 @@ registry without additional integration work. See
 | How they benefit | Claude API revenue grows as MCP drives more Claude usage | MAK4I Registry revenue grows as protocol adoption grows |
 | What's paid | Claude API + Claude.ai subscriptions | Hosted Registry, Enterprise, Cloud API |
 | Model-dependent? | Yes — MCP benefits Anthropic mainly when Claude is used | No — MAK4I earns revenue regardless of which AI model is used |
-| Governance | Anthropic owned | Talvik owned (community steering committee planned) |
+| Governance | Linux Foundation (Anthropic donated MCP to the Agentic AI Foundation, Dec 2025) | Talvik owned (community steering committee planned) |
 
 ### The Key Difference
 

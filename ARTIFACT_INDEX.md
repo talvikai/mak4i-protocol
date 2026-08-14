@@ -1,23 +1,26 @@
 # MAK4I Artifact Index
 
 All registered artifacts across WD Technology Solutions products.
-Last updated: July 9, 2026
+Last updated: August 2026
 
 ---
 
 ## Summary
 
-| Type | Count | Avg tokens saved/use |
-|------|-------|---------------------|
-| document | 2 | 750 |
-| reasoning | 2 | 375 |
-| workflow | 2 | 400 |
-| code | 1 | 600 |
-| prompt | 1 | 250 |
-| context | 1 | 1,500 |
-| **Total** | **9** | |
+| Type | Count |
+|------|-------|
+| document | 2 |
+| reasoning | 2 |
+| workflow | 7 |
+| code | 1 |
+| prompt | 1 |
+| context | 1 |
+| **Total** | **14** |
 
-**Total tokens saved (as of June 25, 2026): 25,100+**
+**Total tokens saved: see [docs/MAK4I_SAVINGS_LOG.md](docs/MAK4I_SAVINGS_LOG.md)
+for the current, dated running total** — this file catalogs artifacts, not
+savings; the two were previously listed together here and drifted out of
+sync, which is why savings totals now live only in the log.
 
 ---
 
@@ -170,7 +173,8 @@ Skills 3 and 4 can be combined into one end-of-session routine.
 **What it is:** The master skill. Defines WHEN all other skills trigger automatically. Inject into Claude Project Instructions once — all skills fire automatically forever after. No manual triggering needed.
 **Trigger:** Always active once injected
 
-New file added: SKILLS.md — human readable trigger map for all skills.
+SKILLS.md (workflow trigger map) has been moved out of this public repo
+and is maintained separately as an internal document.
 
 ## Final Summary (as of July 9, 2026)
 

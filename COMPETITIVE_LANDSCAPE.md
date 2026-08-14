@@ -34,6 +34,10 @@ A vendor-neutral spec for AI tools to store, retrieve, and share memory about us
 
 By mid-2026 every major AI platform shipped persistent memory: ChatGPT (rebuilt June 2026), Claude (extended to all tiers), Gemini (Personal Intelligence), Copilot (GA in M365). None of it travels between platforms — each is a walled garden. This is the problem every protocol above is trying to solve, and the reason the category exists at all.
 
+### Academic work (research, not a shipped competitor)
+
+**Portable Agent Memory** (Ravindran, arXiv:2605.11032, May 2026) — a single-author cryptography/security paper, not a company or funded product. Its actual contribution is narrower and different from MAK4I's: a five-component memory model with Merkle-DAG provenance for tamper-evidence, capability-based access scoping, and an injection-resistant rehydration protocol specifically defending against indirect prompt injection during cross-model memory transfer. It uses the same episodic/semantic/procedural categorization MAK4I uses — worth acknowledging directly rather than pretending the overlap doesn't exist — but its center of gravity is memory security and integrity, not the check-before-create reuse discipline that is MAK4I's actual differentiator. No registry, no reuse enforcement, no production adoption; a reference implementation (Python SDK, 54 tests) under Apache 2.0. Worth revisiting if this moves from a preprint toward an adopted standard or a funded product.
+
 ---
 
 ## What MAK4I No Longer Gets to Claim Alone

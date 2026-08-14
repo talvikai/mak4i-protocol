@@ -154,14 +154,12 @@ Anyone. No affiliation with Talvik required.
 - **Accepted → Implemented:** Reference implementation follows acceptance
 
 ### Naming convention
-```
-MAK-0001  Core schema standards (0001-0099)
-MAK-0100  Injection and resolution (0100-0199)
-MAK-0200  Registry and distribution (0200-0299)
-MAK-0300  Security and access control (0300-0399)
-MAK-0400  SDK and tooling (0400-0499)
-MAK-0500  Enterprise and governance (0500-0599)
-```
+
+Standards are numbered sequentially as they're proposed and accepted —
+see [SPEC.md](SPEC.md#standards) for the current list (MAK-0001 through
+MAK-0007 so far, covering schema, injection, versioning, access control,
+and registry topics). There is no reserved numeric range per topic;
+numbers are assigned in proposal order, not by category.
 
 ### Stewardship
 Talvik, Inc. is the steward of the MAK4I protocol. We are committed to:
