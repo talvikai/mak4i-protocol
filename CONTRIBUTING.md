@@ -168,6 +168,9 @@ Talvik, Inc. is the steward of the MAK4I protocol. We are committed to:
 - Prioritizing backward compatibility
 - Building a community steering committee when adoption warrants it
 
+See [GOVERNANCE.md](GOVERNANCE.md) for the full ownership, approval, and
+versioning model.
+
 ---
 
 ## Code of Conduct

@@ -62,13 +62,14 @@ Talvik CLI (mak4i install, inject, publish)
 
 **Open protocol forever. Commercial ecosystem on top.**
 
-The same model that gave the world Git and GitHub.
+Following the same open protocol + commercial ecosystem model used by
+projects such as Git/GitHub, Kubernetes, and Terraform.
 
 ---
 
 ## How MAK4I Is Different
 
-The AI memory space is crowded — [Mem0](https://mem0.ai), [Google's Open Knowledge Format](https://github.com/google/okf), [Open Memory Protocol](https://github.com/SMJAI/open-memory-protocol), and every major platform's native memory all solve some version of "the AI doesn't remember." We read the landscape closely before writing a line of this README. See [COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
+The AI memory space is crowded — [Mem0](https://mem0.ai), [Google's Open Knowledge Format](https://github.com/google/okf), [Open Memory Protocol](https://github.com/SMJAI/open-memory-protocol), and every major platform's native memory all solve some version of "the AI doesn't remember." MAK4I was designed after evaluating the existing landscape of AI memory, knowledge, and interoperability projects. See [COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
 
 MAK4I isn't trying to out-remember them. It solves a narrower, different problem:
 
