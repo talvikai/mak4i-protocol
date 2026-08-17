@@ -1,17 +1,33 @@
 # MAK4I Vision
 
-*This document covers the long-term vision, core philosophy, and a
-high-level view of the architecture and roadmap. For the detailed
-version of each, see:*
+*The vision described here is supported by the following documents:*
 
-- *[ARCHITECTURE.md](ARCHITECTURE.md) — full runtime, registry, and
-  storage adapter architecture*
-- *[ROADMAP.md](ROADMAP.md) — complete phase-by-phase roadmap and the
-  Phase 2/5 integration workflow*
-- *[MCP.md](MCP.md) — how MAK4I relates to the Model Context Protocol*
-- *[BUSINESS_MODEL.md](BUSINESS_MODEL.md) — pricing tiers and the
-  Talvik/WD Technology relationship*
-- *[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) — CLI, SDK, and tooling*
+- *[ARCHITECTURE.md](ARCHITECTURE.md) — Full runtime architecture,
+  registry model, storage adapters, and protocol interactions.*
+- *[ROADMAP.md](ROADMAP.md) — Complete phase-by-phase roadmap,
+  implementation strategy, and Phase 2/5 integration workflow.*
+- *[SPEC.md](SPEC.md) — The technical protocol specification and
+  normative behavior of MAK4I.*
+- *[STANDARDS.md](STANDARDS.md) — Published MAK standards, protocol
+  conventions, and design principles.*
+- *[GOVERNANCE.md](GOVERNANCE.md) — Stewardship model, proposal
+  process, versioning policy, and protocol evolution.*
+- *[CONFORMANCE.md](CONFORMANCE.md) — MAK4I Certified requirements
+  and conformance expectations.*
+- *[SECURITY.md](SECURITY.md) — Security policy, vulnerability
+  reporting, and future security roadmap.*
+- *[MCP.md](MCP.md) — How MAK4I relates to the Model Context Protocol
+  (MCP) and where they complement one another.*
+- *[COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) — Comparison
+  with existing AI memory systems, registries, and interoperability
+  initiatives.*
+- *[BUSINESS_MODEL.md](BUSINESS_MODEL.md) — Talvik's commercial
+  ecosystem, open protocol strategy, and implementation partner
+  model.*
+- *[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) — CLI, SDKs, tooling, and
+  guidance for developers building on MAK4I.*
+- *[CONTRIBUTING.md](CONTRIBUTING.md) — How to propose changes,
+  participate in discussions, and contribute to the protocol.*
 
 ---
 
@@ -31,10 +47,12 @@ MAK4I is not another memory format, and not another memory store. It's a
 runtime layer that sits above whatever format or store a team already
 uses, adding the discipline that neither formats nor stores enforce on
 their own: checking whether an artifact already exists — and reusing or
-adapting it — *before* generating something new. Formats like OKF define
-what an artifact's metadata looks like, including provenance and
-lifecycle fields; MAK4I defines what happens at the moment of creation,
-which no format enforces by itself.
+adapting it — *before* generating something new. In one line: **MAK4I
+consumes and governs artifact metadata while defining protocol behavior
+above the format layer.** Formats like OKF define what an artifact's
+metadata looks like, including provenance and lifecycle fields; MAK4I
+defines what happens at the moment of creation, which no format enforces
+by itself.
 
 ```
         Applications (Claude Code, Cursor, ChatGPT, Gemini, ...)

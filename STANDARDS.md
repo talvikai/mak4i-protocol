@@ -1,12 +1,15 @@
 # MAK4I Standards
 
+*Published MAK standards and the conventions that govern protocol
+evolution.*
+
 The MAK4I protocol is defined through a series of MAK standards.
 Each standard describes one normative aspect of the protocol. This
 file is the index — see [SPEC.md](SPEC.md) for the protocol
 specification itself and [GOVERNANCE.md](GOVERNANCE.md) for how a
 standard is proposed and approved.
 
-## Current Standards
+## Published and Planned Standards
 
 | Standard | Title | Status | File |
 |----------|-------|--------|------|
@@ -18,8 +21,8 @@ standard is proposed and approved.
 | MAK-0006 | Access Control Model | Planned | — |
 | MAK-0007 | Registry API Contract | Planned | — |
 
-Numbers are assigned sequentially as proposals are accepted, not
-reserved by topic — see
+MAK numbers are assigned sequentially when proposals are accepted
+rather than preallocated by topic — see
 [CONTRIBUTING.md](CONTRIBUTING.md#naming-convention).
 
 ## Design Principles

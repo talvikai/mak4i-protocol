@@ -36,8 +36,10 @@ regardless of which format or store it lives in.
             └─────────────────────────────────────┘
 ```
 
-**In one line:** OKF is a format. Mem0 is a store. MAK4I is the runtime that
-governs memory access, trust, and reuse across all of them.
+**In one line:** MAK4I consumes and governs artifact metadata while
+defining protocol behavior above the format layer. OKF is a format.
+Mem0 is a store. MAK4I is the runtime that governs memory access, trust,
+and reuse across all of them.
 
 This placement matters for one specific reason: it's the honest answer to
 *"why not just use OKF"* or *"how is this different from Mem0."* MAK4I doesn't
