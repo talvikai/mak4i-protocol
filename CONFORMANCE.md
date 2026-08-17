@@ -30,7 +30,7 @@ Similar to:
 
 | Level | What is certified | Requirements |
 |-------|------------------|-------------|
-| **Artifact** | A single memory artifact | Passes MAK-0001 schema validation |
+| **Artifact** | A single MAK4I artifact | Passes MAK-0001 schema validation |
 | **SDK** | A language SDK | Implements inject, publish, list, sync |
 | **Registry** | A MAK4I registry | Implements Registry API (MAK-0007) |
 | **Client** | A MAK4I client | Implements full injection flow (MAK-0002) |

@@ -29,8 +29,12 @@ MAK4I standardizes knowledge continuity for AI.
 
 MAK4I is not another memory format, and not another memory store. It's a
 runtime layer that sits above whatever format or store a team already
-uses, adding the discipline — check-before-create, provenance, reuse
-logging — that neither formats nor stores enforce on their own.
+uses, adding the discipline that neither formats nor stores enforce on
+their own: checking whether an artifact already exists — and reusing or
+adapting it — *before* generating something new. Formats like OKF define
+what an artifact's metadata looks like, including provenance and
+lifecycle fields; MAK4I defines what happens at the moment of creation,
+which no format enforces by itself.
 
 ```
         Applications (Claude Code, Cursor, ChatGPT, Gemini, ...)

@@ -41,9 +41,14 @@ governs memory access, trust, and reuse across all of them.
 
 This placement matters for one specific reason: it's the honest answer to
 *"why not just use OKF"* or *"how is this different from Mem0."* MAK4I doesn't
-ask a team to abandon their format or store — it sits above whatever they
-already chose and adds the discipline (check-before-create, provenance,
-audit) that none of those layers enforce on their own. See
+ask a team to abandon their format or store — it's format-agnostic by
+design. An artifact described in OKF's frontmatter, or held in Mem0's
+store, is a legitimate input MAK4I can read; MAK4I doesn't require
+reinventing provenance or trust metadata that a format already defines.
+What MAK4I adds is what sits above all of them: the enforced
+check-before-create discipline and audit trail that no format or store
+provides on its own, regardless of how well that format or store
+describes the artifact once it exists. See
 [COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
 
 ---

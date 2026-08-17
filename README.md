@@ -62,8 +62,8 @@ Talvik CLI (mak4i install, inject, publish)
 
 **Open protocol forever. Commercial ecosystem on top.**
 
-Following the same open protocol + commercial ecosystem model used by
-projects such as Git/GitHub, Kubernetes, and Terraform.
+Following the open protocol + commercial ecosystem approach used by
+projects such as Git, Kubernetes, and OpenTelemetry.
 
 ---
 
@@ -77,9 +77,10 @@ MAK4I isn't trying to out-remember them. It solves a narrower, different problem
 |---|---|
 | "The AI doesn't remember my preferences" | Mem0, native platform memory |
 | "Our knowledge should live in files, not a vendor's database" | Google's OKF |
-| "We keep paying to regenerate things we already built, and can't prove how much it costs" | **MAK4I** |
+| "I want lifecycle and staleness tracked, but nothing stops duplicate work" | OKF v0.2, ByteRover |
+| "We keep paying to regenerate things we already built, and nothing actually stops that from happening again" | **MAK4I** |
 
-MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Proof of Concept](#proof-of-concept) below).
+MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. That check is a protocol guarantee, not an optional convention a client can skip — the distinction that matters, since tracking that an artifact *could* be reused is different from a runtime that *requires* checking first. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Proof of Concept](#proof-of-concept) below).
 
 ---
 
@@ -193,8 +194,8 @@ this repo is currently **Phase 0 — Foundation** (Aug 2026).
 
 ## Links
 
-- Website: [talvik.ai](https://talvik.ai)
-- Developer docs: [talvik.dev](https://talvik.dev)
+- Website: [talvik.ai](https://talvik.ai/)
+- Documentation: [GitHub](https://github.com/talvikai/mak4i-protocol)
 - Company: Talvik, Inc.
 - License: MIT
 
