@@ -6,7 +6,7 @@
 
 Before going public, we did the research most protocols skip: who else is solving this problem, and does MAK4I still say something true and specific once you account for them? This document is revisited on a real cadence, not written once — the entries below reflect a second full pass, not the original.
 
-**What changed since the first pass (August 2, 2026):** the ecosystem moved fast. Several projects that were pure stores in early August have since added provenance, trust metadata, and lifecycle fields. That's a real shift, and it narrows one part of what MAK4I originally claimed. It does not narrow the part that actually matters most: nobody else enforces reuse-before-generate as a protocol-level runtime behavior. That distinction is explained in detail below, not asserted.
+**What changed since the first pass (August 2, 2026):** the ecosystem moved fast. Several projects that were pure stores in early August have since added provenance, trust metadata, and lifecycle fields. That's a real shift, and it narrows one part of what MAK4I originally claimed. It does not narrow the part that actually matters most: Based on this review, we did not identify another open protocol that specifies reuse-before-generate as protocol-level behavior. That distinction is explained in detail below, not asserted.
 
 ---
 
@@ -107,7 +107,7 @@ Independent security research published mid-2026 documented AI coding assistants
 
 **What MAK4I is not:** the first or only open memory format, and — as of this review — no longer the only project describing provenance or lifecycle metadata. OKF got there first on distribution. Mem0 has more funding and more developers today. ByteRover independently arrived at a similar lifecycle model.
 
-**What MAK4I is:** the protocol that treats *not rebuilding what you already built* as an enforced discipline, not an optional convenience — the only project reviewed here that makes discovery-before-generation a protocol guarantee rather than a feature a client can choose to skip. This is evidenced by a continuously logged reuse record, and distributed through a registry of reusable Skills, not just stored facts.
+**What MAK4I is:** the protocol that treats *not rebuilding what you already built* as an enforced discipline, not an optional convenience — Among the projects reviewed here that makes discovery-before-generation a protocol guarantee rather than a feature a client can choose to skip. This is evidenced by a continuously logged reuse record, and distributed through a registry of reusable Skills, not just stored facts.
 
 If a team's problem is "the AI doesn't remember my preferences" → Mem0 or native platform memory solves that.
 If a team's problem is "our knowledge should live in files, not a vendor's database, and I want provenance and staleness tracked" → OKF v0.2 solves that, and MAK4I can consume it.

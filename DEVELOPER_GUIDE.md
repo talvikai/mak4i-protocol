@@ -1,14 +1,32 @@
 # Developer Guide
 
+*Planned developer tooling and integration experience for MAK4I.
+The tools described in this document are roadmap targets and are not
+available in Phase 0 unless explicitly stated otherwise.*
+
 *CLI, SDK, Registry UI, and editor/CI integrations for building with
 MAK4I. See [ARCHITECTURE.md](ARCHITECTURE.md) for the underlying API
 these tools call, and [MCP.md](MCP.md) for the MCP integration path.*
 
 ---
 
+## Current Status
+
+MAK4I is currently in Phase 0.
+
+The CLI, SDKs, hosted Registry UI, VS Code extension, GitHub Action,
+and MCP server described below are planned capabilities. Their commands,
+APIs, interfaces, and behavior may change as the reference implementation
+is developed.
+
+The examples in this document illustrate the intended developer
+experience; they are not currently available production interfaces.
+
+---
+
 ## Developer Tools
 
-MAK4I is not just for AI models. It is a complete developer ecosystem.
+MAK4I is intended to support both AI systems and developers through a broader developer ecosystem.
 
 There are two distinct users of MAK4I:
 

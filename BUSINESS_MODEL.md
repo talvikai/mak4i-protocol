@@ -48,15 +48,22 @@ Early, development-time reuse observations (not production data):
 ---
 
 
-## Business Model
+## Commercial Offerings
 
-| Tier | What | Price |
-|------|------|-------|
-| Protocol | Full MAK4I spec, MIT licensed | Free forever |
-| Community Registry | Public artifact marketplace | Free |
-| Pro | Private artifacts, analytics, history | $15/month |
-| Team | Shared org registry, admin, team Skills | $20/seat/month |
-| Enterprise | Self-hosted, SSO, SLA, governance | Custom |
+The MAK4I protocol will remain open and MIT licensed.
 
+Talvik intends to build commercial products and services around the protocol, which may include:
+
+- Hosted Registry
+- Enterprise deployment options
+- Managed Cloud API
+- MAK4I Certified program
+- Enterprise support
+- Professional services
+- Implementation partnerships
+
+Specific product packaging and pricing will be announced as these offerings mature.
+
+The protocol itself will remain open regardless of future commercial offerings.
 ---
 

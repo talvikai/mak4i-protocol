@@ -11,10 +11,13 @@ once a hosted service exists.
 
 ## Reporting a Vulnerability
 
-If you find a security issue in anything currently in this repository —
-for example, an issue in `frameworks/wd-docx-framework`, or a problem
-with how an artifact's metadata could be misused — please report it
-privately rather than opening a public GitHub issue.
+Please report security vulnerabilities privately via email rather than
+opening a public GitHub issue so that we have an opportunity to
+investigate, develop a fix, and coordinate responsible disclosure
+before details become public.
+
+Please do not disclose suspected vulnerabilities publicly until we have
+had an opportunity to investigate and coordinate a fix.
 
 **Email: hello@talvik.ai**
 
