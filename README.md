@@ -17,6 +17,10 @@ MAK4I is an open protocol for packaging, identifying, versioning, sharing,
 injecting, and reusing AI artifacts across models, platforms, and
 organizations.
 
+> **New to MAK4I?** Start with [Understanding MAK4I](docs/UNDERSTANDING_MAK4I.md)
+> for a plain-language explanation of MAK4I, what a MAK specification is,
+> and how the core MAK standards work together.
+
 A MAK4I artifact can represent:
 
 - Project context
