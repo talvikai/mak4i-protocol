@@ -1,13 +1,13 @@
 # Security Policy
 
-## Current Scope (Phase 0)
+## Current Scope
 
-As of Phase 0, this repository contains protocol documentation, the
-draft specification, artifact metadata (JSON), and the
-`frameworks/wd-docx-framework` document-generation tool. There is no
-hosted API, registry, or production service yet — that begins in
-Phase 2 (see [ROADMAP.md](ROADMAP.md)). This policy will be expanded
-once a hosted service exists.
+This repository contains protocol documentation, the draft specification,
+artifact metadata (JSON), and the `frameworks/wd-docx-framework`
+document-generation tool. A working reference implementation exists
+separately and is deployed for testing, but there is no production or
+generally available hosted service. This policy covers this repository; it
+will be expanded when a production service exists.
 
 ## Reporting a Vulnerability
 
@@ -33,14 +33,14 @@ details are shared.
 
 ## Supported Versions
 
-Given the repository's current stage (Phase 0, pre-1.0 specification),
-only the latest state of `main` is supported. There are no maintained
-release branches yet.
+Given the repository's current stage (pre-1.0 specification), only the
+latest state of `main` is supported. There are no maintained release
+branches yet.
 
 ## Scope Going Forward
 
-Once Phase 2 ships a hosted reference implementation, this document
-will be updated to cover:
+Once a production hosted service exists, this document will be updated to
+cover:
 
 - API authentication and authorization
 - Data handling for artifacts submitted to the registry

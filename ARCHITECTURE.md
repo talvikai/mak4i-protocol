@@ -55,44 +55,47 @@ describes the artifact once it exists. See
 
 ---
 
-## What v0.1 Actually Ships (August 2026)
+## What the Reference Implementation Ships Today
 
 The diagram above is the target architecture — the destination, not the
 starting point. Being direct about the gap between the two is part of how
-this protocol earns trust. Here is the thin vertical slice that exists today:
+this protocol earns trust. Here is what the working reference
+implementation (MVP) covers today:
 
 ```
-                          Applications
-                   Claude Code | Claude.ai (via CLI)
+              MCP-connected AI clients   │   Operator CLI
                               │
-                         CLI / local API
+              MCP server (stdio + Streamable HTTP)
                               │
-                     MAK4I Runtime (v0.1)
+                        MAK4I engine
             ┌─────────────────────────────────────┐
-            │  Retrieval        ✓ implemented      │
-            │  Provenance       ✓ implemented      │
+            │  Create / retrieve / search      ✓   │
+            │  Supersede (lineage preserved)   ✓   │
+            │  Version history                 ✓   │
+            │  Provenance + audit log          ✓   │
+            │  Conflict detection (surfaced)   ✓   │
+            │  Integrity checks (fail-closed)  ✓   │
             │  Check-before-create discipline  ✓   │
-            │  Savings log (audit-lite)        ✓   │
             │  ─────────────────────────────────   │
-            │  Identity          spec'd, not built │
-            │  Authorization     spec'd, not built │
-            │  Sync / Conflicts  roadmap (Phase 3+) │
-            │  Write policy      roadmap (Phase 4)  │
-            │  Revocation        roadmap (Phase 4+) │
+            │  Identity / auth beyond bearer   —   │
+            │  Sync / revocation / write policy —  │
             └─────────────────────────────────────┘
                               │
-                  Format and storage adapters
+                     Storage adapters
             ┌─────────────────────────────────────┐
-            │  Local JSON artifacts    ✓ v0.1      │
-            │  Git repo (this repo)    ✓ v0.1      │
-            │  OKF bundle adapter      roadmap      │
-            │  SQL / vector DB adapter roadmap      │
+            │  Local JSON store                ✓   │
+            │  Object storage (GCS) adapter    ✓   │
+            │  OKF / SQL / vector adapters     —   │
             └─────────────────────────────────────┘
 ```
 
-Every box marked `roadmap` has a target phase in [ROADMAP.md](ROADMAP.md).
-Nothing on this page claims to be built unless it is built — if you clone
-this repo today, the `✓ implemented` boxes are what you get.
+Items marked `—` are specified or planned, not built; each has a target
+phase in [ROADMAP.md](ROADMAP.md). The object-storage adapter is one
+storage backend behind the same interface, not a requirement — the engine
+contains no storage-, database- or provider-specific workflow logic. The
+reference implementation is deployed for testing but is a proof of
+protocol behavior, not a production service; its source will be published
+when it is release-ready.
 
 ---
 

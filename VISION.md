@@ -5,7 +5,7 @@
 - *[ARCHITECTURE.md](ARCHITECTURE.md) — Full runtime architecture,
   registry model, storage adapters, and protocol interactions.*
 - *[ROADMAP.md](ROADMAP.md) — Complete phase-by-phase roadmap,
-  implementation strategy, and Phase 2/5 integration workflow.*
+  implementation status, and the multi-tool integration workflow.*
 - *[SPEC.md](SPEC.md) — The technical protocol specification and
   normative behavior of MAK4I.*
 - *[STANDARDS.md](STANDARDS.md) — Published MAK standards, protocol
@@ -239,18 +239,21 @@ Similar to CNCF conformance for Kubernetes.
 
 ## Roadmap
 
-The full phase-by-phase roadmap, including the Phase 2 and Phase 5
-integration workflow, is in [ROADMAP.md](ROADMAP.md). Summary:
+The full phase-by-phase roadmap and the multi-tool integration workflow
+are in [ROADMAP.md](ROADMAP.md). MAK4I is in **Developer Preview**: the
+specification is in active development, and a working reference
+implementation covers the core workflow with an operator CLI and MCP
+access. Summary:
 
-| Phase | When | Key Output |
-|-------|------|-----------|
-| 0 — Foundation | Aug 2026 | Public repo, spec, problem statement ← **YOU ARE HERE** |
-| 1 — Protocol Spec | Aug-Sep 2026 | SPEC.md v1.0, community RFC open |
-| 2 — Reference Impl | Oct-Nov 2026 | Python + Node.js SDK, CLI |
-| 3 — First Artifacts | Dec 2026 | 10+ community artifacts open source |
-| 4 — Hosted Registry | Jan-Feb 2027 | Public registry, free tier live |
-| 5 — MCP Integration | Feb-Mar 2027 | Native support for MCP-compatible tools |
-| 6 — Funding | Apr-Jun 2027 | Pre-seed conversations with production data |
+| Phase | Status | Scope |
+|-------|--------|-------|
+| 0 — Foundation | Complete | Public repo, protocol design, problem statement, vision |
+| 1 — Protocol Spec | Active development | SPEC.md and the MAK-0001…MAK-0005 standards; community RFC |
+| 2 — Reference Implementation | Initial MVP complete | Core workflow (create, retrieve, search, supersede, history, provenance), operator CLI, MCP access; hardening ongoing |
+| 3 — Reusable Artifacts | Planned | Community artifacts; reuse-workflow validation with early design partners |
+| 4 — Hosted Registry | Planned | Public registry with governance and access controls |
+| 5 — MCP Integration | Initial integration working | MAK4I reachable through MCP today; native registry-level MCP ahead |
+| 6 — Funding | Planned | Pre-seed fundraising, informed by real usage data |
 
 ---
 
