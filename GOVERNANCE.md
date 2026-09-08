@@ -24,8 +24,8 @@ documents reference this one rather than repeating it.
 
 As the project grows, Talvik intends to establish a community steering
 committee (referenced in [CONTRIBUTING.md](CONTRIBUTING.md#stewardship)).
-That does not exist yet as of Phase 0 — until it does, Talvik's
-maintainers steward proposed standards through the process below.
+That does not exist yet — until it does, Talvik's maintainers steward
+proposed standards through the process below.
 
 ### Stewardship Principles
 

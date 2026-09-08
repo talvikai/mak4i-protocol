@@ -1,73 +1,67 @@
 # MAK4I Roadmap
 
-*Phase timing and scope. See [ARCHITECTURE.md](ARCHITECTURE.md) for what's
+*Phase scope and status. See [ARCHITECTURE.md](ARCHITECTURE.md) for what's
 actually implemented today versus planned, and [MCP.md](MCP.md) for how
-MCP fits into Phase 5.*
+MCP relates to MAK4I.*
 
 ---
 
-## Roadmap
+## Where MAK4I is
 
-| Phase | When | Key Output |
-|-------|------|-----------|
-| 0 — Foundation | Aug 2026 | Public repo, spec, problem statement ← **YOU ARE HERE** |
-| 1 — Protocol Spec | Aug-Sep 2026 | SPEC.md v1.0, community RFC open |
-| 2 — Reference Impl | Oct-Nov 2026 | Python + Node.js SDK, CLI |
-| 3 — First Artifacts | Dec 2026 | 10+ community artifacts open source |
-| 4 — Hosted Registry | Jan-Feb 2027 | Public registry, free tier live |
-| 5 — MCP Integration | Feb-Mar 2027 | Native support for MCP-compatible tools |
-| 6 — Funding | Apr-Jun 2027 | Pre-seed conversations with production data |
+MAK4I is in **Developer Preview**. Phase 1 (the specification) is in active
+development, and Phases 2 and 5 have initial working implementations in the
+reference MVP. The phases are no longer strictly sequential — nothing below
+is marked done until it actually works.
+
+| Phase | Status | Scope |
+|-------|--------|-------|
+| 0 — Foundation | Complete | Public repo, protocol design, problem statement, vision |
+| 1 — Protocol Spec | Active development | SPEC.md and the MAK-0001…MAK-0005 standards; community RFC |
+| 2 — Reference Implementation | Initial MVP complete | Working reference implementation of the core workflow — create, retrieve, search, supersede, version history, provenance — with an operator CLI and MCP access. Hardening and expansion are ongoing. |
+| 3 — Reusable Artifacts | Planned | Community artifacts across artifact types; reuse-workflow validation with developers and early design partners |
+| 4 — Hosted Registry | Planned | Public registry for discovering, versioning and sharing artifacts, with governance and access controls |
+| 5 — MCP Integration | Initial integration working | MAK4I is reachable through MCP in the reference implementation today. Native registry-level MCP and broader interoperability remain ahead. |
+| 6 — Funding | Planned | Pre-seed fundraising, informed by real usage data |
 
 ---
 
-## The Multi-Tool Workflow: Phase 2 vs. Phase 5
+## The Multi-Tool Workflow
 
-MAK4I's founding use case is a workflow gap its own builders live with
-today: architecture and requirements decisions get made in one AI tool,
-get manually re-explained to a second tool to implement, and get manually
+MAK4I's founding use case is a workflow gap its own builders live with:
+architecture and requirements decisions get made in one AI tool, get
+manually re-explained to a second tool to implement, and get manually
 re-explained again to document. Nothing persists between them
-automatically. MAK4I is designed to close that gap — but not all at once,
-and not on the same timeline for every integration path, since different
-tools reach MAK4I through different mechanisms.
+automatically.
 
-### Phase 2 (Oct-Nov 2026) — Direct REST API integration
+### Working today — via MCP
 
 ```
-AI tool (decisions made)
-       │  written to MAK4I via REST API
+AI client A (decision made)
+       │  recorded through an MCP tool call
        ▼
-MAK4I  (artifact stored: architecture decision, requirement, spec)
-       │  read via REST API, CLI, or SDK
+MAK4I reference implementation
+   (artifact stored, with lineage, provenance and an audit event)
+       │  retrieved through an MCP tool call — conflict/integrity checked
        ▼
-AI tool (implements from stored context)
+AI client B (implements from the current decision, no re-explaining)
 ```
 
-Phase 2 targets AI tools and workflows that can call a REST API directly
-— no MCP server required. The MAK4I endpoints this depends on (`POST
-/api/v1/artifacts`, `GET /api/v1/artifacts/search`, `POST /api/v1/inject`)
-are scoped for the Phase 2 reference implementation, alongside a CLI and
-SDK for the same integration path.
+The reference implementation closes this gap today through MCP: a decision
+recorded through one MCP-connected AI client is discoverable by another,
+with conflict and integrity checks, version history and provenance — no
+REST integration required. It has been exercised end to end this way
+against several independent AI clients it was tested with.
 
-A second use case in the same phase: MAK4I-stored decisions being read by
-a documentation or presentation tool, closing the loop between "decision
-made" and "decision documented" — available to any tool capable of REST
-API, CLI, or SDK access.
+### Still ahead
 
-### Phase 5 (Feb-Mar 2027) — MCP integration
-
-```
-AI tool
-       │  via MCP server (mcp.talvik.ai)
-       ▼
-MAK4I
-```
-
-Phase 5 builds MAK4I as a native MCP server, extending access to any
-MCP-compatible tool without requiring direct REST API integration. See
-[MCP.md](MCP.md) for how MCP and MAK4I relate architecturally.
-
-**Why the split matters:** Phase 2 targets what's achievable with existing
-integration surfaces (REST API, CLI, SDK) and requires no new
-infrastructure. Phase 5 extends reach to any tool that speaks MCP, without
-the protocol's roadmap depending on the current capabilities of any single
-vendor's product — those capabilities change faster than a roadmap should.
+- **A documented REST API and language SDKs** for tools that integrate
+  directly rather than through MCP (e.g. `POST /artifacts`,
+  `GET /artifacts/search`, `POST /inject` or equivalent), so a
+  documentation or presentation tool can read MAK4I-stored decisions and
+  close the loop between "decision made" and "decision documented".
+- **A hosted registry** for discovering and sharing artifacts across
+  organizations.
+- **Native registry-level MCP**, so any MCP-compatible tool gains access
+  to a hosted MAK4I registry without additional integration work — without
+  the protocol's roadmap depending on the current capabilities of any
+  single vendor's product.

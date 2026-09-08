@@ -39,7 +39,9 @@ Similar to:
 
 ## Conformance Test Suite
 
-> Status: Planned for Phase 2 (October 2026)
+> Status: Planned. The reference implementation is being validated against
+> the evolving specification; a published conformance suite follows as the
+> specification stabilizes.
 
 The MAK4I Conformance Test Suite will include:
 
@@ -66,7 +68,7 @@ The MAK4I Conformance Test Suite will include:
 
 ## How to Get Certified
 
-> Process to be defined in Phase 3 (December 2026)
+> Process to be defined as the conformance suite is published.
 
 1. Implement the MAK4I protocol
 2. Run the conformance test suite against your implementation
@@ -77,10 +79,10 @@ The MAK4I Conformance Test Suite will include:
 
 ## Reference Implementation
 
-The Talvik reference implementation will serve as the
-canonical conformance baseline.
-
-Repository: [github.com/talvikai/mak4i-protocol](https://github.com/talvikai/mak4i-protocol)
+Talvik maintains a reference implementation of the core protocol workflow,
+currently in Developer Preview. It serves as the canonical conformance
+baseline as the specification and conformance suite mature. Its source is
+not yet public and will be released when it is release-ready.
 
 ---
 

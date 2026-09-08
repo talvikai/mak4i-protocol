@@ -1,8 +1,8 @@
 # Developer Guide
 
-*Planned developer tooling and integration experience for MAK4I. The
-tools described in this document are roadmap targets and are not
-available in Phase 0 unless explicitly stated otherwise.*
+*Planned developer tooling and integration experience for MAK4I. Except
+where a section explicitly says otherwise, the tools described in this
+document are roadmap targets and are not yet generally available.*
 
 *CLI, SDK, Registry UI, and editor/CI integrations for building with
 MAK4I. See [ARCHITECTURE.md](ARCHITECTURE.md) for the underlying API
@@ -12,15 +12,21 @@ these tools call, and [MCP.md](MCP.md) for the MCP integration path.*
 
 ## Current Status
 
-MAK4I is currently in Phase 0.
+MAK4I is in Developer Preview.
 
-The CLI, SDKs, hosted Registry UI, VS Code extension, GitHub Action, and
-MCP server described below are planned capabilities. Their commands,
-APIs, interfaces, and behavior may change as the reference
-implementation is developed.
+A working reference implementation of the core protocol workflow exists.
+It provides an **operator CLI** and **MCP access** today — `mak4i create`,
+`supersede`, `search`, `get-current`, `history`, and a `doctor` integrity
+check — and connected MCP clients reach the same engine. Its source is not
+yet public.
+
+The hosted Registry UI, language SDKs, VS Code extension, GitHub Action,
+and the broader registry-oriented CLI described below are planned. Their
+commands, APIs, interfaces, and behavior may change.
 
 The examples in this document illustrate the intended developer
-experience; they are not currently available production interfaces.
+experience; except where noted, they are not currently available
+production interfaces.
 
 ------------------------------------------------------------------------
 
@@ -31,29 +37,41 @@ broader developer ecosystem.
 
 There are two distinct users of MAK4I:
 
-    AI Systems (planned via MCP server):
-      MCP-compatible AI tools will be able to connect to MAK4I
-      They will be able to discover and consume relevant artifacts
-      MAK4I can provide reusable context through the integration
+    AI Systems (via MCP server — working in the reference implementation):
+      MCP-compatible AI clients connect to MAK4I
+      They discover and consume relevant artifacts
+      MAK4I provides reusable context through the integration
 
     Developers (via dev tools):
       Humans who BUILD with MAK4I
       They create, publish, and manage artifacts
       They integrate MAK4I into their products and pipelines
 
-### Planned Tool 1 --- MAK4I CLI
+### MAK4I CLI
 
-The CLI is planned as the primary command-line interface for developers.
+**Today (reference implementation):** an operator CLI over the core
+workflow —
+
+``` bash
+mak4i create ...        # record a new artifact
+mak4i supersede ...     # replace a current artifact, preserving lineage
+mak4i search ...        # deterministic lookup by type / tags / status
+mak4i get-current ...   # current applicable artifacts, conflict-checked
+mak4i history ...       # every version in a lineage
+mak4i doctor            # fail-closed integrity report
+```
+
+**Planned:** a broader registry-oriented CLI as the primary command-line
+interface for developers —
 
 ``` bash
 mak4i init                          # set up MAK4I in a project
 mak4i inject                        # inject all relevant artifacts
 mak4i install company/standards     # install an artifact pack
 mak4i publish ./my-artifact.json    # publish to registry
-mak4i search "fastapi deployment"   # search the registry
 mak4i list                          # list installed artifacts
 mak4i validate                      # validate against MAK-0001
-mak4i diff v1.0 v1.1               # compare artifact versions
+mak4i diff v1.0 v1.1                # compare artifact versions
 mak4i logs                          # view token savings
 ```
 
@@ -66,7 +84,7 @@ Comparable to: npm CLI, pip, git
 For developers who want to integrate MAK4I into their own code.
 
 ``` python
-# Python SDK (Phase 2)
+# Python SDK (planned)
 from mak4i import MAK4IClient
 
 client = MAK4IClient(api_key="...")

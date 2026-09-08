@@ -4,10 +4,14 @@
 
 **Built by [Talvik, Inc.](https://talvik.ai)**
 
-**Status: Phase 0 — Foundation.** This repo currently contains the protocol
-design, specification draft, and documentation. The reference API
-implementation (backend, CLI, SDK) has not been built yet — that's Phase 2.
-See [ROADMAP.md](ROADMAP.md) for what exists today versus what's planned.
+**Status: Developer Preview.** This repo contains the protocol design, the
+draft specification, and documentation. A working reference implementation
+(MVP) now exists separately — it covers the core protocol workflow end to
+end (create, retrieve, search, supersede, version history, provenance) with
+an operator CLI and MCP access, and is being validated against the evolving
+specification. Its source is not yet public and will be released when it is
+release-ready. See [ROADMAP.md](ROADMAP.md) for what exists today versus
+what's planned.
 
 ---
 
@@ -84,7 +88,7 @@ MAK4I isn't trying to out-remember them. It solves a narrower, different problem
 | "I want lifecycle and staleness tracked, but nothing stops duplicate work" | OKF v0.2, ByteRover |
 | "We keep paying to regenerate things we already built, and nothing actually stops that from happening again" | **MAK4I** |
 
-MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. That check is a protocol guarantee, not an optional convention a client can skip — the distinction that matters, since tracking that an artifact *could* be reused is different from a runtime that *requires* checking first. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Proof of Concept](#proof-of-concept) below).
+MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. That check is a protocol guarantee, not an optional convention a client can skip — the distinction that matters, since tracking that an artifact *could* be reused is different from a runtime that *requires* checking first. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Reference Implementation](#reference-implementation) below).
 
 ---
 
@@ -124,6 +128,12 @@ Together they provide complete project continuity across any AI tool.
 
 ## How It Works
 
+The registry-backed `install` / `inject` workflow below is the intended
+end-state (see [ROADMAP.md](ROADMAP.md)). Today the reference
+implementation exposes a smaller operator surface — `mak4i create`,
+`supersede`, `search`, `get-current`, `history` — plus MCP access for
+connected AI clients.
+
 ```bash
 # Install memory packs
 mak4i install company/backend-standards
@@ -155,12 +165,24 @@ mak4i inject
 
 ---
 
-## Proof of Concept
+## Reference Implementation
+
+A working reference implementation (MVP) exists and is in Developer
+Preview. It implements the core protocol workflow — create, retrieve,
+search, supersede, version history and provenance — with an operator CLI
+and MCP access, and has been exercised end to end against several
+independent AI clients it was tested with, through MCP. This is a proof of
+protocol behavior, not a production platform; its source will be published
+when it is release-ready.
+
+Talvik is beginning validation with developers and early design partners.
+
+### Early reuse observations
 
 MAK4I's core reuse mechanism — checking for and reusing existing artifacts
-instead of regenerating them — was demonstrated during MAK4I's own
-development process, before any API existed. Early figures below reflect
-that development-time observation, not production traffic.
+instead of regenerating them — was applied during MAK4I's own development.
+The figures below are development-time observations, not production
+traffic.
 
 | Metric | Value |
 |--------|-------|
@@ -171,18 +193,15 @@ that development-time observation, not production traffic.
 See [docs/MAK4I_SAVINGS_LOG.md](docs/MAK4I_SAVINGS_LOG.md) for the full,
 dated session-by-session breakdown.
 
-[WD Technology Solutions](https://western-digital.net) is Talvik's design
-partner and the intended first production adopter, once the Phase 2 API is
-live. See [ROADMAP.md](ROADMAP.md) for the integration plan.
-
 ---
 
 ## Roadmap
 
 MAK4I uses the **MAK-XXXX** convention for protocol standards. See
 [ROADMAP.md](ROADMAP.md) for the full phase-by-phase roadmap and
-[VISION.md](VISION.md#standards-process) for the standards list —
-this repo is currently **Phase 0 — Foundation** (Aug 2026).
+[VISION.md](VISION.md#standards-process) for the standards list. MAK4I is
+in **Developer Preview**: the specification is in active development and a
+working reference implementation exists.
 
 ---
 

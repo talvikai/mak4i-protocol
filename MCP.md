@@ -15,34 +15,42 @@ No. They solve different problems, at different layers.
 MCP defines:    How AI models connect to external tools and data
                 (the transport and communication layer)
 
-MAK4I defines:  What AI knowledge IS and how it's stored
-                (the content and memory layer)
+MAK4I defines:  How reusable AI context is represented, governed,
+                versioned, discovered and reused
+                (the artifact and interoperability layer)
 
 They work together:
-  MAK4I Registry → exposed as MCP server
-  AI tools connect to MAK4I via MCP
+  MAK4I → exposed as an MCP server
+  AI clients connect to MAK4I via MCP
   MAK4I artifacts flow through MCP to the AI
 
-MCP without MAK4I:  a connection with nothing persistent to transfer
-MAK4I without MCP:  knowledge stored with no standard delivery method
-Together:           persistent, portable AI memory delivered anywhere
+MCP without MAK4I:  a connection with no reusable artifact model or
+                    reuse discipline on top of it
+MAK4I without MCP:  artifacts governed and reused via API, SDK and CLI —
+                    MCP is one integration option among several
+Together:           reusable, governed AI context delivered through
+                    whichever integration path a tool supports
 ```
 
 **The USB-C analogy:**
 
 ```
 MCP   = the USB-C standard (how devices connect)
-MAK4I = the files on the drive (what gets transferred)
+MAK4I = how the work being transferred is represented, so it's
+        reusable on arrival — not just delivered
 
 You need both.
-MCP without MAK4I: a connection with nothing to transfer
-MAK4I without MCP: content with no standard way to deliver it
+MCP without MAK4I: a connection with no shared model for what's reused
+                   on the other end
+MAK4I without MCP: an artifact model with no standard way to deliver it
+                   to every connected tool
 ```
 
-Phase 5 of the MAK4I roadmap builds MAK4I as a native MCP server. After
-that, any MCP-compatible tool automatically gains access to the MAK4I
-registry without additional integration work. See
-[ROADMAP.md](ROADMAP.md) for phase timing.
+The reference implementation is already reachable through MCP today —
+MAK4I can be accessed as an MCP server as part of the working MVP. Native
+registry-level MCP, so any MCP-compatible tool gains access to a hosted
+MAK4I registry without additional integration work, is later roadmap work.
+See [ROADMAP.md](ROADMAP.md).
 
 ---
 

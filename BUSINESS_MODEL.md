@@ -9,27 +9,23 @@ not a concession.*
 
 ## Two Companies, One Protocol
 
-Talvik, Inc. builds MAK4I — the open protocol and enterprise platform.
-WD Technology Solutions is Talvik's design partner and intended first
-production adopter, once the Phase 2 reference API is live.
+Talvik, Inc. builds MAK4I — the open protocol and the enterprise platform
+around it.
 
 ```
 Talvik, Inc.
   MAK4I Protocol (open, MIT licensed)
     Talvik Registry (hosted)
       Talvik Enterprise (commercial)
-
-WD Technology Solutions (planned first adopter, Phase 2+)
-  Schedovia    — appointment scheduling SaaS
-  Reminder AI  — SMS appointment reminders
-  AIOps        — AI operations platform, planned as a
-                 MAK4I-native product from the start
 ```
+
+Talvik is beginning validation with developers and early design partners,
+including candidate first adopters in appointment scheduling / reminders
+and an AI-operations product planned as MAK4I-native from the start.
 
 **Talvik, Inc. is incorporated in Delaware, and trademark applications for
 Talvik and MAK4I have been filed.** No product revenue or production
-integrations exist yet — those are Phase 2 and later milestones, tracked
-below.
+integrations exist yet — those are later milestones, tracked below.
 
 **The planned AIOps connection:**
 

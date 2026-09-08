@@ -187,8 +187,9 @@ MAK4I's reuse mechanism was first demonstrated informally during its own
 development: rather than regenerating documents, code patterns, and other
 artifacts from scratch each time a similar need came up, existing artifacts
 were checked for and reused. The figures below come from that development
-process — not from a live API or production traffic, since the API does
-not yet exist (see [ROADMAP.md](ROADMAP.md), Phase 2).
+process — development-time observations, not production traffic. A working
+reference implementation now exists (see [ROADMAP.md](ROADMAP.md)); it has
+not yet been exercised at production scale.
 
 | Metric | Value |
 |--------|-------|
@@ -209,9 +210,8 @@ not yet exist (see [ROADMAP.md](ROADMAP.md), Phase 2).
 | appointment-parser-prompt | Skill — how to parse appointments from SMS | 250 |
 
 These are development-time observations, not measured production savings.
-Production validation is planned for Phase 2, once the reference API exists
-and WD Technology Solutions (Schedovia, and AIOps, a MAK4I-native product
-in planning) becomes the first real integration target.
+Production validation is planned with developers and early design partners
+as the reference implementation matures.
 
 ---
 
