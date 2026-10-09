@@ -93,9 +93,9 @@ Items marked `—` are specified or planned, not built; each has a target
 phase in [ROADMAP.md](ROADMAP.md). The object-storage adapter is one
 storage backend behind the same interface, not a requirement — the engine
 contains no storage-, database- or provider-specific workflow logic. The
-reference implementation is deployed for testing but is a proof of
-protocol behavior, not a production service; its source will be published
-when it is release-ready.
+[reference implementation](https://github.com/talvikai/mak4i-reference) is public in
+Developer Preview but is a proof of protocol behavior, not a production
+service.
 
 ---
 
