@@ -82,7 +82,7 @@ The MAK4I Conformance Test Suite will include:
 Talvik maintains a reference implementation of the core protocol workflow,
 currently in Developer Preview. It serves as the canonical conformance
 baseline as the specification and conformance suite mature. Its source is
-not yet public and will be released when it is release-ready.
+public at [talvikai/mak4i-reference](https://github.com/talvikai/mak4i-reference).
 
 ---
 

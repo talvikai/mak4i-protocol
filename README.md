@@ -4,14 +4,15 @@
 
 **Built by [Talvik, Inc.](https://talvik.ai)**
 
-**Status: Developer Preview.** This repo contains the protocol design, the
-draft specification, and documentation. A working reference implementation
-(MVP) now exists separately — it covers the core protocol workflow end to
-end (create, retrieve, search, supersede, version history, provenance) with
-an operator CLI and MCP access, and is being validated against the evolving
-specification. Its source is not yet public and will be released when it is
-release-ready. See [ROADMAP.md](ROADMAP.md) for what exists today versus
-what's planned.
+**Status: Developer Preview.** This repository contains the protocol design,
+draft specification and documentation. A public
+[MAK4I reference implementation](https://github.com/talvikai/mak4i-reference) is available
+separately. It supports the core protocol workflow end to end, including
+create, retrieve, search, supersede, version history, provenance, operator
+CLI access and MCP integration. The reference implementation provides Local
+Developer and Enterprise Self-Hosted deployment options and continues to be
+validated against the evolving specification. See [ROADMAP.md](ROADMAP.md)
+for what exists today versus what's planned.
 
 ---
 
@@ -172,8 +173,9 @@ Preview. It implements the core protocol workflow — create, retrieve,
 search, supersede, version history and provenance — with an operator CLI
 and MCP access, and has been exercised end to end against several
 independent AI clients it was tested with, through MCP. This is a proof of
-protocol behavior, not a production platform; its source will be published
-when it is release-ready.
+protocol behavior, not a production platform. Its source is public at
+[talvikai/mak4i-reference](https://github.com/talvikai/mak4i-reference), with Local Developer and
+Enterprise Self-Hosted deployment options.
 
 Talvik is beginning validation with developers and early design partners.
 
