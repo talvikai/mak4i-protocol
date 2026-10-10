@@ -1,0 +1,19 @@
+{
+  "conflict_id": "cfl_00000000000000000000000000000000",
+  "candidate_artifact_ids": [
+    "cache-red",
+    "cache-yellow"
+  ],
+  "action": "separate_subjects",
+  "assignments": [
+    {
+      "artifact_id": "cache-red",
+      "subject_key": "primary-cache"
+    },
+    {
+      "artifact_id": "cache-yellow",
+      "subject_key": "session-cache"
+    }
+  ],
+  "reason": "Different caches"
+}

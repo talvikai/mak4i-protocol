@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/oauth-authorization-server-metadata.schema.json",
+  "title": "MAK4I authorization server metadata profile",
+  "description": "RFC 8414 metadata constrained by MAK-0008 \u00a74.3. Additional RFC 8414 members are allowed.",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "required": [
+    "issuer",
+    "authorization_endpoint",
+    "token_endpoint",
+    "revocation_endpoint",
+    "response_types_supported",
+    "grant_types_supported",
+    "code_challenge_methods_supported",
+    "token_endpoint_auth_methods_supported",
+    "scopes_supported",
+    "authorization_response_iss_parameter_supported"
+  ],
+  "properties": {
+    "issuer": {
+      "$ref": "common.schema.json#/$defs/httpsUrl"
+    },
+    "authorization_endpoint": {
+      "$ref": "common.schema.json#/$defs/httpsUrl"
+    },
+    "token_endpoint": {
+      "$ref": "common.schema.json#/$defs/httpsUrl"
+    },
+    "revocation_endpoint": {
+      "$ref": "common.schema.json#/$defs/httpsUrl"
+    },
+    "registration_endpoint": {
+      "$ref": "common.schema.json#/$defs/httpsUrl"
+    },
+    "response_types_supported": {
+      "const": [
+        "code"
+      ]
+    },
+    "grant_types_supported": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "authorization_code",
+          "refresh_token"
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "const": "authorization_code"
+          }
+        },
+        {
+          "contains": {
+            "const": "refresh_token"
+          }
+        }
+      ]
+    },
+    "code_challenge_methods_supported": {
+      "const": [
+        "S256"
+      ]
+    },
+    "token_endpoint_auth_methods_supported": {
+      "type": "array",
+      "contains": {
+        "const": "none"
+      },
+      "items": {
+        "enum": [
+          "none",
+          "client_secret_post",
+          "client_secret_basic"
+        ]
+      }
+    },
+    "revocation_endpoint_auth_methods_supported": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "none",
+          "client_secret_post",
+          "client_secret_basic"
+        ]
+      }
+    },
+    "scopes_supported": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/scope"
+      },
+      "not": {
+        "contains": {
+          "const": "offline_access"
+        }
+      }
+    },
+    "authorization_response_iss_parameter_supported": {
+      "const": true
+    },
+    "client_id_metadata_document_supported": {
+      "type": "boolean"
+    },
+    "service_documentation": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}

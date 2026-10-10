@@ -1,0 +1,8 @@
+{
+  "project": "prj_1",
+  "artifact_id": "cache-red",
+  "artifact_type": "caching_decision",
+  "title": "Cache",
+  "content": "Use RED",
+  "created_by": "prn_other"
+}

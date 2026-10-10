@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/principal.schema.json",
+  "title": "Principal",
+  "description": "An identity that can authenticate and act (MAK-0006 \u00a72\u2013\u00a73).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "required": [
+    "principal_id",
+    "organization_id",
+    "principal_type",
+    "role",
+    "display_name",
+    "status"
+  ],
+  "properties": {
+    "principal_id": {
+      "$ref": "common.schema.json#/$defs/principalId"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "principal_type": {
+      "$ref": "common.schema.json#/$defs/principalType"
+    },
+    "type": {
+      "$ref": "common.schema.json#/$defs/principalType",
+      "description": "Deprecated compatibility alias of principal_type (MAK-0006 \u00a72.2)."
+    },
+    "role": {
+      "enum": [
+        "owner",
+        "member"
+      ]
+    },
+    "display_name": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "deactivated"
+      ]
+    },
+    "agent_id": {
+      "$ref": "common.schema.json#/$defs/agentId"
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    }
+  },
+  "additionalProperties": false,
+  "if": {
+    "properties": {
+      "principal_type": {
+        "const": "agent"
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "agent_id"
+    ]
+  },
+  "else": {
+    "not": {
+      "required": [
+        "agent_id"
+      ]
+    }
+  }
+}

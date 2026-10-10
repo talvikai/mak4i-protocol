@@ -1,0 +1,16 @@
+{
+  "resource": "https://mak4i.example.com/team-a/mcp",
+  "authorization_servers": [
+    "https://mak4i.example.com/team-a"
+  ],
+  "scopes_supported": [
+    "mak4i:read",
+    "mak4i:write",
+    "mak4i:resolve"
+  ],
+  "bearer_methods_supported": [
+    "header",
+    "query"
+  ],
+  "resource_name": "MAK4I"
+}
