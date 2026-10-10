@@ -106,10 +106,18 @@
               ]
             },
             "scopes": {
-              "type": "array",
-              "items": {
-                "$ref": "common.schema.json#/$defs/scope"
-              }
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "common.schema.json#/$defs/scope"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "OAuth scopes of the access token; null for a principal credential (no scope ceiling, MAK-0008 \u00a77.4)."
             }
           }
         }
@@ -125,33 +133,42 @@
           "properties": {}
         },
         "output": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "required": [
-              "project_id",
-              "name",
-              "organization_id",
-              "permissions"
-            ],
-            "properties": {
-              "project_id": {
-                "$ref": "common.schema.json#/$defs/projectId"
-              },
-              "name": {
-                "type": "string"
-              },
-              "organization_id": {
-                "$ref": "common.schema.json#/$defs/organizationId"
-              },
-              "organization_name": {
-                "type": "string"
-              },
-              "permissions": {
-                "type": "array",
-                "items": {
-                  "$ref": "common.schema.json#/$defs/permission"
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "required": [
+                  "project_id",
+                  "name",
+                  "organization_id",
+                  "permissions"
+                ],
+                "properties": {
+                  "project_id": {
+                    "$ref": "common.schema.json#/$defs/projectId"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "organization_id": {
+                    "$ref": "common.schema.json#/$defs/organizationId"
+                  },
+                  "organization_name": {
+                    "type": "string"
+                  },
+                  "permissions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "common.schema.json#/$defs/permission"
+                    }
+                  }
                 }
               }
             }
@@ -191,9 +208,18 @@
           }
         },
         "output": {
-          "type": "array",
-          "items": {
-            "$ref": "project-record.schema.json"
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "project-record.schema.json"
+              }
+            }
           }
         }
       }
@@ -342,9 +368,18 @@
           }
         },
         "output": {
-          "type": "array",
-          "items": {
-            "$ref": "project-record.schema.json"
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "project-record.schema.json"
+              }
+            }
           }
         }
       }
@@ -375,9 +410,18 @@
           }
         },
         "output": {
-          "type": "array",
-          "items": {
-            "$ref": "conflict.schema.json"
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "conflict.schema.json"
+              }
+            }
           }
         }
       }

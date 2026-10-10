@@ -109,7 +109,15 @@
       "$ref": "common.schema.json#/$defs/principalId"
     },
     "provenance": {
-      "$ref": "provenance.schema.json"
+      "anyOf": [
+        {
+          "$ref": "provenance.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Absent or null only on legacy versions (MAK-0005 \u00a7A2)."
     },
     "resolution_id": {
       "anyOf": [
@@ -122,11 +130,18 @@
       ]
     },
     "merged_from": {
-      "type": "array",
-      "minItems": 2,
-      "items": {
-        "$ref": "common.schema.json#/$defs/artifactId"
-      }
+      "anyOf": [
+        {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "created_at": {
       "$ref": "common.schema.json#/$defs/timestamp"

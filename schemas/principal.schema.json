@@ -43,7 +43,14 @@
       ]
     },
     "agent_id": {
-      "$ref": "common.schema.json#/$defs/agentId"
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/agentId"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "created_at": {
       "$ref": "common.schema.json#/$defs/timestamp"
@@ -63,13 +70,18 @@
   "then": {
     "required": [
       "agent_id"
-    ]
+    ],
+    "properties": {
+      "agent_id": {
+        "$ref": "common.schema.json#/$defs/agentId"
+      }
+    }
   },
   "else": {
-    "not": {
-      "required": [
-        "agent_id"
-      ]
+    "properties": {
+      "agent_id": {
+        "type": "null"
+      }
     }
   }
 }
