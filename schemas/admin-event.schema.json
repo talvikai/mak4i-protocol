@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/admin-event.schema.json",
+  "title": "Administrative audit event",
+  "description": "Attributable record of an administrative action (MAK-0006 \u00a78.5). Never contains secrets.",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "occurred_at",
+    "organization_id",
+    "actor",
+    "action",
+    "targets",
+    "outcome",
+    "correlation_id"
+  ],
+  "properties": {
+    "event_id": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "occurred_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_id",
+        "auth_method"
+      ],
+      "properties": {
+        "principal_id": {
+          "$ref": "common.schema.json#/$defs/principalId"
+        },
+        "auth_method": {
+          "enum": [
+            "credential",
+            "oauth",
+            "operator"
+          ]
+        }
+      }
+    },
+    "action": {
+      "type": "string",
+      "pattern": "^[a-z_]+\\.[a-z_]+$",
+      "examples": [
+        "principal.deactivate",
+        "grant.create",
+        "credential.revoke",
+        "oauth_authorization.revoke"
+      ]
+    },
+    "targets": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/nonEmptyString"
+      }
+    },
+    "outcome": {
+      "enum": [
+        "succeeded",
+        "denied",
+        "failed"
+      ]
+    },
+    "detail": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    }
+  }
+}

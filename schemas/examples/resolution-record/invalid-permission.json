@@ -1,0 +1,52 @@
+{
+  "resolution_id": "res_1",
+  "conflict_id": "cfl_00000000000000000000000000000000",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "subject_key": "primary-cache",
+  "generation": 0,
+  "action": "select_winner",
+  "parameters": {
+    "winner_artifact_id": "cache-red"
+  },
+  "reason": "RED approved",
+  "candidate_artifact_ids": [
+    "cache-red",
+    "cache-yellow"
+  ],
+  "actor": {
+    "principal_id": "prn_alice",
+    "principal_type": "human",
+    "agent_id": null,
+    "display_name": "Alice",
+    "auth_method": "oauth",
+    "credential_id": null,
+    "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+    "client": null,
+    "recorded_at": "2026-10-10T12:00:00Z"
+  },
+  "permission": "write",
+  "effects": [
+    {
+      "artifact_id": "cache-red",
+      "effect": "unchanged",
+      "successor_artifact_id": null
+    },
+    {
+      "artifact_id": "cache-yellow",
+      "effect": "withdrawn",
+      "successor_artifact_id": null
+    }
+  ],
+  "resulting_heads": [
+    {
+      "subject_key": "primary-cache",
+      "artifact_id": "cache-red"
+    }
+  ],
+  "state": "completed",
+  "idempotency_key": null,
+  "created_at": "2026-10-10T12:00:00Z",
+  "completed_at": "2026-10-10T12:00:00Z"
+}

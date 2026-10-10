@@ -1,0 +1,8 @@
+{
+  "principal_id": "prn_agent_a",
+  "organization_id": "org_1",
+  "principal_type": "agent",
+  "role": "member",
+  "display_name": "Release bot",
+  "status": "active"
+}

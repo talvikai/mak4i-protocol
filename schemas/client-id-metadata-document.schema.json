@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/client-id-metadata-document.schema.json",
+  "title": "Accepted client ID metadata document",
+  "description": "What a MAK4I authorization server accepts when a client_id is an HTTPS URL (MAK-0008 \u00a78.3). Unknown members are ignored.",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "required": [
+    "client_id",
+    "redirect_uris"
+  ],
+  "properties": {
+    "client_id": {
+      "$ref": "common.schema.json#/$defs/httpsUrl"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "client_uri": {
+      "type": "string"
+    },
+    "logo_uri": {
+      "type": "string"
+    },
+    "redirect_uris": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1|\\[::1\\])(:[0-9]+)?/)[^#*]*$"
+      }
+    },
+    "grant_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "response_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "token_endpoint_auth_method": {
+      "const": "none"
+    },
+    "scope": {
+      "type": "string"
+    }
+  }
+}

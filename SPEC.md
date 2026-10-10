@@ -1,7 +1,8 @@
 # MAK4I Protocol Specification
 
-**Version:** 0.1 (Draft)  
+**Version:** 0.2 (Draft)  
 **Status:** Work in Progress  
+**Last updated:** 2026-10-10 — see [CHANGELOG.md](CHANGELOG.md)  
 **Author:** Talvik, Inc.  
 **Created:** August 2026  
 **License:** MIT  
@@ -51,6 +52,13 @@ artifacts are:
 | **Registry** | A store of published artifacts |
 | **Injection** | The process of loading artifacts into an AI session |
 | **MAK standard** | A formal specification in the MAK-XXXX series |
+| **Organization / Project** | Tenancy boundary / unit of authorization ([MAK-0006](standards/MAK-0006.md)) |
+| **Principal** | An authenticated identity: `human`, `service` or `agent` ([MAK-0006](standards/MAK-0006.md)) |
+| **`agent_id`** | Stable, organization-scoped identifier of an agent principal ([MAK-0006 §3](standards/MAK-0006.md#3-agent-identity-agent_id)) |
+| **Grant** | A principal's permissions (`read`, `write`, `resolve`) on one project ([MAK-0006 §5](standards/MAK-0006.md#5-permissions-and-grants)) |
+| **Governed project record** | A versioned unit of project knowledge with lineage and provenance ([MAK-0005 Part A](standards/MAK-0005.md#part-a--governed-project-records-normative)) |
+| **Subject key** | Explicit name of what a record is authoritative about ([MAK-0005 §A5](standards/MAK-0005.md#a5-subject-keys)) |
+| **Conflict** | Two or more lineages claiming the same subject ([MAK-0004 Part A](standards/MAK-0004.md#part-a--subject-conflicts-normative)) |
 
 ---
 
@@ -135,6 +143,14 @@ Organizations can pin artifact versions exactly like software packages.
 
 ## Access Control
 
+**Project access (normative, draft):** identities, `agent_id`,
+permissions, grants, revocation, provenance and administration are
+defined in [MAK-0006](standards/MAK-0006.md). Transport scopes never
+widen a project grant.
+
+**Registry visibility (planned):** the levels below describe intended
+visibility of *published* artifacts in a future registry (MAK-0007).
+
 | Level | Who can access |
 |-------|---------------|
 | Public | Anyone |
@@ -168,6 +184,37 @@ mak4i sync
 
 ---
 
+## MCP Binding
+
+MAK4I is reachable over the Model Context Protocol. Transports (stdio,
+Streamable HTTP), authentication (bearer credentials and a
+self-contained OAuth 2.1 authorization service pinned to the MCP
+2025-11-25 authorization specification), the tool catalog
+(`mak4i_whoami` … `mak4i_resolve_conflict`) and the error model are
+defined in [MAK-0008](standards/MAK-0008.md).
+
+---
+
+## Schemas
+
+Canonical, machine-readable JSON Schemas (draft 2020-12) for the
+normative interfaces live in [`schemas/`](schemas/), with valid and
+invalid examples in [`schemas/examples/`](schemas/examples/). Run
+`python scripts/validate_protocol.py` (requires `jsonschema>=4.23`) to
+validate schemas, examples, artifacts, links and the standards index.
+
+---
+
+## Skills (planned, deferred)
+
+Skills as a first-class MAK4I object — packaged, invocable procedures
+with their own lifecycle — are **planned and deferred**. No MAK standard
+defines them yet and no reference implementation supports them. (The
+word "Skills" elsewhere in this repository is an analogy for procedural
+artifacts, not this future object.)
+
+---
+
 ## Standards
 
 | Standard | Title | Status |
@@ -175,10 +222,11 @@ mak4i sync
 | MAK-0001 | Artifact Metadata Schema | Draft |
 | MAK-0002 | Context Injection Specification | Planned |
 | MAK-0003 | Memory Resolution Algorithm | Planned |
-| MAK-0004 | Conflict Resolution Rules | Planned |
-| MAK-0005 | Versioning and Compatibility | Planned |
-| MAK-0006 | Access Control Model | Planned |
+| MAK-0004 | Conflict Resolution Specification | Draft |
+| MAK-0005 | Versioning and Compatibility Specification | Draft |
+| MAK-0006 | Identity and Access Control | Draft |
 | MAK-0007 | Registry API Contract | Planned |
+| MAK-0008 | MCP Binding and Authorization | Draft |
 
 ---
 
@@ -189,6 +237,10 @@ An implementation is MAK4I Certified when it:
 1. Implements all REQUIRED fields from MAK-0001
 2. Implements the injection flow defined in MAK-0002
 3. Passes the MAK4I Conformance Test Suite
+
+Implementations of governed project records, identity and the MCP
+binding are assessed against the acceptance criteria for MAK-0004 Part A,
+MAK-0005 Part A, MAK-0006 and MAK-0008 in [CONFORMANCE.md](CONFORMANCE.md).
 
 See [CONFORMANCE.md](CONFORMANCE.md) for details.
 

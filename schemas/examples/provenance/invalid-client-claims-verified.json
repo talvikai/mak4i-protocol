@@ -1,0 +1,15 @@
+{
+  "principal_id": "prn_agent_a",
+  "principal_type": "agent",
+  "agent_id": "release-bot",
+  "display_name": "Release bot",
+  "auth_method": "credential",
+  "credential_id": "cred_1",
+  "oauth_client_id": null,
+  "client": {
+    "name": "claude-code",
+    "version": "2.1",
+    "verified": true
+  },
+  "recorded_at": "2026-10-10T12:00:00Z"
+}

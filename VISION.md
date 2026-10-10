@@ -222,8 +222,11 @@ MAK4I uses the **MAK-XXXX** convention for protocol standards.
 MAK-0001  Artifact Metadata Schema         (draft)
 MAK-0002  Context Injection Specification  (planned)
 MAK-0003  Memory Resolution Algorithm      (planned)
-MAK-0004  Conflict Resolution Rules        (planned)
-MAK-0005  Versioning and Compatibility     (planned)
+MAK-0004  Conflict Resolution              (draft)
+MAK-0005  Versioning and Compatibility     (draft)
+MAK-0006  Identity and Access Control      (draft)
+MAK-0007  Registry API Contract            (planned)
+MAK-0008  MCP Binding and Authorization    (draft)
 ```
 
 Anyone can propose a new MAK standard via GitHub.

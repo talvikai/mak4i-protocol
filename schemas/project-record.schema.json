@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/project-record.schema.json",
+  "title": "Governed project record version",
+  "description": "One version of a governed project record (MAK-0005 Part A).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "artifact_type",
+    "organization_id",
+    "project",
+    "title",
+    "content",
+    "status",
+    "version",
+    "lineage_id",
+    "created_by",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "artifact_id": {
+      "$ref": "common.schema.json#/$defs/artifactId"
+    },
+    "artifact_type": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "project": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "title": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "content": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "rationale": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/nonEmptyString"
+      }
+    },
+    "status": {
+      "enum": [
+        "active",
+        "superseded",
+        "withdrawn"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*\\.0$"
+    },
+    "lineage_id": {
+      "$ref": "common.schema.json#/$defs/artifactId"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "superseded_by": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "subject_key": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/subjectKey"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "released_subject_key": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/subjectKey"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_by": {
+      "$ref": "common.schema.json#/$defs/principalId"
+    },
+    "provenance": {
+      "anyOf": [
+        {
+          "$ref": "provenance.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Absent or null only on legacy versions (MAK-0005 \u00a7A2)."
+    },
+    "resolution_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/resolutionId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "merged_from": {
+      "anyOf": [
+        {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "superseded"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "superseded_by"
+        ],
+        "properties": {
+          "superseded_by": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "withdrawn"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "resolution_id"
+        ],
+        "properties": {
+          "resolution_id": {
+            "$ref": "common.schema.json#/$defs/resolutionId"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "version": {
+            "const": "1.0"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "supersedes": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "required": [
+          "supersedes"
+        ],
+        "properties": {
+          "supersedes": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        }
+      }
+    },
+    {
+      "not": {
+        "required": [
+          "subject_key",
+          "released_subject_key"
+        ],
+        "properties": {
+          "subject_key": {
+            "$ref": "common.schema.json#/$defs/subjectKey"
+          },
+          "released_subject_key": {
+            "$ref": "common.schema.json#/$defs/subjectKey"
+          }
+        }
+      }
+    }
+  ]
+}

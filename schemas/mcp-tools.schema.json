@@ -1,0 +1,516 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/mcp-tools.schema.json",
+  "title": "MAK4I MCP tool catalog",
+  "description": "Input and output schemas of the MAK4I MCP tools (MAK-0008 \u00a710). Implementations MUST NOT accept identity/provenance arguments.",
+  "x-mak4i-schema-version": "0.2.0",
+  "$defs": {
+    "mak4i_whoami": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        },
+        "output": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "connection",
+            "organization",
+            "principal"
+          ],
+          "properties": {
+            "connection": {
+              "type": "object",
+              "properties": {
+                "instance_name": {
+                  "type": "string"
+                },
+                "environment": {
+                  "type": "string"
+                },
+                "public_endpoint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "server_version": {
+                  "type": "string"
+                }
+              }
+            },
+            "organization": {
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "organization_id",
+                "name"
+              ],
+              "properties": {
+                "organization_id": {
+                  "$ref": "common.schema.json#/$defs/organizationId"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "principal": {
+              "type": "object",
+              "required": [
+                "principal_id",
+                "principal_type",
+                "display_name",
+                "role",
+                "agent_id"
+              ],
+              "properties": {
+                "principal_id": {
+                  "$ref": "common.schema.json#/$defs/principalId"
+                },
+                "principal_type": {
+                  "$ref": "common.schema.json#/$defs/principalType"
+                },
+                "type": {
+                  "$ref": "common.schema.json#/$defs/principalType"
+                },
+                "display_name": {
+                  "type": "string"
+                },
+                "role": {
+                  "enum": [
+                    "owner",
+                    "member"
+                  ]
+                },
+                "agent_id": {
+                  "anyOf": [
+                    {
+                      "$ref": "common.schema.json#/$defs/agentId"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "auth_method": {
+              "enum": [
+                "credential",
+                "oauth"
+              ]
+            },
+            "scopes": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "common.schema.json#/$defs/scope"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "OAuth scopes of the access token; null for a principal credential (no scope ceiling, MAK-0008 \u00a77.4)."
+            }
+          }
+        }
+      }
+    },
+    "mak4i_list_projects": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        },
+        "output": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "required": [
+                  "project_id",
+                  "name",
+                  "organization_id",
+                  "permissions"
+                ],
+                "properties": {
+                  "project_id": {
+                    "$ref": "common.schema.json#/$defs/projectId"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "organization_id": {
+                    "$ref": "common.schema.json#/$defs/organizationId"
+                  },
+                  "organization_name": {
+                    "type": "string"
+                  },
+                  "permissions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "common.schema.json#/$defs/permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "mak4i_search": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "artifact_type": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "enum": [
+                "active",
+                "superseded",
+                "withdrawn"
+              ]
+            }
+          }
+        },
+        "output": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "project-record.schema.json"
+              }
+            }
+          }
+        }
+      }
+    },
+    "mak4i_get_current": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "artifact_type": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "output": {
+          "$ref": "context-package.schema.json"
+        }
+      }
+    },
+    "mak4i_create": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project",
+            "artifact_id",
+            "artifact_type",
+            "title",
+            "content"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "artifact_id": {
+              "$ref": "common.schema.json#/$defs/artifactId"
+            },
+            "artifact_type": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "title": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "content": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "rationale": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/nonEmptyString"
+              }
+            },
+            "subject_key": {
+              "type": "string"
+            }
+          }
+        },
+        "output": {
+          "$ref": "project-record.schema.json"
+        }
+      }
+    },
+    "mak4i_supersede": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project",
+            "old_id",
+            "content",
+            "reason"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "old_id": {
+              "$ref": "common.schema.json#/$defs/artifactId"
+            },
+            "content": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "reason": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "title": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/nonEmptyString"
+              }
+            },
+            "subject_key": {
+              "type": "string"
+            },
+            "release_subject_key": {
+              "type": "boolean"
+            }
+          }
+        },
+        "output": {
+          "$ref": "project-record.schema.json"
+        }
+      }
+    },
+    "mak4i_history": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project",
+            "lineage_id"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "lineage_id": {
+              "$ref": "common.schema.json#/$defs/artifactId"
+            }
+          }
+        },
+        "output": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "project-record.schema.json"
+              }
+            }
+          }
+        }
+      }
+    },
+    "mak4i_list_conflicts": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "artifact_type": {
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "open",
+                "resolved",
+                "all"
+              ]
+            }
+          }
+        },
+        "output": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "conflict.schema.json"
+              }
+            }
+          }
+        }
+      }
+    },
+    "mak4i_get_conflict": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project",
+            "conflict_id"
+          ],
+          "properties": {
+            "project": {
+              "$ref": "common.schema.json#/$defs/projectId"
+            },
+            "conflict_id": {
+              "$ref": "common.schema.json#/$defs/conflictId"
+            }
+          }
+        },
+        "output": {
+          "$ref": "conflict.schema.json"
+        }
+      }
+    },
+    "mak4i_resolve_conflict": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "allOf": [
+            {
+              "$ref": "resolution-request.schema.json"
+            },
+            {
+              "required": [
+                "project"
+              ]
+            }
+          ]
+        },
+        "output": {
+          "$ref": "resolution-record.schema.json"
+        }
+      }
+    }
+  },
+  "x-mak4i-tools": {
+    "mak4i_whoami": {
+      "input": "#/$defs/mak4i_whoami/properties/input",
+      "output": "#/$defs/mak4i_whoami/properties/output"
+    },
+    "mak4i_list_projects": {
+      "input": "#/$defs/mak4i_list_projects/properties/input",
+      "output": "#/$defs/mak4i_list_projects/properties/output"
+    },
+    "mak4i_search": {
+      "input": "#/$defs/mak4i_search/properties/input",
+      "output": "#/$defs/mak4i_search/properties/output"
+    },
+    "mak4i_get_current": {
+      "input": "#/$defs/mak4i_get_current/properties/input",
+      "output": "#/$defs/mak4i_get_current/properties/output"
+    },
+    "mak4i_create": {
+      "input": "#/$defs/mak4i_create/properties/input",
+      "output": "#/$defs/mak4i_create/properties/output"
+    },
+    "mak4i_supersede": {
+      "input": "#/$defs/mak4i_supersede/properties/input",
+      "output": "#/$defs/mak4i_supersede/properties/output"
+    },
+    "mak4i_history": {
+      "input": "#/$defs/mak4i_history/properties/input",
+      "output": "#/$defs/mak4i_history/properties/output"
+    },
+    "mak4i_list_conflicts": {
+      "input": "#/$defs/mak4i_list_conflicts/properties/input",
+      "output": "#/$defs/mak4i_list_conflicts/properties/output"
+    },
+    "mak4i_get_conflict": {
+      "input": "#/$defs/mak4i_get_conflict/properties/input",
+      "output": "#/$defs/mak4i_get_conflict/properties/output"
+    },
+    "mak4i_resolve_conflict": {
+      "input": "#/$defs/mak4i_resolve_conflict/properties/input",
+      "output": "#/$defs/mak4i_resolve_conflict/properties/output"
+    }
+  }
+}

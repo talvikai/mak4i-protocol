@@ -1,0 +1,11 @@
+{
+  "project": "prj_1",
+  "conflict_id": "cfl_00000000000000000000000000000000",
+  "candidate_artifact_ids": [
+    "cache-red",
+    "cache-yellow"
+  ],
+  "action": "select_winner",
+  "winner_artifact_id": "cache-red",
+  "reason": "approved"
+}

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/resolution-request.schema.json",
+  "title": "Conflict resolution request",
+  "description": "Arguments of a resolution (MAK-0004 \u00a7A7.2).",
+  "x-mak4i-schema-version": "0.2.0",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conflict_id",
+        "candidate_artifact_ids",
+        "action",
+        "reason",
+        "winner_artifact_id"
+      ],
+      "properties": {
+        "conflict_id": {
+          "$ref": "common.schema.json#/$defs/conflictId"
+        },
+        "candidate_artifact_ids": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        },
+        "reason": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
+        "winner_artifact_id": {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        "action": {
+          "const": "select_winner"
+        },
+        "project": {
+          "$ref": "common.schema.json#/$defs/projectId"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conflict_id",
+        "candidate_artifact_ids",
+        "action",
+        "reason",
+        "into_artifact_id",
+        "content"
+      ],
+      "properties": {
+        "conflict_id": {
+          "$ref": "common.schema.json#/$defs/conflictId"
+        },
+        "candidate_artifact_ids": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        },
+        "reason": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
+        "into_artifact_id": {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        "content": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "action": {
+          "const": "merge"
+        },
+        "project": {
+          "$ref": "common.schema.json#/$defs/projectId"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conflict_id",
+        "candidate_artifact_ids",
+        "action",
+        "reason",
+        "assignments"
+      ],
+      "properties": {
+        "conflict_id": {
+          "$ref": "common.schema.json#/$defs/conflictId"
+        },
+        "candidate_artifact_ids": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        },
+        "reason": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
+        "assignments": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifact_id",
+              "subject_key"
+            ],
+            "properties": {
+              "artifact_id": {
+                "$ref": "common.schema.json#/$defs/artifactId"
+              },
+              "subject_key": {
+                "$ref": "common.schema.json#/$defs/subjectKey"
+              }
+            }
+          }
+        },
+        "action": {
+          "const": "separate_subjects"
+        },
+        "project": {
+          "$ref": "common.schema.json#/$defs/projectId"
+        }
+      }
+    }
+  ]
+}
