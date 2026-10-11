@@ -101,6 +101,8 @@ future shared suite) can map evidence to them one-to-one.
 - [ ] C13 Releasing a candidate's key during an open conflict fails `subject_in_conflict` (§A3.7).
 - [ ] C14 History preserves every original version and every resolution record (§A7.6).
 - [ ] C15 A second client (different principal and/or transport) retrieves the same conflicted or resolved state (§A3.2).
+- [ ] C16 A resolution reserves every candidate before any effect; a write to a reserved candidate fails `conflict_changed`; a resolution that can't reserve aborts with no effect and the conflict stays open with the same id (§A8.2, §A8.3).
+- [ ] C17 Crashing after any single write of any resolution never shows the subject (or a separation target) as resolved while pending; recovery yields the uninterrupted result (§A8.2).
 
 ### MAK-0006: identity and access control
 
@@ -132,6 +134,7 @@ future shared suite) can map evidence to them one-to-one.
 - [ ] M13 OAuth state survives a restart (§6.8).
 - [ ] M14 No secret appears in logs or error messages (§11.2).
 - [ ] M15 Tool errors carry `error.code` from §9; tool results validate against `mcp-tools.schema.json`.
+- [ ] M17 Discovery defaults: withdrawn/superseded versions are never current; `mak4i_search` defaults to active; history includes every version (§10.6).
 - [ ] M16 Interoperability: at least two independent OAuth-capable MCP clients complete discovery, authorization, tool calls, refresh and revocation against a reachable HTTPS deployment (client versions recorded).
 
 ---

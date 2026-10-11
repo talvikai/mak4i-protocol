@@ -203,7 +203,9 @@
                 "active",
                 "superseded",
                 "withdrawn"
-              ]
+              ],
+              "default": "active",
+              "description": "MAK-0008 \u00a710.6: withdrawn/superseded only when requested."
             }
           }
         },
@@ -405,7 +407,8 @@
                 "open",
                 "resolved",
                 "all"
-              ]
+              ],
+              "default": "open"
             }
           }
         },

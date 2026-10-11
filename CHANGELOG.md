@@ -54,6 +54,20 @@ Accepted.
 - MAK-0006 retitled from "Access Control Model" to "Identity and Access
   Control"; MAK-0008 added to the index.
 
+### Clarified during Reference implementation (2026-10-11)
+
+- MAK-0004 §A8.2/§A8.3: resolutions **reserve** every candidate head
+  before applying effects; writes to reserved heads are rejected; an
+  abort can only occur before any semantic effect.
+- MAK-0005 §A3.3/§A7 and MAK-0004 §A8.2: resolution ownership marker for
+  crash-safe recovery; a half-applied supersede under a pending
+  resolution is not a `zero_active` error.
+- MAK-0008 §10.5/§10.6: list results are wrapped; normative discovery
+  defaults (withdrawn/superseded never current, search defaults to
+  active, history includes all versions) — taken from issue #4.
+- MAK-0006 §2.1, MAK-0005 §A2: non-applicable optional fields may be
+  absent or `null`.
+
 ### Fixed
 
 - Standards index drift: STANDARDS.md, SPEC.md and VISION.md listed
