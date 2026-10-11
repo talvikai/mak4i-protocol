@@ -1,0 +1,11 @@
+{
+  "conflict_id": "cfl_00000000000000000000000000000000",
+  "candidate_artifact_ids": [
+    "cache-red",
+    "cache-yellow"
+  ],
+  "action": "merge",
+  "into_artifact_id": "cache-red",
+  "content": "Use RED in prod, YELLOW in dev",
+  "reason": "Both apply per environment"
+}

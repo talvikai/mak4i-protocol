@@ -17,8 +17,8 @@ MAK4I is in Developer Preview.
 A working reference implementation of the core protocol workflow exists.
 It provides an **operator CLI** and **MCP access** today — `mak4i create`,
 `supersede`, `search`, `get-current`, `history`, and a `doctor` integrity
-check — and connected MCP clients reach the same engine. Its source is not
-yet public.
+check — and connected MCP clients reach the same engine. Its source is
+public at [talvikai/mak4i-reference](https://github.com/talvikai/mak4i-reference).
 
 The hosted Registry UI, language SDKs, VS Code extension, GitHub Action,
 and the broader registry-oriented CLI described below are planned. Their

@@ -1,0 +1,21 @@
+{
+  "connection": {
+    "instance_name": "MAK4I",
+    "environment": "local",
+    "public_endpoint": null,
+    "server_version": "2.0.0rc1"
+  },
+  "organization": {
+    "organization_id": "org_1",
+    "name": "Acme"
+  },
+  "principal": {
+    "principal_id": "prn_agent_a",
+    "principal_type": "agent",
+    "type": "agent",
+    "display_name": "Release bot",
+    "role": "member",
+    "agent_id": "release-bot"
+  },
+  "auth_method": "credential"
+}

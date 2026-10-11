@@ -1,0 +1,9 @@
+{
+  "principal_id": "prn_alice",
+  "organization_id": "org_1",
+  "principal_type": "human",
+  "agent_id": "alice",
+  "role": "member",
+  "display_name": "Alice",
+  "status": "active"
+}

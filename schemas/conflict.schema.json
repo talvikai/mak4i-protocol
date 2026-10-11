@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/conflict.schema.json",
+  "title": "Subject conflict",
+  "description": "An open, resolving or resolved conflict between lineages claiming one subject (MAK-0004 \u00a7A4\u2013\u00a7A5).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "conflict_id",
+    "state",
+    "generation",
+    "organization_id",
+    "project",
+    "artifact_type",
+    "subject_key",
+    "identical_content",
+    "reason",
+    "candidates",
+    "hidden_candidate_count"
+  ],
+  "properties": {
+    "conflict_id": {
+      "$ref": "common.schema.json#/$defs/conflictId"
+    },
+    "state": {
+      "enum": [
+        "open",
+        "resolving",
+        "resolved"
+      ]
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "project": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "artifact_type": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "subject_key": {
+      "$ref": "common.schema.json#/$defs/subjectKey"
+    },
+    "identical_content": {
+      "type": "boolean"
+    },
+    "reason": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "lineage_id",
+          "version",
+          "title",
+          "created_at",
+          "created_by",
+          "content_sha256"
+        ],
+        "properties": {
+          "artifact_id": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          },
+          "lineage_id": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          },
+          "version": {
+            "type": "string"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/nonEmptyString"
+          },
+          "created_at": {
+            "$ref": "common.schema.json#/$defs/timestamp"
+          },
+          "created_by": {
+            "$ref": "common.schema.json#/$defs/principalId"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "provenance.schema.json"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "content_sha256": {
+            "$ref": "common.schema.json#/$defs/sha256"
+          },
+          "content": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "hidden_candidate_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "resolution": {
+      "anyOf": [
+        {
+          "$ref": "resolution-record.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$comment": "For open/resolving conflicts, len(candidates)+hidden_candidate_count >= 2 (checked by implementations; not expressible in JSON Schema)."
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/resolution-record.schema.json",
+  "title": "Conflict resolution record",
+  "description": "Durable record of one resolution (MAK-0004 \u00a7A7.6).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "resolution_id",
+    "conflict_id",
+    "organization_id",
+    "project",
+    "artifact_type",
+    "subject_key",
+    "generation",
+    "action",
+    "parameters",
+    "reason",
+    "candidate_artifact_ids",
+    "actor",
+    "permission",
+    "effects",
+    "resulting_heads",
+    "state",
+    "created_at",
+    "completed_at"
+  ],
+  "properties": {
+    "resolution_id": {
+      "$ref": "common.schema.json#/$defs/resolutionId"
+    },
+    "conflict_id": {
+      "$ref": "common.schema.json#/$defs/conflictId"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "project": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "artifact_type": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "subject_key": {
+      "$ref": "common.schema.json#/$defs/subjectKey"
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "action": {
+      "enum": [
+        "select_winner",
+        "merge",
+        "separate_subjects"
+      ]
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "reason": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "candidate_artifact_ids": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "common.schema.json#/$defs/artifactId"
+      }
+    },
+    "actor": {
+      "$ref": "provenance.schema.json"
+    },
+    "permission": {
+      "const": "resolve"
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "effect"
+        ],
+        "properties": {
+          "artifact_id": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          },
+          "effect": {
+            "enum": [
+              "withdrawn",
+              "superseded",
+              "unchanged"
+            ]
+          },
+          "successor_artifact_id": {
+            "anyOf": [
+              {
+                "$ref": "common.schema.json#/$defs/artifactId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "resulting_heads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "subject_key",
+          "artifact_id"
+        ],
+        "properties": {
+          "subject_key": {
+            "$ref": "common.schema.json#/$defs/subjectKey"
+          },
+          "artifact_id": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          }
+        }
+      }
+    },
+    "state": {
+      "enum": [
+        "pending",
+        "completed",
+        "aborted"
+      ]
+    },
+    "idempotency_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "completed_at": {
+            "$ref": "common.schema.json#/$defs/timestamp"
+          }
+        }
+      }
+    }
+  ]
+}

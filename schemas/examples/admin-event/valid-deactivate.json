@@ -1,0 +1,15 @@
+{
+  "event_id": "evt_1",
+  "occurred_at": "2026-10-10T12:00:00Z",
+  "organization_id": "org_1",
+  "actor": {
+    "principal_id": "prn_alice",
+    "auth_method": "credential"
+  },
+  "action": "principal.deactivate",
+  "targets": {
+    "principal_id": "prn_agent_a"
+  },
+  "outcome": "succeeded",
+  "correlation_id": "c-1"
+}

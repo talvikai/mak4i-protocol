@@ -1,0 +1,22 @@
+name: Validate protocol
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install validator dependencies
+        run: pip install "jsonschema>=4.23,<5" "rfc3339-validator>=0.1.4"
+      - name: Validate schemas, examples, artifacts, links and standards index
+        run: python scripts/validate_protocol.py

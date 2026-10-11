@@ -31,8 +31,10 @@ MAK standards define the protocol. Anyone can propose one.
 Proposed → Draft → Review → Accepted → Deprecated
 ```
 
-**Existing standards for reference:**
+**Existing standards for reference:** see [STANDARDS.md](STANDARDS.md)
+for the full index, for example:
 - [MAK-0001](standards/MAK-0001.md) — Artifact Metadata Schema
+- [MAK-0006](standards/MAK-0006.md) — Identity and Access Control
 
 ---
 
@@ -132,6 +134,9 @@ artifact: add gcp-cloudrun-deploy workflow artifact
 standard: open MAK-0003 memory resolution for community review
 ```
 
+**Validation:** run `python scripts/validate_protocol.py` (requires
+`jsonschema>=4.23`) before opening a PR; CI runs the same check.
+
 **PR checklist:**
 - [ ] Artifact follows MAK-0001 schema (if contributing an artifact)
 - [ ] ARTIFACT_INDEX.md updated (if contributing an artifact)
@@ -157,8 +162,9 @@ Anyone. No affiliation with Talvik required.
 
 Standards are numbered sequentially as they're proposed and accepted —
 see [SPEC.md](SPEC.md#standards) for the current list (MAK-0001 through
-MAK-0007 so far, covering schema, injection, versioning, access control,
-and registry topics). There is no reserved numeric range per topic;
+MAK-0008 so far, covering the artifact schema, context injection, memory
+resolution, conflict resolution, versioning, identity and access
+control, the registry API, and the MCP binding). There is no reserved numeric range per topic;
 numbers are assigned in proposal order, not by category.
 
 ### Stewardship

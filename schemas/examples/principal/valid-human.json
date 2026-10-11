@@ -1,0 +1,9 @@
+{
+  "principal_id": "prn_alice",
+  "organization_id": "org_1",
+  "principal_type": "human",
+  "type": "human",
+  "role": "owner",
+  "display_name": "Alice",
+  "status": "active"
+}

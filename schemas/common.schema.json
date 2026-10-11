@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/common.schema.json",
+  "title": "MAK4I common definitions",
+  "description": "Shared definitions used by the MAK4I schemas (MAK-0004, MAK-0005, MAK-0006, MAK-0008).",
+  "x-mak4i-schema-version": "0.2.0",
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp with offset."
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "organizationId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "principalId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "projectId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "artifactId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "agentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9](?:[a-z0-9._-]{1,62}[a-z0-9])$",
+      "description": "MAK-0006 \u00a73.2"
+    },
+    "principalType": {
+      "enum": [
+        "human",
+        "service",
+        "agent"
+      ]
+    },
+    "permission": {
+      "enum": [
+        "read",
+        "write",
+        "resolve"
+      ]
+    },
+    "scope": {
+      "enum": [
+        "mak4i:read",
+        "mak4i:write",
+        "mak4i:resolve"
+      ]
+    },
+    "subjectKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
+      "description": "Normalized subject key (MAK-0005 \u00a7A5.2): no leading/trailing whitespace."
+    },
+    "conflictId": {
+      "type": "string",
+      "pattern": "^cfl_[0-9a-f]{32}$"
+    },
+    "resolutionId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "httpsUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    }
+  }
+}

@@ -155,8 +155,8 @@ mak4i inject
 {
   "id": "schedovia-stack-context",
   "version": "1.0.0",
-  "type": "context",
-  "layer": "episodic",
+  "type": "semantic",
+  "layer": "context",
   "name": "Schedovia Stack Context",
   "description": "Full stack context for Schedovia — eliminates re-explaining architecture each session",
   "token_estimate": 1500,

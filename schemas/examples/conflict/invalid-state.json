@@ -1,0 +1,60 @@
+{
+  "conflict_id": "cfl_00000000000000000000000000000000",
+  "state": "auto_resolved",
+  "generation": 0,
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "subject_key": "primary-cache",
+  "identical_content": false,
+  "reason": "2 lineages claim artifact_type=caching_decision subject_key=primary-cache",
+  "candidates": [
+    {
+      "artifact_id": "cache-red",
+      "lineage_id": "cache-red",
+      "version": "1.0",
+      "title": "Cache",
+      "created_at": "2026-10-10T12:00:00Z",
+      "created_by": "prn_agent_a",
+      "provenance": {
+        "principal_id": "prn_agent_a",
+        "principal_type": "agent",
+        "agent_id": "release-bot",
+        "display_name": "Release bot",
+        "auth_method": "credential",
+        "credential_id": "cred_1",
+        "oauth_client_id": null,
+        "client": {
+          "name": "claude-code",
+          "version": "2.1",
+          "verified": false
+        },
+        "recorded_at": "2026-10-10T12:00:00Z"
+      },
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "content": "..."
+    },
+    {
+      "artifact_id": "cache-yellow",
+      "lineage_id": "cache-yellow",
+      "version": "1.0",
+      "title": "Cache",
+      "created_at": "2026-10-10T12:00:00Z",
+      "created_by": "prn_alice",
+      "provenance": {
+        "principal_id": "prn_alice",
+        "principal_type": "human",
+        "agent_id": null,
+        "display_name": "Alice",
+        "auth_method": "oauth",
+        "credential_id": null,
+        "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+        "client": null,
+        "recorded_at": "2026-10-10T12:00:00Z"
+      },
+      "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "content": "..."
+    }
+  ],
+  "hidden_candidate_count": 0
+}

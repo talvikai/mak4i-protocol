@@ -16,10 +16,19 @@ standard is proposed and approved.
 | MAK-0001 | Artifact Metadata Schema | Draft | [standards/MAK-0001.md](standards/MAK-0001.md) |
 | MAK-0002 | Context Injection Specification | Planned | — |
 | MAK-0003 | Memory Resolution Algorithm | Planned | — |
-| MAK-0004 | Conflict Resolution Rules | Planned | — |
-| MAK-0005 | Versioning and Compatibility | Planned | — |
-| MAK-0006 | Access Control Model | Planned | — |
+| MAK-0004 | Conflict Resolution Specification | Draft | [standards/MAK-0004.md](standards/MAK-0004.md) |
+| MAK-0005 | Versioning and Compatibility Specification | Draft | [standards/MAK-0005.md](standards/MAK-0005.md) |
+| MAK-0006 | Identity and Access Control | Draft | [standards/MAK-0006.md](standards/MAK-0006.md) |
 | MAK-0007 | Registry API Contract | Planned | — |
+| MAK-0008 | MCP Binding and Authorization | Draft | [standards/MAK-0008.md](standards/MAK-0008.md) |
+
+MAK-0004 and MAK-0005 each contain a normative **Part A** (governed
+project records and subject conflicts) and a **Part B** template whose
+design decisions remain open. "Draft" means published for the community
+comment period; no standard here is yet Accepted.
+
+Canonical JSON Schemas for these standards are in [`schemas/`](schemas/);
+validate the repository with `python scripts/validate_protocol.py`.
 
 MAK numbers are assigned sequentially when proposals are accepted
 rather than preallocated by topic — see

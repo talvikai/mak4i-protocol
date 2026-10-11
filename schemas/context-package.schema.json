@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/context-package.schema.json",
+  "title": "Authoritative retrieval result",
+  "description": "Result of get-current (MAK-0004 \u00a7A6, MAK-0008 \u00a710).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "required": [
+    "artifacts",
+    "conflicts",
+    "integrity_errors",
+    "instruction"
+  ],
+  "properties": {
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "project-record.schema.json"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "$ref": "conflict.schema.json"
+      }
+    },
+    "integrity_errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "lineage_id",
+          "kind"
+        ],
+        "properties": {
+          "lineage_id": {
+            "$ref": "common.schema.json#/$defs/artifactId"
+          },
+          "kind": {
+            "enum": [
+              "zero_active",
+              "multiple_active",
+              "dangling_pointer"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "instruction": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "resolution_trace_id": {
+      "type": "string"
+    },
+    "resolution_trace": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

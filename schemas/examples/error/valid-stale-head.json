@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "stale_head",
+    "message": "The record changed; re-read and retry.",
+    "retryable": true
+  }
+}

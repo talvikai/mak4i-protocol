@@ -1,0 +1,10 @@
+[
+  {
+    "project_id": "prj_1",
+    "name": "Platform",
+    "organization_id": "org_1",
+    "permissions": [
+      "read"
+    ]
+  }
+]

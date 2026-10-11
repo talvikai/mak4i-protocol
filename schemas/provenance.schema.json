@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/provenance.schema.json",
+  "title": "Authenticated provenance",
+  "description": "Server-recorded authorship of a record version or action (MAK-0006 \u00a77).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "principal_id",
+    "principal_type",
+    "agent_id",
+    "display_name",
+    "auth_method",
+    "recorded_at"
+  ],
+  "properties": {
+    "principal_id": {
+      "$ref": "common.schema.json#/$defs/principalId"
+    },
+    "principal_type": {
+      "$ref": "common.schema.json#/$defs/principalType"
+    },
+    "agent_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/agentId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "display_name": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "auth_method": {
+      "enum": [
+        "credential",
+        "oauth",
+        "operator"
+      ]
+    },
+    "credential_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "oauth_client_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "client": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "verified"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "verified": {
+              "const": false
+            }
+          }
+        }
+      ]
+    },
+    "recorded_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "principal_type": {
+            "const": "agent"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "agent_id": {
+            "$ref": "common.schema.json#/$defs/agentId"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "agent_id": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "auth_method": {
+            "const": "credential"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "credential_id"
+        ],
+        "properties": {
+          "credential_id": {
+            "$ref": "common.schema.json#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "auth_method": {
+            "const": "oauth"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "oauth_client_id"
+        ],
+        "properties": {
+          "oauth_client_id": {
+            "$ref": "common.schema.json#/$defs/nonEmptyString"
+          }
+        }
+      }
+    }
+  ]
+}

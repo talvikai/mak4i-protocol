@@ -1,0 +1,37 @@
+{
+  "artifact_id": "cache-choice",
+  "artifact_type": "caching_decision",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "title": "Cache",
+  "content": "Use cache RED",
+  "rationale": null,
+  "tags": [
+    "cache"
+  ],
+  "status": "superseded",
+  "version": "1.0",
+  "lineage_id": "cache-choice",
+  "supersedes": null,
+  "superseded_by": null,
+  "subject_key": "primary-cache",
+  "released_subject_key": null,
+  "created_by": "prn_agent_a",
+  "provenance": {
+    "principal_id": "prn_agent_a",
+    "principal_type": "agent",
+    "agent_id": "release-bot",
+    "display_name": "Release bot",
+    "auth_method": "credential",
+    "credential_id": "cred_1",
+    "oauth_client_id": null,
+    "client": {
+      "name": "claude-code",
+      "version": "2.1",
+      "verified": false
+    },
+    "recorded_at": "2026-10-10T12:00:00Z"
+  },
+  "created_at": "2026-10-10T12:00:00Z",
+  "updated_at": "2026-10-10T12:00:00Z"
+}

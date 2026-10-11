@@ -1,0 +1,7 @@
+{
+  "client_id": "https://client.example/meta",
+  "redirect_uris": [
+    "https://client.example/cb"
+  ],
+  "token_endpoint_auth_method": "client_secret_post"
+}

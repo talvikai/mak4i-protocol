@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/error.schema.json",
+  "title": "Tool error",
+  "description": "structuredContent of a failed tool result (MAK-0008 \u00a79).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "error"
+  ],
+  "properties": {
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "access_denied",
+            "identity_mismatch",
+            "validation_error",
+            "not_found",
+            "artifact_not_active",
+            "stale_head",
+            "subject_key_change",
+            "subject_in_conflict",
+            "conflict_changed",
+            "conflict_not_open",
+            "subject_collision",
+            "rate_limited",
+            "internal_error"
+          ]
+        },
+        "message": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "correlation_id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
