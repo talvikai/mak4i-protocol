@@ -73,6 +73,28 @@ the resolution of every open item in the protocol gap/decision register.
   - schema-based artifact validation with a file-name rule;
   - `scripts/requirements.txt`.
 
+### Added — Drafts (In Progress)
+- **[MAK-0002](standards/MAK-0002.md) Context Injection Specification** and
+  **[MAK-0003](standards/MAK-0003.md) Memory Resolution Algorithm** (v0.2):
+  - The pre-v0.2 working drafts, reconciled with protocol v0.2 and
+    MAK-0009 before publishing.
+  - Each separates a *Settled design* (only requirements inherited from
+    merged standards and owner decisions, each cited) from *Open items*
+    (M2-O1 … M2-O22, M3-O1 … M3-O22, cross-referenced) and non-normative
+    design notes that keep the unresolved v0.1 alternatives.
+  - Each has a reconciliation log.
+  - MAK-0003's output is the "applicability result" (`applicability_id`).
+- **[MAK-0007](standards/MAK-0007.md) Registry API Contract** (v0.1): initial
+  draft covering registry scope, settled design inherited from
+  MAK-0001/0006/0009, and open decisions M7-O1 … M7-O17.
+- **None of the three is complete, accepted or implemented.**
+  - They have no conformance criteria and no schemas yet.
+  - The validator check *status* now also requires every Draft (In
+    Progress) to declare "Conformance status: In progress" and to have no
+    CONFORMANCE criteria.
+  - GOVERNANCE defines the "Draft (In Progress)" marker.
+  - ROADMAP lists what they need to leave In Progress.
+
 ### Changed
 - **Governance:**
   - status ladder Reserved → Draft → Review → Accepted → Deprecated;
