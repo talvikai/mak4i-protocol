@@ -15,7 +15,8 @@
     "resource_type",
     "group_id",
     "created_at",
-    "updated_at"
+    "updated_at",
+    "status"
   ],
   "properties": {
     "resource_id": {
@@ -56,6 +57,13 @@
     },
     "updated_at": {
       "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "description": "Archived, never deleted (MAK-0009 \u00a73)."
     }
   }
 }

@@ -17,6 +17,6 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install validator dependencies
-        run: pip install "jsonschema>=4.23,<5" "rfc3339-validator>=0.1.4"
-      - name: Validate schemas, examples, artifacts, links and standards index
+        run: pip install -r scripts/requirements.txt
+      - name: Validate schemas, examples, artifacts, links, standards index, status and consistency
         run: python scripts/validate_protocol.py

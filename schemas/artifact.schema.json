@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/artifact.schema.json",
+  "title": "MAK-0001 artifact packaging metadata",
+  "description": "Packaging metadata for a Distributable Artifact (MAK-0001; MAK-0009 \u00a72.2). `version` is a package version.",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+  },
+  "required": [
+    "id",
+    "version",
+    "type",
+    "name",
+    "description"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9]+(?:-[a-z0-9]+)*/)?[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "`name` or `org/name` (MAK-0001 rule 2)."
+    },
+    "version": {
+      "$ref": "common.schema.json#/$defs/packageVersion"
+    },
+    "type": {
+      "enum": [
+        "procedural",
+        "semantic",
+        "episodic"
+      ]
+    },
+    "name": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "layer": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/nonEmptyString"
+      }
+    },
+    "ai_platforms": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/nonEmptyString"
+      }
+    },
+    "injection_hint": {
+      "enum": [
+        "inline",
+        "prepend",
+        "append",
+        "system"
+      ]
+    },
+    "token_estimate": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Estimated size of `content` in tokens."
+    },
+    "author": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "license": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?:[a-z0-9]+(?:-[a-z0-9]+)*/)?[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "deprecated": {
+      "type": "boolean"
+    },
+    "deprecated_by": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9]+(?:-[a-z0-9]+)*/)?[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "content": {
+      "type": [
+        "string",
+        "object"
+      ]
+    }
+  }
+}

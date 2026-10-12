@@ -1,0 +1,18 @@
+{
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "artifact_id": "glossary",
+  "package_version": "0.3.1",
+  "pinned_by": {
+    "principal_id": "prn_alice",
+    "principal_type": "human",
+    "agent_id": null,
+    "display_name": "Alice",
+    "auth_method": "oauth",
+    "credential_id": null,
+    "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+    "client": null,
+    "recorded_at": "2026-10-10T12:00:00Z"
+  },
+  "pinned_at": "2026-10-12T12:00:00Z"
+}

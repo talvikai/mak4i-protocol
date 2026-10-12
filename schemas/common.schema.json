@@ -43,8 +43,10 @@
       "enum": [
         "read",
         "write",
-        "resolve"
-      ]
+        "resolve",
+        "govern"
+      ],
+      "description": "MAK-0006 \u00a75.1. `govern` is architecture-defined (MAK-0009 \u00a76.2) and not part of any conformance profile yet."
     },
     "scope": {
       "enum": [
@@ -125,6 +127,44 @@
       "type": "string",
       "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$",
       "description": "Semantic version of a distributable artifact (MAK-0009 \u00a72.3). Not a project-record revision."
+    },
+    "httpsOrLoopbackUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https://|http://(127\\.0\\.0\\.1|\\[::1\\]|localhost)(:[0-9]+)?(/|$))",
+      "description": "HTTPS, or http on a loopback host only (MAK-0008 \u00a71.2, \u00a73)."
+    },
+    "protocolInfo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "profiles"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+          "description": "Protocol release the implementation targets (SPEC.md)."
+        },
+        "profiles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "server-project-records",
+              "transport-stdio",
+              "transport-http-credential",
+              "transport-http-oauth",
+              "oauth-cimd",
+              "oauth-dcr",
+              "client-sdk",
+              "artifact"
+            ]
+          }
+        }
+      },
+      "description": "MAK-0008 \u00a710.5; profiles from CONFORMANCE.md."
     }
   }
 }

@@ -4,52 +4,135 @@ All notable changes to the MAK4I protocol specification. The specification
 version (SPEC.md) is independent of artifact versions (MAK-0001) and of any
 implementation's release version.
 
-## Unreleased (proposed on branch `architecture/scopes-resources-rules`)
+## Unreleased
 
-Four architecture decisions settled by the specification owner on
-2026-10-12. Not tagged; no version number has been assigned (register O-4).
+Owner decisions of 2026-10-12. These are four architecture decisions and
+the resolution of every open item in the protocol gap/decision register.
+- **Not tagged.** The release number is assigned when a maintainer tags it
+  ([GOVERNANCE](GOVERNANCE.md#versioning)).
+- **Comment period.** It starts on publication for MAK-0004 Part A,
+  MAK-0005 Part A, MAK-0006, MAK-0008 and MAK-0009; the start and end
+  dates are recorded here at that time.
 
 ### Added
 - **[MAK-0009](standards/MAK-0009.md) Knowledge Scopes, Resources and Rule
-  Inheritance** (Draft v0.1, *architecture-defined*, provisional number):
-  - Project Record vs Distributable Artifact profiles (organization-scoped,
-    shared only within the organization; no public registry implied);
-  - revision vs package version;
-  - the Organization → Project → (Resource Group) → Resource hierarchy;
-  - resources with extensible types; optional, non-nested groups;
-  - rules with a dedicated `enforcement: default | mandatory` field, stable
-    `rule_key` identity, explicit `overrides` targeting, effective-rule
-    computation and explanation;
-  - same-scope rule conflicts;
-  - current (project) vs future (additive group/resource) authorization;
-  - a no-compliance-guarantee statement.
-- Schemas: `resource`, `resource-group`, `rule`, `distributable-artifact`,
-  `effective-rule` (all `"x-mak4i-status": "architecture"`), plus common
-  definitions (`scopeRef`, `ruleKey`, `enforcement`, `packageVersion`,
-  resource and group ids), with valid and invalid examples.
-- SPEC "Knowledge Model" and "Specification status markers".
-- ARCHITECTURE "Knowledge Scopes".
-- CONFORMANCE "Architecture-defined standards".
-- Validator check *status*: architecture-defined schemas and properties
-  stay out of the MCP tool contract and out of CONFORMANCE criteria.
+  Inheritance** (Draft, *architecture-defined*: no conformance criteria or
+  binding yet):
+  - **Profiles:** Project Record and Distributable Artifact
+    (organization-scoped; all projects by default with optional
+    `targets`; `active` / `deprecated` / `withdrawn`; latest version by
+    default with optional pins; mandatory rules always at latest).
+  - **Hierarchy:** organization → project → optional resource group →
+    resource. Resources and groups are archive-only with unique active
+    names; records can be moved as an audited metadata change.
+  - **Rules:** `enforcement: default | mandatory`, `rule_key`,
+    `applies_to`, explicit `overrides`; effective-rule computation with
+    preserve-and-reactivate; same-scope conflicts generalized to every
+    scope.
+  - **Authorization:** organization owners for organization knowledge,
+    the new project permission `govern` for enforcement and structure;
+    project `read` covers inherited organization artifacts.
+  - **Audit:** event names defined.
+- **Schemas:**
+  - New: `artifact` (MAK-0001), `resource`, `resource-group`, `rule`,
+    `distributable-artifact`, `artifact-pin`, `effective-rule`.
+  - Common definitions: `scopeRef`, `ruleKey`, `enforcement`,
+    `packageVersion`, `httpsOrLoopbackUrl`,
+    `protocolInfo`, resource and group ids.
+  - Vendor extension fields `x_<vendor>_` on output objects.
+  - 155 examples covering every tool's input and output; record,
+    conflict and resolution states; real content hashes and conflict
+    ids.
+- **MAK-0006:**
+  - §8.6 refused-write security events (required fields;
+    deployment-retained);
+  - `govern` permission (architecture-defined).
+- **MAK-0008:**
+  - §13 client requirements, the basis of the Python SDK contract;
+  - `artifact_exists` error;
+  - `error.correlation_id`;
+  - unknown-code rule;
+  - `mak4i_whoami.protocol`;
+  - result rules (tag matching, search status, successor ids, opaque
+    traces);
+  - loopback `http` issuer/resource;
+  - proxy routing note.
+- **CONFORMANCE:**
+  - conformance profiles (Server: Project Records, transport options,
+    OAuth options, Client/SDK, Artifact);
+  - about 50 new criteria (P9–P16, C18–C27, I11–I23, M18–M39, K1–K12,
+    A1–A4).
+- **SPEC:** Knowledge Model, specification status markers, Extensibility.
+- **ROADMAP:** approved future protocol scope (F-1 … F-18, MAK-0009
+  binding) and entry criteria for the MAK-0002/0003 rewrite.
+- **Validator:**
+  - check *status*: architecture-defined content stays out of the
+    implemented contract;
+  - check *consistency*: tool and error tables vs schemas, per-tool
+    example coverage, one schema version;
+  - schema-based artifact validation with a file-name rule;
+  - `scripts/requirements.txt`.
 
 ### Changed
-- `project-record.schema.json`: optional, architecture-defined `resource_id`
-  and `rule` (additive; existing records unaffected).
-- MAK-0005 §A1/§A2/§A3.0: Project Record profile and revision terminology.
-- MAK-0006 §5.4, new §5.6: future grants are additive; no deny; metadata is
-  not access control.
-- MAK-0004 A10: rule-conflict architecture note.
-- MAK-0008 §10.7: no binding yet.
-- MAK-0001: profile note.
-- SPEC versioning: package versions vs revisions.
+- **Governance:**
+  - status ladder Reserved → Draft → Review → Accepted → Deprecated;
+  - sequential numbering (0002/0003/0007 recorded as reserved);
+  - Drafts may be implemented experimentally with a pinned revision;
+  - one protocol SemVer release number;
+  - revision-history and CHANGELOG discipline in the PR template.
+- **Conformance claims** are per profile and protocol version; "MAK4I
+  Certified" is removed until a published suite exists (future scope).
+- **MAK-0004 / MAK-0005:**
+  - Part B is a non-normative design appendix (future scope F-8 / F-9);
+  - MAK-0004's design principle is aligned with A6.4 (existence and
+    count disclosable).
+- **MAK-0001 (v0.2):**
+  - Distributable Artifact packaging metadata; `version` is a package
+    version;
+  - optional `content`; `org/name` ids; `token_estimate` = content size
+    in tokens.
+- **Check-before-create** is described as a supported discipline (client
+  guidance, SDK helper), not a protocol guarantee; a normative rule is
+  future scope.
+- **The `context-package` schema** is retitled "Current knowledge result";
+  the file name is unchanged.
+- **Repository hygiene:**
+  - neutral sample artifacts and examples (no personal email, company
+    branding or product names);
+  - sample "Skill" names → "Workflow"; versions bumped to 1.0.1;
+  - the bundled document framework and its artifact removed;
+  - business, positioning and savings documents moved to
+    `docs/background/` (non-normative), with internal references removed;
+  - MCP.md limited to the technical relationship.
+
+### Breaking (Draft-stage; migration notes)
+- **`mak4i_whoami` output** must include `protocol` (`version`,
+  `profiles`) and the `scopes` key. *Migration:* servers add both.
+- **Conflict candidates** must carry the `provenance` key (`null` for
+  legacy). A `resolved` conflict must carry `resolution`. *Migration:*
+  always emit the key.
+- **Resolution records** must carry `idempotency_key` (or `null`), unique
+  candidate ids, `parameters` matching the action, `completed_at` null
+  exactly while pending, and a successor for every `superseded` effect.
+  *Migration:* emit as specified.
+- **Tool inputs:**
+  - unknown arguments → `validation_error`;
+  - differing identity claims → `identity_mismatch`;
+  - empty `artifact_type`/tag filters and unknown `status` values are
+    invalid.
+  
+  *Migration:* reject instead of ignoring.
+- **Duplicate `artifact_id` on create** → `artifact_exists` (was
+  implementation-defined). *Migration:* map the error.
+- **Client ID Metadata Documents** must declare
+  `token_endpoint_auth_method: "none"`.
 
 ### Compatibility
-- Additive only. No existing field, tool, error code or conformance
-  criterion changed.
-- The Reference implementation at protocol revision `62fca93` remains
-  conformant. It implements none of MAK-0009, and nothing here suggests
-  otherwise.
+- **Existing records** remain valid. The new record fields (`resource_id`,
+  `rule`) are optional and architecture-defined.
+- **Reference implementation:** the Reference at `62fca93` doesn't yet
+  meet the Breaking items above. Its alignment is tracked separately and
+  follows this release (protocol first).
 
 ## v0.2 (Draft) — 2026-10-10
 

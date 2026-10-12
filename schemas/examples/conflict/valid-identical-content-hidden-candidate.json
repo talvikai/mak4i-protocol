@@ -1,0 +1,67 @@
+{
+  "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
+  "state": "open",
+  "generation": 0,
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "subject_key": "primary-cache",
+  "identical_content": true,
+  "reason": "3 lineages claim artifact_type=caching_decision subject_key=primary-cache",
+  "candidates": [
+    {
+      "artifact_id": "cache-red",
+      "lineage_id": "cache-red",
+      "version": "1.0",
+      "title": "Cache",
+      "created_at": "2026-10-10T12:00:00Z",
+      "created_by": "prn_agent_a",
+      "provenance": {
+        "principal_id": "prn_agent_a",
+        "principal_type": "agent",
+        "agent_id": "release-bot",
+        "display_name": "Release bot",
+        "auth_method": "credential",
+        "credential_id": "cred_1",
+        "oauth_client_id": null,
+        "client": {
+          "name": "claude-code",
+          "version": "2.1",
+          "verified": false
+        },
+        "recorded_at": "2026-10-10T12:00:00Z"
+      },
+      "content_sha256": "3c8bc0f6ffe00c2ca00a157c314613f8999b7a309961a9d8e830df01bad00d54",
+      "content": "Use cache RED",
+      "tags": [
+        "cache"
+      ]
+    },
+    {
+      "artifact_id": "cache-red-2",
+      "lineage_id": "cache-red-2",
+      "version": "1.0",
+      "title": "Cache",
+      "created_at": "2026-10-10T12:00:00Z",
+      "created_by": "prn_ci",
+      "provenance": {
+        "principal_id": "prn_ci",
+        "principal_type": "service",
+        "agent_id": null,
+        "display_name": "CI pipeline",
+        "auth_method": "credential",
+        "credential_id": "cred_ci",
+        "oauth_client_id": null,
+        "client": null,
+        "recorded_at": "2026-10-10T12:00:00Z"
+      },
+      "content_sha256": "3c8bc0f6ffe00c2ca00a157c314613f8999b7a309961a9d8e830df01bad00d54",
+      "content": "Use cache RED",
+      "tags": [
+        "cache"
+      ]
+    }
+  ],
+  "hidden_candidate_count": 1,
+  "resolution": null
+}

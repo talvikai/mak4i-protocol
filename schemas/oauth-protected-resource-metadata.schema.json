@@ -29,7 +29,7 @@
       "minItems": 1,
       "maxItems": 1,
       "items": {
-        "$ref": "common.schema.json#/$defs/httpsUrl"
+        "$ref": "common.schema.json#/$defs/httpsOrLoopbackUrl"
       }
     },
     "scopes_supported": {

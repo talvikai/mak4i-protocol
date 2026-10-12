@@ -33,5 +33,8 @@
     "created_at": {
       "$ref": "common.schema.json#/$defs/timestamp"
     }
+  },
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
   }
 }

@@ -7,7 +7,8 @@
   "type": "object",
   "required": [
     "client_id",
-    "redirect_uris"
+    "redirect_uris",
+    "token_endpoint_auth_method"
   ],
   "properties": {
     "client_id": {

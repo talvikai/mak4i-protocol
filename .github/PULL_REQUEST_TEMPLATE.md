@@ -17,6 +17,9 @@
 
 - [ ] Artifact follows [MAK-0001](../standards/MAK-0001.md) schema (if contributing an artifact)
 - [ ] [ARTIFACT_INDEX.md](../ARTIFACT_INDEX.md) updated (if contributing an artifact)
-- [ ] Specification change is backward compatible (if editing SPEC.md)
+- [ ] Specification change is backward compatible, or listed under "Breaking" in CHANGELOG.md with a migration note
+- [ ] Standard revision history row and *Last Updated* date updated (if editing a standard)
+- [ ] CHANGELOG.md "Unreleased" updated (if changing the protocol)
+- [ ] `python scripts/validate_protocol.py` passes
 - [ ] No sensitive, proprietary, or personally identifiable information
 - [ ] Description above explains the problem solved, not just the change made

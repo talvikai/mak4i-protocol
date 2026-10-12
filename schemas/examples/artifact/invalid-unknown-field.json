@@ -1,0 +1,8 @@
+{
+  "id": "fastapi-scaffold",
+  "version": "1.0.0",
+  "type": "procedural",
+  "name": "FastAPI Scaffold",
+  "description": "Standard FastAPI project structure and bootstrap code",
+  "source_path": "frameworks/x"
+}

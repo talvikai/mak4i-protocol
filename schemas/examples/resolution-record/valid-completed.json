@@ -1,6 +1,6 @@
 {
   "resolution_id": "res_1",
-  "conflict_id": "cfl_00000000000000000000000000000000",
+  "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
   "organization_id": "org_1",
   "project": "prj_1",
   "artifact_type": "caching_decision",
@@ -48,5 +48,5 @@
   "state": "completed",
   "idempotency_key": null,
   "created_at": "2026-10-10T12:00:00Z",
-  "completed_at": "2026-10-10T12:00:00Z"
+  "completed_at": "2026-10-10T12:00:01Z"
 }

@@ -1,8 +1,8 @@
 # MAK4I Protocol Specification
 
-**Version:** 0.2 (Draft)  
+**Version:** 0.2 (Draft). Unreleased changes are listed in [CHANGELOG.md](CHANGELOG.md); the next release number is assigned when a maintainer tags it ([GOVERNANCE.md](GOVERNANCE.md#versioning))  
 **Status:** Work in Progress  
-**Last updated:** 2026-10-10 — see [CHANGELOG.md](CHANGELOG.md)  
+**Last updated:** 2026-10-12  
 **Author:** Talvik, Inc.  
 **Created:** August 2026  
 **License:** MIT  
@@ -23,7 +23,7 @@ organizations.
 protocol.** MAK4I also covers procedural knowledge, project context,
 prompts, workflows, and historical decisions. See
 [README.md](README.md#what-mak4i-is) for the full picture and
-[COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for why this
+[COMPETITIVE_LANDSCAPE.md](docs/background/COMPETITIVE_LANDSCAPE.md) for why this
 distinction matters relative to memory-focused alternatives.
 
 ### Core Principle
@@ -32,14 +32,22 @@ distinction matters relative to memory-focused alternatives.
 > adapt what's there, and only generate something new when nothing
 > matches.
 
-This is a **reuse discipline**, specified as protocol behavior rather
-than left to individual client implementations. MAK4I defines how AI
-artifacts are:
-- **Structured** — using a standard artifact schema (MAK-0001)
-- **Discovered** — searched before anything new is generated
-- **Versioned** — using semantic versioning
-- **Injected** — into any AI session before work begins
-- **Shared** — via public and private registries
+This is a **reuse discipline** that MAK4I supports with protocol
+structure and client guidance. It is not an enforcement guarantee: the
+protocol defines how to look up current knowledge before writing
+([MAK-0008 §13.9](standards/MAK-0008.md#13-client-requirements)), and conflicts make competing writes
+visible ([MAK-0004](standards/MAK-0004.md)), but no standard forces a client to check first.
+MAK4I defines how AI knowledge is:
+- **Structured**: project records ([MAK-0005](standards/MAK-0005.md)) and
+  distributable artifacts ([MAK-0001](standards/MAK-0001.md), [MAK-0009](standards/MAK-0009.md));
+- **Discovered**: deterministic lookup of current knowledge
+  ([MAK-0008](standards/MAK-0008.md)), which clients should consult before creating;
+- **Versioned**: record revisions and package versions;
+- **Governed**: identity, permissions, provenance, conflicts and rules;
+- **Injected** *(planned, [MAK-0002](STANDARDS.md))*: assembled into an AI session
+  before work begins;
+- **Shared**: within an organization today (architecture-defined); via
+  public registries in the future ([MAK-0007](STANDARDS.md), planned).
 
 ---
 
@@ -125,7 +133,7 @@ Decisions, rationale, history, and context.
 
 Project records are defined by [MAK-0005 Part A](standards/MAK-0005.md#part-a--governed-project-records-normative).
 Packaging metadata for distributable artifacts is defined in [MAK-0001](standards/MAK-0001.md)
-(its mapping onto the Distributable Artifact profile is open, MAK-0009 U-9).
+(its field mapping onto the Distributable Artifact profile is in [MAK-0009 §2.2](standards/MAK-0009.md#2-knowledge-profiles)).
 
 ### Minimum required fields (MAK-0001 packaging metadata)
 
@@ -146,7 +154,12 @@ See [MAK-0001](standards/MAK-0001.md) for the complete artifact metadata schema.
 
 ---
 
-## Injection Flow
+## Injection Flow (planned, illustrative)
+
+*Illustrative only. Context assembly (MAK-0002) and memory resolution
+(MAK-0003) are approved future scope ([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope));
+there is no `mak4i inject` command today. Until they are specified,
+[MAK-0008 §10.6](standards/MAK-0008.md#10-tool-catalog) is the only injection rule.*
 
 ```
 Developer
@@ -184,7 +197,9 @@ to package versions only, and is illustrative until
 | New optional fields | MINOR |
 | Documentation, metadata | PATCH |
 
-Organizations can pin artifact versions exactly like software packages.
+Projects can pin an organization artifact to a package version
+([MAK-0009 §2.2](standards/MAK-0009.md#2-knowledge-profiles)); a mandatory rule always applies at its latest
+version.
 
 ---
 
@@ -199,8 +214,11 @@ future work; they will be additive (never narrowing project access), and
 there is no explicit deny. Resource metadata is not an access
 restriction ([MAK-0009 §7](standards/MAK-0009.md#7-authorization-current-and-future)).
 
-**Registry visibility (planned):** the levels below describe intended
-visibility of *published* artifacts in a future registry (MAK-0007).
+**Registry visibility (planned, illustrative):** the levels below
+describe intended visibility of *published* artifacts in a future
+registry (MAK-0007). Teams and individual-only visibility are not part of
+[MAK-0006](standards/MAK-0006.md) (no teams, project grants only), and will be defined with the
+registry, consistently with MAK-0006.
 
 | Level | Who can access |
 |-------|---------------|
@@ -209,11 +227,16 @@ visibility of *published* artifacts in a future registry (MAK-0007).
 | Team | Specific team members |
 | Private | Individual only |
 
-Sensitive artifacts can be encrypted while remaining protocol-compatible.
+Encryption of sensitive artifact content is approved future scope
+([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)); no standard defines it today.
 
 ---
 
-## CLI Interface
+## CLI Interface (planned, illustrative)
+
+*Illustrative only. These registry commands depend on MAK-0002 and
+MAK-0007, which are planned. Implementations document their own CLIs and
+map them to the MAK-0008 tools ([MAK-0008 §10.3](standards/MAK-0008.md#10-tool-catalog)).*
 
 ```bash
 # Install artifacts from registry
@@ -250,19 +273,51 @@ defined in [MAK-0008](standards/MAK-0008.md).
 
 Canonical, machine-readable JSON Schemas (draft 2020-12) for the
 normative interfaces live in [`schemas/`](schemas/), with valid and
-invalid examples in [`schemas/examples/`](schemas/examples/). Run
-`python scripts/validate_protocol.py` (requires `jsonschema>=4.23`) to
-validate schemas, examples, artifacts, links and the standards index.
+invalid examples in [`schemas/examples/`](schemas/examples/). Validate the
+repository with:
+
+```bash
+pip install -r scripts/requirements.txt
+python scripts/validate_protocol.py
+```
+
+Schema keywords specific to MAK4I:
+- `x-mak4i-schema-version`: the schema's version (equal to the protocol
+  release).
+- `x-mak4i-status`: `architecture` marks architecture-defined schemas and
+  properties.
+- `x-mak4i-tools`: the tool list in `mcp-tools.schema.json`.
+
+---
+
+## Extensibility
+
+- **Inputs are closed.** Servers reject arguments that a tool's input
+  schema doesn't define (`validation_error`,
+  [MAK-0008 §10.2](standards/MAK-0008.md#10-tool-catalog)).
+- **Clients ignore unknown output fields** and handle unknown error codes
+  by their `retryable` flag ([MAK-0008 §9.5](standards/MAK-0008.md#9-error-model)).
+- **New protocol fields** are added only as OPTIONAL fields in a MINOR
+  protocol release.
+- **Vendor fields.** Implementation-specific fields in outputs use the
+  prefix `x_<vendor>_` (for example `x_acme_trace`). Output schemas
+  accept them through `patternProperties`.
+- **Vendor tools.** Implementation-specific tools MUST NOT use the
+  `mak4i_` prefix ([MAK-0008 §10.4](standards/MAK-0008.md#10-tool-catalog)).
+- **Naming asymmetries kept for compatibility.** Tool inputs and records
+  say `project`, while grants and `mak4i_list_projects` say `project_id`.
+  A supersession's `reason` input is stored as the record's `rationale`.
 
 ---
 
 ## Skills (planned, deferred)
 
-Skills as a first-class MAK4I object — packaged, invocable procedures
-with their own lifecycle — are **planned and deferred**. No MAK standard
-defines them yet and no reference implementation supports them. (The
-word "Skills" elsewhere in this repository is an analogy for procedural
-artifacts, not this future object.)
+Skills as a first-class MAK4I object (packaged, invocable procedures
+with their own lifecycle) are **approved future scope**
+([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)). No MAK standard defines them yet and no
+reference implementation supports them. Where "Skills" appears
+elsewhere in this repository, it is an analogy for procedural knowledge,
+not this future object.
 
 ---
 
@@ -271,12 +326,12 @@ artifacts, not this future object.)
 | Standard | Title | Status |
 |----------|-------|--------|
 | MAK-0001 | Artifact Metadata Schema | Draft |
-| MAK-0002 | Context Injection Specification | Planned |
-| MAK-0003 | Memory Resolution Algorithm | Planned |
+| MAK-0002 | Context Injection Specification | Reserved |
+| MAK-0003 | Memory Resolution Algorithm | Reserved |
 | MAK-0004 | Conflict Resolution Specification | Draft |
 | MAK-0005 | Versioning and Compatibility Specification | Draft |
 | MAK-0006 | Identity and Access Control | Draft |
-| MAK-0007 | Registry API Contract | Planned |
+| MAK-0007 | Registry API Contract | Reserved |
 | MAK-0008 | MCP Binding and Authorization | Draft |
 | MAK-0009 | Knowledge Scopes, Resources and Rule Inheritance | Draft |
 
@@ -284,17 +339,12 @@ artifacts, not this future object.)
 
 ## Conformance
 
-An implementation is MAK4I Certified when it:
-
-1. Implements all REQUIRED fields from MAK-0001
-2. Implements the injection flow defined in MAK-0002
-3. Passes the MAK4I Conformance Test Suite
-
-Implementations of governed project records, identity and the MCP
-binding are assessed against the acceptance criteria for MAK-0004 Part A,
-MAK-0005 Part A, MAK-0006 and MAK-0008 in [CONFORMANCE.md](CONFORMANCE.md).
-
-See [CONFORMANCE.md](CONFORMANCE.md) for details.
+Conformance is claimed per **profile and protocol version**, for example
+"conformant to *Server: Project Records* and *Transport: HTTP + OAuth*
+at protocol 0.2". The profiles and their acceptance criteria are in
+[CONFORMANCE.md](CONFORMANCE.md#conformance-profiles). There is no "MAK4I Certified" badge until a
+published conformance suite and certification process exist (approved
+future scope).
 
 ---
 

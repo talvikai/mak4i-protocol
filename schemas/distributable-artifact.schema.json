@@ -15,7 +15,8 @@
     "title",
     "content",
     "provenance",
-    "created_at"
+    "created_at",
+    "status"
   ],
   "properties": {
     "artifact_id": {
@@ -57,6 +58,41 @@
     },
     "created_at": {
       "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "deprecated",
+        "withdrawn"
+      ],
+      "description": "MAK-0009 \u00a72.2. Changing status never alters a published package version."
+    },
+    "deprecated_by": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Replacement artifact (maps MAK-0001 deprecated_by)."
+    },
+    "targets": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/projectId"
+          }
+        }
+      ],
+      "description": "null/absent = applies to every project of the organization; otherwise only the listed projects (MAK-0009 \u00a72.2)."
     }
   },
   "allOf": [
@@ -87,6 +123,26 @@
         }
       },
       "description": "An organization artifact's rule applies at organization scope."
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "active"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "deprecated_by": {
+            "type": "null"
+          }
+        }
+      },
+      "description": "Only a deprecated artifact names a replacement."
     }
   ]
 }

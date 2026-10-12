@@ -6,5 +6,6 @@
   "description": null,
   "created_at": "2026-10-12T12:00:00Z",
   "updated_at": "2026-10-12T12:00:00Z",
-  "parent_group_id": "grp_platform"
+  "parent_group_id": "grp_platform",
+  "status": "active"
 }
