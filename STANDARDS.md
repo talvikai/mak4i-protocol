@@ -21,11 +21,17 @@ standard is proposed and approved.
 | MAK-0006 | Identity and Access Control | Draft | [standards/MAK-0006.md](standards/MAK-0006.md) |
 | MAK-0007 | Registry API Contract | Planned | — |
 | MAK-0008 | MCP Binding and Authorization | Draft | [standards/MAK-0008.md](standards/MAK-0008.md) |
+| MAK-0009 | Knowledge Scopes, Resources and Rule Inheritance | Draft | [standards/MAK-0009.md](standards/MAK-0009.md) |
 
 MAK-0004 and MAK-0005 each contain a normative **Part A** (governed
 project records and subject conflicts) and a **Part B** template whose
 design decisions remain open. "Draft" means published for the community
 comment period; no standard here is yet Accepted.
+
+MAK-0009 is **architecture-defined** (see [SPEC.md](SPEC.md#specification-status-markers)):
+it fixes the model for organization knowledge, resources and rule
+inheritance, but has no acceptance criteria or interface binding yet, and
+no implementation may claim support for it. Its number is provisional.
 
 Canonical JSON Schemas for these standards are in [`schemas/`](schemas/);
 validate the repository with `python scripts/validate_protocol.py`.

@@ -55,6 +55,25 @@ describes the artifact once it exists. See
 
 ---
 
+## Knowledge Scopes (protocol architecture)
+
+```
+Organization ── Distributable Artifacts + organization rules   (shared with its projects only)
+   └─ Project ── Project Records + project rules              (not shared with other projects)
+        ├─ Resource ── Project Records                         (e.g. Requirements, Issues, Rules)
+        └─ Resource Group ── Resource ── Project Records       (optional; one group per resource; no nesting)
+
+Rules: inherited downward · enforcement: default (overridable, explicitly) | mandatory (not overridable below)
+Grants: project grants today · group/resource grants future and additive · no explicit deny
+```
+
+This model is defined by [MAK-0009](standards/MAK-0009.md) and is
+**architecture-defined**: it is fixed in the protocol but has no
+conformance criteria or interface binding yet. It is **not** part of what
+the reference implementation ships today (next section). MAK4I governs
+which rules form the effective context; it doesn't guarantee that an
+external AI system follows them.
+
 ## What the Reference Implementation Ships Today
 
 The diagram above is the target architecture — the destination, not the
@@ -89,6 +108,9 @@ implementation (MVP) covers today:
             └─────────────────────────────────────┘
 ```
 
+Not shown above because not built: organization-scoped distributable
+artifacts, resources, resource groups and rule inheritance (MAK-0009,
+architecture-defined).
 Items marked `—` are specified or planned, not built; each has a target
 phase in [ROADMAP.md](ROADMAP.md). The object-storage adapter is one
 storage backend behind the same interface, not a requirement — the engine

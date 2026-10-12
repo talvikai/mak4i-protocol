@@ -139,6 +139,20 @@ future shared suite) can map evidence to them one-to-one.
 
 ---
 
+## Architecture-defined standards (no criteria at this revision)
+
+[MAK-0009](standards/MAK-0009.md) (distributable artifacts, resources, resource groups, rules
+and inheritance) is **architecture-defined**:
+- no acceptance criteria are defined for it here;
+- an implementation MUST NOT claim support for it;
+- no implementation is assessed against it at this revision.
+
+The project-record fields it reserves (`resource_id`, `rule`) are optional
+and are not required by the MAK-0005 Part A criteria above. Criteria will
+be added once MAK-0009's open questions are settled and MAK-0008 defines a
+binding (`scripts/validate_protocol.py` check *status* enforces this
+boundary).
+
 ## How to Get Certified
 
 > Process to be defined as the conformance suite is published.

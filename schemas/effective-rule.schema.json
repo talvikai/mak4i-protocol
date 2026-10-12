@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/effective-rule.schema.json",
+  "title": "Effective rule",
+  "description": "The rule that applies for one rule_key at one scope, with its explanation (MAK-0009 \u00a74.6). Architecture-defined: no tool returns it at this revision.",
+  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-status": "architecture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rule_key",
+    "target_scope",
+    "state",
+    "effective",
+    "chain"
+  ],
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "artifact_id"
+      ],
+      "properties": {
+        "profile": {
+          "enum": [
+            "project_record",
+            "distributable_artifact"
+          ]
+        },
+        "artifact_id": {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        "organization_id": {
+          "$ref": "common.schema.json#/$defs/organizationId"
+        },
+        "project": {
+          "$ref": "common.schema.json#/$defs/projectId"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*\\.0$",
+          "description": "Project-record revision (record field `version`)."
+        },
+        "package_version": {
+          "$ref": "common.schema.json#/$defs/packageVersion"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "profile": {
+                "const": "project_record"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "project",
+              "revision"
+            ],
+            "not": {
+              "required": [
+                "package_version"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "profile": {
+                "const": "distributable_artifact"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "organization_id",
+              "package_version"
+            ],
+            "not": {
+              "required": [
+                "revision"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "scope",
+        "enforcement",
+        "status"
+      ],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "scope": {
+          "$ref": "common.schema.json#/$defs/scopeRef"
+        },
+        "enforcement": {
+          "$ref": "common.schema.json#/$defs/enforcement"
+        },
+        "status": {
+          "enum": [
+            "effective",
+            "overridden",
+            "blocked_by_mandatory",
+            "override_not_declared",
+            "conflicted"
+          ]
+        },
+        "overrides": {
+          "anyOf": [
+            {
+              "$ref": "common.schema.json#/$defs/scopeRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "$ref": "provenance.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "rule_key": {
+      "$ref": "common.schema.json#/$defs/ruleKey"
+    },
+    "target_scope": {
+      "$ref": "common.schema.json#/$defs/scopeRef"
+    },
+    "state": {
+      "enum": [
+        "resolved",
+        "conflicted",
+        "none"
+      ]
+    },
+    "effective": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/entry"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "originating_scope": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/scopeRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "chain": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "resolved"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "originating_scope"
+        ],
+        "properties": {
+          "effective": {
+            "$ref": "#/$defs/entry"
+          },
+          "originating_scope": {
+            "$ref": "common.schema.json#/$defs/scopeRef"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "conflicted",
+              "none"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "effective": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

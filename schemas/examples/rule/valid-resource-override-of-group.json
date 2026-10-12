@@ -1,0 +1,14 @@
+{
+  "rule_key": "api.versioning",
+  "enforcement": "default",
+  "applies_to": {
+    "type": "resource",
+    "id": "res_api_rules"
+  },
+  "overrides": {
+    "scope": {
+      "type": "resource_group",
+      "id": "grp_backend"
+    }
+  }
+}

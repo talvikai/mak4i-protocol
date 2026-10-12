@@ -1,0 +1,8 @@
+{
+  "rule_key": "logging.format",
+  "applies_to": {
+    "type": "project",
+    "id": "prj_1"
+  },
+  "overrides": null
+}

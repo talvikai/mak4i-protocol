@@ -1,0 +1,14 @@
+{
+  "rule_key": "logging.format",
+  "enforcement": "mandatory",
+  "applies_to": {
+    "type": "project",
+    "id": "prj_1"
+  },
+  "overrides": {
+    "scope": {
+      "type": "organization",
+      "id": "org_1"
+    }
+  }
+}

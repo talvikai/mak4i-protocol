@@ -4,6 +4,53 @@ All notable changes to the MAK4I protocol specification. The specification
 version (SPEC.md) is independent of artifact versions (MAK-0001) and of any
 implementation's release version.
 
+## Unreleased (proposed on branch `architecture/scopes-resources-rules`)
+
+Four architecture decisions settled by the specification owner on
+2026-10-12. Not tagged; no version number has been assigned (register O-4).
+
+### Added
+- **[MAK-0009](standards/MAK-0009.md) Knowledge Scopes, Resources and Rule
+  Inheritance** (Draft v0.1, *architecture-defined*, provisional number):
+  - Project Record vs Distributable Artifact profiles (organization-scoped,
+    shared only within the organization; no public registry implied);
+  - revision vs package version;
+  - the Organization → Project → (Resource Group) → Resource hierarchy;
+  - resources with extensible types; optional, non-nested groups;
+  - rules with a dedicated `enforcement: default | mandatory` field, stable
+    `rule_key` identity, explicit `overrides` targeting, effective-rule
+    computation and explanation;
+  - same-scope rule conflicts;
+  - current (project) vs future (additive group/resource) authorization;
+  - a no-compliance-guarantee statement.
+- Schemas: `resource`, `resource-group`, `rule`, `distributable-artifact`,
+  `effective-rule` (all `"x-mak4i-status": "architecture"`), plus common
+  definitions (`scopeRef`, `ruleKey`, `enforcement`, `packageVersion`,
+  resource and group ids), with valid and invalid examples.
+- SPEC "Knowledge Model" and "Specification status markers".
+- ARCHITECTURE "Knowledge Scopes".
+- CONFORMANCE "Architecture-defined standards".
+- Validator check *status*: architecture-defined schemas and properties
+  stay out of the MCP tool contract and out of CONFORMANCE criteria.
+
+### Changed
+- `project-record.schema.json`: optional, architecture-defined `resource_id`
+  and `rule` (additive; existing records unaffected).
+- MAK-0005 §A1/§A2/§A3.0: Project Record profile and revision terminology.
+- MAK-0006 §5.4, new §5.6: future grants are additive; no deny; metadata is
+  not access control.
+- MAK-0004 A10: rule-conflict architecture note.
+- MAK-0008 §10.7: no binding yet.
+- MAK-0001: profile note.
+- SPEC versioning: package versions vs revisions.
+
+### Compatibility
+- Additive only. No existing field, tool, error code or conformance
+  criterion changed.
+- The Reference implementation at protocol revision `62fca93` remains
+  conformant. It implements none of MAK-0009, and nothing here suggests
+  otherwise.
+
 ## v0.2 (Draft) — 2026-10-10
 
 Specification changes required by the MAK4I Reference implementation's

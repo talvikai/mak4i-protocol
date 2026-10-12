@@ -15,6 +15,13 @@ Checks (each prints PASS/FAIL; exit status 1 if any check fails):
 5. standards  - every standards/MAK-*.md is listed in STANDARDS.md and the
                 SPEC.md standards table with the status in its header, and
                 every listed file exists.
+6. status     - architecture-defined definitions ("x-mak4i-status":
+                "architecture", SPEC.md "Specification status markers") stay
+                out of the implemented contract: no MCP tool schema
+                references them, no schema requires an architecture-marked
+                property, and every standard whose header says
+                "Conformance status: Architecture" has no CONFORMANCE.md
+                criteria section.
 
 Usage:
     uv run --with 'jsonschema>=4.23' python scripts/validate_protocol.py
@@ -288,6 +295,35 @@ def check_standards() -> int:
 # --------------------------------------------------------------------------- main
 
 
+# --------------------------------------------------------------------------- status
+
+
+ARCHITECTURE = "architecture"
+
+
+def check_status(schemas: dict[str, dict]) -> int:
+    architecture = {name for name, s in schemas.items() if s.get("x-mak4i-status") == ARCHITECTURE}
+    for name, schema in schemas.items():
+        if schema.get("x-mak4i-status") not in (None, ARCHITECTURE):
+            fail("status", f"{name}: unknown x-mak4i-status {schema['x-mak4i-status']!r}")
+        props = schema.get("properties", {})
+        for prop in schema.get("required", []):
+            if isinstance(props.get(prop), dict) and props[prop].get("x-mak4i-status") == ARCHITECTURE:
+                fail("status", f"{name}: architecture-defined property {prop!r} must not be required")
+    tools = schemas.get("mcp-tools.schema.json", {})
+    for ref in iter_refs(tools):
+        target = ref.split("#")[0].rsplit("/", 1)[-1]
+        if target in architecture:
+            fail("status", f"mcp-tools.schema.json references architecture-defined {target}; "
+                 "an interface binding needs the standard's conformance criteria first")
+    conformance = (ROOT / "CONFORMANCE.md").read_text()
+    for path in sorted((ROOT / "standards").glob("MAK-*.md")):
+        if re.search(r"^\*\*Conformance status:\*\* Architecture", path.read_text(), re.M):
+            if re.search(rf"^### {path.stem}\b", conformance, re.M):
+                fail("status", f"{path.stem} is architecture-defined but CONFORMANCE.md has a criteria section for it")
+    return len(architecture)
+
+
 def main() -> int:
     schemas, registry = load_schemas()
     check_refs(schemas, registry)
@@ -297,6 +333,7 @@ def main() -> int:
         ("artifacts", f"{check_artifacts()} artifact(s)"),
         ("links", f"{check_links()} Markdown file(s)"),
         ("standards", f"{check_standards()} standard(s)"),
+        ("status", f"{check_status(schemas)} architecture-defined schema(s)"),
     ]
     for check, summary in results:
         failed = [f for f in FAILURES if f.startswith(f"[{check}]")]

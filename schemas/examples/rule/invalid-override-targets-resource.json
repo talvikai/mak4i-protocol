@@ -1,0 +1,14 @@
+{
+  "rule_key": "x",
+  "enforcement": "default",
+  "applies_to": {
+    "type": "resource",
+    "id": "res_api_rules"
+  },
+  "overrides": {
+    "scope": {
+      "type": "resource",
+      "id": "res_api_rules"
+    }
+  }
+}

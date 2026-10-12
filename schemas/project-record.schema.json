@@ -148,6 +148,30 @@
     },
     "updated_at": {
       "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "resource_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/resourceId"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-mak4i-status": "architecture",
+      "description": "Attachment to one resource of the same project (MAK-0009 \u00a73.4). Architecture-defined: not required by any conformance profile; absent or null = project-wide."
+    },
+    "rule": {
+      "anyOf": [
+        {
+          "$ref": "rule.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-mak4i-status": "architecture",
+      "description": "Present when the record is a rule (MAK-0009 \u00a74.1). Architecture-defined."
     }
   },
   "allOf": [
@@ -236,6 +260,38 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "required": [
+          "rule"
+        ],
+        "properties": {
+          "rule": {
+            "type": "object"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "rule": {
+            "properties": {
+              "applies_to": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "project",
+                      "resource_group",
+                      "resource"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "A project-record rule applies at its project or below, never at organization scope (MAK-0009 \u00a74.2)."
     }
   ]
 }

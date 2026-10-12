@@ -16,7 +16,7 @@ is marked done until it actually works.
 | Phase | Status | Scope |
 |-------|--------|-------|
 | 0 — Foundation | Complete | Public repo, protocol design, problem statement, vision |
-| 1 — Protocol Spec | Active development | SPEC.md and the MAK standards: MAK-0001 (artifact schema), MAK-0004/0005 Part A (subject conflicts, project records), MAK-0006 (identity and access control) and MAK-0008 (MCP binding and OAuth) are Draft; MAK-0002/0003/0007 planned; community RFC |
+| 1 — Protocol Spec | Active development | SPEC.md and the MAK standards: MAK-0001 (artifact schema), MAK-0004/0005 Part A (subject conflicts, project records), MAK-0006 (identity and access control) and MAK-0008 (MCP binding and OAuth) are Draft; MAK-0009 (knowledge scopes, resources, rule inheritance) is a Draft architecture standard with no conformance criteria yet; MAK-0002/0003/0007 planned; community RFC |
 | 2 — Reference Implementation | Initial MVP complete | Working reference implementation of the core workflow — create, retrieve, search, supersede, version history, provenance — with an operator CLI and MCP access. Hardening and expansion are ongoing. |
 | 3 — Reusable Artifacts | Planned | Community artifacts across artifact types; reuse-workflow validation with developers and early design partners |
 | 4 — Hosted Registry | Planned | Public registry for discovering, versioning and sharing artifacts, with governance and access controls |

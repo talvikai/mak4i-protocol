@@ -47,7 +47,12 @@ artifacts are:
 
 | Term | Definition |
 |------|-----------|
-| **Artifact** | A unit of knowledge conforming to the MAK4I schema |
+| **Artifact** | A unit of knowledge. MAK4I has two knowledge profiles, Project Records and Distributable Artifacts ([MAK-0009 §2](standards/MAK-0009.md#2-knowledge-profiles)) |
+| **Project Record** | Knowledge kept within one project; not shared with other projects ([MAK-0005 Part A](standards/MAK-0005.md#part-a--governed-project-records-normative)) |
+| **Distributable Artifact** | Organization-scoped knowledge shared with that organization's projects ([MAK-0009 §2.2](standards/MAK-0009.md#2-knowledge-profiles)) — *architecture-defined* |
+| **Revision / package version** | A project record's lineage position (`version`: `"1.0"`, `"2.0"`) vs a distributable artifact's semantic version (`package_version`); never compared ([MAK-0009 §2.3](standards/MAK-0009.md#2-knowledge-profiles)) |
+| **Resource / resource group** | A logical collection inside one project, optionally in one non-nested group ([MAK-0009 §3](standards/MAK-0009.md#3-resources-and-resource-groups)) — *architecture-defined* |
+| **Rule / enforcement** | Knowledge carrying a `rule` object with `enforcement: default \| mandatory`, inherited downward with explicit overrides ([MAK-0009 §4](standards/MAK-0009.md#4-rules-enforcement-and-inheritance)) — *architecture-defined* |
 | **Memory pack** | A collection of related artifacts |
 | **Registry** | A store of published artifacts |
 | **Injection** | The process of loading artifacts into an AI session |
@@ -59,6 +64,40 @@ artifacts are:
 | **Governed project record** | A versioned unit of project knowledge with lineage and provenance ([MAK-0005 Part A](standards/MAK-0005.md#part-a--governed-project-records-normative)) |
 | **Subject key** | Explicit name of what a record is authoritative about ([MAK-0005 §A5](standards/MAK-0005.md#a5-subject-keys)) |
 | **Conflict** | Two or more lineages claiming the same subject ([MAK-0004 Part A](standards/MAK-0004.md#part-a--subject-conflicts-normative)) |
+
+---
+
+## Knowledge Model
+
+```
+Organization ─┬─ Distributable Artifacts (organization-scoped, shared with its projects)
+              └─ Project ─┬─ Project Records (project-wide)
+                          ├─ Resource ── Project Records
+                          └─ Resource Group ── Resource ── Project Records
+```
+
+- **Project Records** stay in their project. **Distributable Artifacts**
+  are shared only within their organization; a public registry is not
+  implied ([MAK-0009](standards/MAK-0009.md)).
+- **Rules** at organization, project, resource-group or resource scope are
+  inherited downward. `default` rules may be explicitly overridden at a
+  lower scope; `mandatory` rules may not. Effective context explains which
+  rule applies and where it came from. MAK4I governs effective context; it
+  does not guarantee that an external AI follows it.
+- **Authorization** is by project grant today. Resource-group and
+  resource grants are future and additive; there is no explicit deny.
+
+### Specification status markers
+
+| Marker | Meaning |
+|---|---|
+| **Implemented contract** | Normative and covered by acceptance criteria in [CONFORMANCE.md](CONFORMANCE.md). Implementations are assessed against it today. |
+| **Architecture-defined** | Normative design that fixes the model for future implementations. It has no acceptance criteria and no interface binding yet. Schemas, and individual schema properties, carry `"x-mak4i-status": "architecture"`; standards say `Conformance status: Architecture`. Implementations MUST NOT claim support for it, and `scripts/validate_protocol.py` keeps it out of the MCP tool contract. |
+
+At this revision, MAK-0009 (distributable artifacts, resources, resource
+groups, rules and inheritance) is architecture-defined. Everything in
+MAK-0004 Part A, MAK-0005 Part A, MAK-0006 and MAK-0008 that CONFORMANCE.md
+lists is the implemented contract.
 
 ---
 
@@ -84,9 +123,11 @@ Decisions, rationale, history, and context.
 
 ## Artifact Schema
 
-Defined in [MAK-0001](standards/MAK-0001.md).
+Project records are defined by [MAK-0005 Part A](standards/MAK-0005.md#part-a--governed-project-records-normative).
+Packaging metadata for distributable artifacts is defined in [MAK-0001](standards/MAK-0001.md)
+(its mapping onto the Distributable Artifact profile is open, MAK-0009 U-9).
 
-### Minimum required fields
+### Minimum required fields (MAK-0001 packaging metadata)
 
 ```json
 {
@@ -129,7 +170,13 @@ The key principle: **MAK4I operates before the prompt, not inside it.**
 
 ## Versioning
 
-Every artifact uses semantic versioning (MAJOR.MINOR.PATCH).
+Project records are versioned by **revision**, their position in a lineage
+(`"1.0"`, `"2.0"`, …, [MAK-0005 §A2](standards/MAK-0005.md#a2-record-fields)).
+Distributable artifacts use a semantic **package version**
+(MAJOR.MINOR.PATCH). The two are never compared or converted
+([MAK-0009 §2.3](standards/MAK-0009.md#2-knowledge-profiles)). The bump guidance below applies
+to package versions only, and is illustrative until
+[MAK-0005 D-001](standards/MAK-0005.md#decision-d-001--version-representation-and-semantics) is decided.
 
 | Change | Version bump |
 |--------|-------------|
@@ -146,7 +193,11 @@ Organizations can pin artifact versions exactly like software packages.
 **Project access (normative, draft):** identities, `agent_id`,
 permissions, grants, revocation, provenance and administration are
 defined in [MAK-0006](standards/MAK-0006.md). Transport scopes never
-widen a project grant.
+widen a project grant. A project grant governs every resource and
+resource group in the project. Resource-group and resource grants are
+future work; they will be additive (never narrowing project access), and
+there is no explicit deny. Resource metadata is not an access
+restriction ([MAK-0009 §7](standards/MAK-0009.md#7-authorization-current-and-future)).
 
 **Registry visibility (planned):** the levels below describe intended
 visibility of *published* artifacts in a future registry (MAK-0007).
@@ -227,6 +278,7 @@ artifacts, not this future object.)
 | MAK-0006 | Identity and Access Control | Draft |
 | MAK-0007 | Registry API Contract | Planned |
 | MAK-0008 | MCP Binding and Authorization | Draft |
+| MAK-0009 | Knowledge Scopes, Resources and Rule Inheritance | Draft |
 
 ---
 
