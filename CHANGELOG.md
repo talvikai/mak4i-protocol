@@ -40,7 +40,7 @@ the resolution of every open item in the protocol gap/decision register.
     `packageVersion`, `httpsOrLoopbackUrl`,
     `protocolInfo`, resource and group ids.
   - Vendor extension fields `x_<vendor>_` on output objects.
-  - 155 examples covering every tool's input and output; record,
+  - 154 examples covering every tool's input and output; record,
     conflict and resolution states; real content hashes and conflict
     ids.
 - **MAK-0006:**
@@ -60,7 +60,7 @@ the resolution of every open item in the protocol gap/decision register.
 - **CONFORMANCE:**
   - conformance profiles (Server: Project Records, transport options,
     OAuth options, Client/SDK, Artifact);
-  - about 50 new criteria (P9–P16, C18–C27, I11–I23, M18–M39, K1–K12,
+  - 69 new criteria (P9–P16, C18–C27, I11–I23, M18–M39, K1–K12,
     A1–A4).
 - **SPEC:** Knowledge Model, specification status markers, Extensibility.
 - **ROADMAP:** approved future protocol scope (F-1 … F-18, MAK-0009
