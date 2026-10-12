@@ -90,7 +90,7 @@ Artifacts re-generated:
 
 Project context re-established:
   "My stack is Firebase Auth, React, Node.js, GCP Cloud Run..."
-  "We're building an appointment scheduling SaaS called Schedovia..."
+  "We're building an appointment scheduling SaaS called ExampleApp..."
   "We use Square for payments and Twilio for SMS..."
 ```
 
@@ -195,14 +195,13 @@ not yet been exercised at production scale.
 |--------|-------|
 | Tokens saved (dev-time observation) | 38,400+ |
 | Sessions tracked | 29 |
-| Artifacts registered | 9 across 6 types |
+| Sample artifacts in this repository | 13 |
 
 ### What was saved and how:
 
 | Artifact | What it is | Tokens saved per use |
 |----------|-----------|---------------------|
-| wd-docx-framework | Skill — how to generate professional documents | 1,200 |
-| schedovia-stack-context | Knowledge — full project stack and architecture | 1,500 |
+| example-app-stack-context | Knowledge — full project stack and architecture | 1,500 |
 | issue-triage-framework | Skill — how to triage P0/P1/P2/P3 issues | 400 |
 | cloud-run-429-diagnosis | History — diagnosis pattern from a real incident | 350 |
 | gcp-wildcard-cert-godaddy | Skill — how to provision SSL certs on GCP | 500 |
@@ -252,6 +251,8 @@ as the reference implementation matures.
 ## The Solution
 
 MAK4I makes your Projects, Artifacts, and Skills permanent and portable.
+*(Here "Skills" means repeatable procedures, stored today as procedural
+artifacts. Skills as a first-class MAK4I object are approved future scope.)*
 
 ```
 With MAK4I:

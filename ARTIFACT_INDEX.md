@@ -1,199 +1,128 @@
 # MAK4I Artifact Index
 
-All registered artifacts across WD Technology Solutions products.
-Last updated: August 2026
+Sample MAK-0001 artifacts (Distributable Artifact packaging metadata) kept in this
+repository as examples. Every file validates against
+[`schemas/artifact.schema.json`](schemas/artifact.schema.json). The validator checks that
+each file name matches its `id` and `version`.
+
+Last updated: 2026-10-12
 
 ---
 
 ## Summary
 
-| Type | Count |
+| Directory | Count |
 |------|-------|
-| document | 2 |
+| code | 1 |
+| context | 1 |
+| document | 1 |
+| prompt | 1 |
 | reasoning | 2 |
 | workflow | 7 |
-| code | 1 |
-| prompt | 1 |
-| context | 1 |
-| **Total** | **14** |
+| **Total** | **13** |
 
-**Total tokens saved: see [docs/MAK4I_SAVINGS_LOG.md](docs/MAK4I_SAVINGS_LOG.md)
-for the current, dated running total** — this file catalogs artifacts, not
-savings; the two were previously listed together here and drifted out of
-sync, which is why savings totals now live only in the log.
+Directories group the samples by kind. They are not the MAK-0001 `type`
+(`procedural` / `semantic` / `episodic`), which each file declares.
+
+Reuse and token-savings records are kept in
+[docs/background/MAK4I_SAVINGS_LOG.md](docs/background/MAK4I_SAVINGS_LOG.md), a non-normative
+background document.
 
 ---
 
 ## Artifacts
 
-### wd-docx-framework v1.1.0
-**File:** `artifacts/document/wd-docx-framework-v1.0.0.json`
-**Source:** `frameworks/wd-docx-framework/` — tested, working code, not just a description
-**Token savings:** ~1,200 per session
-**What it is:** Reusable Node.js framework for generating professional DOCX documents. Covers helpers, styles, tables, template, and PDF generator (via LibreOffice).
-**Used in:** Every document generation session
+### multitenant-slug-auth-pattern v1.0.1
+**File:** `artifacts/code/multitenant-slug-auth-pattern-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~600 tokens  
+**What it is:** Multi-tenant slug authentication pattern for SaaS: managed auth, request middleware, role-based routing.
 
-### claude-code-fix-instructions-template v1.0.0
-**File:** `artifacts/document/claude-code-fix-instructions-template-v1.0.0.json`
-**Token savings:** ~300 per session
-**What it is:** Template for Claude Code fix instruction documents. Covers triage format, priority classification, code examples, commit order, testing checklist.
-**Used in:** Schedovia fix rounds 1-5
+### example-app-stack-context v1.0.1
+**File:** `artifacts/context/example-app-stack-context-v1.0.1.json`  
+**Type:** semantic  
+**Size estimate:** ~1500 tokens  
+**What it is:** Stack context for an example appointment-scheduling SaaS, so sessions don't re-explain the architecture.
 
-### issue-triage-framework v1.0.0
-**File:** `artifacts/reasoning/issue-triage-framework-v1.0.0.json`
-**Token savings:** ~400 per session
-**What it is:** Reasoning framework for triaging issues into P0/P1/P2/P3. Covers impact assessment, root cause analysis, fix ordering.
-**Used in:** Schedovia issue triage
+### claude-code-fix-instructions-template v1.0.1
+**File:** `artifacts/document/claude-code-fix-instructions-template-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~300 tokens  
+**What it is:** Template for AI coding-agent fix instructions: triage format, priority classification, code examples, commit order, testing checklist.
 
-### cloud-run-429-diagnosis v1.0.0
-**File:** `artifacts/reasoning/cloud-run-429-diagnosis-v1.0.0.json`
-**Token savings:** ~350 per session
-**What it is:** Diagnosis pattern for GCP Cloud Run 429 errors. Covers concurrency limits, min/max instances, Redis rate limiting.
-**Used in:** Schedovia 429 error investigation
+### appointment-parser-prompt v1.0.1
+**File:** `artifacts/prompt/appointment-parser-prompt-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~250 tokens  
+**What it is:** Prompt for parsing appointments from natural language and photos of appointment cards.
 
-### gcp-wildcard-cert-godaddy v1.0.0
-**File:** `artifacts/workflow/gcp-wildcard-cert-godaddy-v1.0.0.json`
-**Token savings:** ~500 per session
-**What it is:** Step-by-step workflow for wildcard SSL certs on GCP with GoDaddy DNS.
-**Used in:** Schedovia SSL fix
+### cloud-run-429-diagnosis v1.0.1
+**File:** `artifacts/reasoning/cloud-run-429-diagnosis-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~350 tokens  
+**What it is:** Diagnosis pattern for HTTP 429 errors on a serverless container platform: concurrency limits, instance bounds, rate limiting.
 
-### mak4i-repo-zip-packager v1.0.0
-**File:** `artifacts/workflow/mak4i-repo-zip-packager-v1.0.0.json`
-**Token savings:** ~300 per session
-**What it is:** End-of-session workflow to sync artifacts and package the repo ZIP.
-**Used in:** Every session that produces new artifacts
+### issue-triage-framework v1.0.1
+**File:** `artifacts/reasoning/issue-triage-framework-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~400 tokens  
+**What it is:** Reasoning framework for triaging issues into P0–P3: impact assessment, root-cause analysis, fix ordering.
 
-### multitenant-slug-auth-pattern v1.0.0
-**File:** `artifacts/code/multitenant-slug-auth-pattern-v1.0.0.json`
-**Token savings:** ~600 per session
-**What it is:** Multi-tenant slug auth pattern for SaaS. Firebase Auth + requireAuth middleware + role-based routing.
-**Used in:** Schedovia auth architecture
+### gcp-wildcard-cert-godaddy v1.0.1
+**File:** `artifacts/workflow/gcp-wildcard-cert-godaddy-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~500 tokens  
+**What it is:** Step-by-step workflow for wildcard TLS certificates on a cloud load balancer with an external DNS provider.
 
-### appointment-parser-prompt v1.0.0
-**File:** `artifacts/prompt/appointment-parser-prompt-v1.0.0.json`
-**Token savings:** ~250 per session
-**What it is:** Claude prompt for parsing appointments from natural language and MMS photos.
-**Used in:** Reminder AI app
+### mak4i-check-before-create v1.0.1
+**File:** `artifacts/workflow/mak4i-check-before-create-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~100 tokens  
+**What it is:** Check-before-create workflow: look for an existing artifact before building anything new; reuse, adapt or store.
 
-### schedovia-stack-context v1.0.0
-**File:** `artifacts/context/schedovia-stack-context-v1.0.0.json`
-**Token savings:** ~1,500 per session
-**What it is:** Full stack context for Schedovia. Eliminates re-explaining architecture, business rules, and patterns.
-**Used in:** Every Schedovia development session
+### mak4i-operating-system v1.0.1
+**File:** `artifacts/workflow/mak4i-operating-system-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~300 tokens  
+**What it is:** Master workflow that defines when the other workflows trigger in a session.
 
----
+### mak4i-repo-zip-packager v1.0.1
+**File:** `artifacts/workflow/mak4i-repo-zip-packager-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~300 tokens  
+**What it is:** End-of-session workflow that syncs artifacts and packages the repository as a ZIP.
 
-## July 9, 2026 Update
+### mak4i-savings-log-update v1.0.1
+**File:** `artifacts/workflow/mak4i-savings-log-update-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~50 tokens  
+**What it is:** End-of-session workflow for recording honest reuse and token-savings estimates.
 
-Two new daily workflow skills added:
+### mak4i-session-end v1.0.1
+**File:** `artifacts/workflow/mak4i-session-end-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~200 tokens  
+**What it is:** Daily session-end workflow: capture new artifacts, update the index and savings log, package and push.
 
-### mak4i-session-start v1.0.0
-**File:** `artifacts/workflow/mak4i-session-start-v1.0.0.json`
-**Token savings:** ~5,000 per session (context loading eliminated)
-**What it is:** The daily session start skill. Step-by-step process for loading all MAK4I artifacts at the start of every Claude session. Eliminates re-explaining context, stack, and history every day.
-**Frequency:** Every Claude session
-
-### mak4i-session-end v1.0.0
-**File:** `artifacts/workflow/mak4i-session-end-v1.0.0.json`
-**Token savings:** ~200 per session (consistency — no missed artifacts)
-**What it is:** The daily session end skill. Step-by-step process for capturing new artifacts, updating the index and savings log, packaging the zip, and pushing to GitHub. Ensures no session output is ever lost.
-**Frequency:** Every productive Claude session
-
----
-
-## Updated Summary (as of July 9, 2026)
-
-| Type | Count | Key artifacts |
-|------|-------|--------------|
-| document | 2 | wd-docx-framework, claude-code-fix-template |
-| reasoning | 2 | issue-triage-framework, cloud-run-429-diagnosis |
-| workflow | 4 | gcp-wildcard-cert, mak4i-repo-zip-packager, **mak4i-session-start**, **mak4i-session-end** |
-| code | 1 | multitenant-slug-auth-pattern |
-| prompt | 1 | appointment-parser-prompt |
-| context | 1 | schedovia-stack-context |
-| **Total** | **11** | |
-
-**Total tokens saved (as of July 9, 2026): 25,100+**
-**With daily session-start skill: projected ~5,000 additional tokens saved per day**
+### mak4i-session-start v1.0.1
+**File:** `artifacts/workflow/mak4i-session-start-v1.0.1.json`  
+**Type:** procedural  
+**Size estimate:** ~5000 tokens  
+**What it is:** Daily session-start workflow: load the relevant artifacts before work begins.
 
 ---
 
-## July 9, 2026 Update — Core Skills Added
+## The sample session workflows
 
-Three new skills added that form the MAK4I daily operating system:
+Five of the workflow samples describe one way to use MAK4I in a daily AI
+session. They are examples of **procedural knowledge**, not first-class
+"skills" (skills as a protocol object are approved future scope; see
+[ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)).
 
-### mak4i-check-before-create v1.0.0
-**File:** `artifacts/workflow/mak4i-check-before-create-v1.0.0.json`
-**Token savings:** ~100 per session (overhead) + full savings from reuse
-**What it is:** The DRY enforcement skill. Before creating ANYTHING, check if it was done before. If found — reuse. If adapted — note what changed. If new — store it. The skill that makes MAK4I self-compounding.
-**Trigger:** Before creating any document, code, workflow, or prompt
-
-### mak4i-savings-log-update v1.0.0
-**File:** `artifacts/workflow/mak4i-savings-log-update-v1.0.0.json`
-**Token savings:** ~50 per session (overhead)
-**What it is:** End-of-session skill for recording token savings in SAVINGS_LOG. Tracks reused, adapted, and new artifacts with honest token estimates. This log is the pre-seed evidence for Talvik.
-**Trigger:** End of every productive Claude session
-
----
-
-## The Four Core Daily Skills
-
-These four workflow artifacts form the MAK4I daily operating system:
-
-| Order | Skill | When | What it does |
-|-------|-------|------|-------------|
-| 1 | mak4i-session-start | Session begins | Load all artifacts — start with context |
-| 2 | mak4i-check-before-create | Before any work | Check index → reuse or build new |
-| 3 | mak4i-session-end | Session ends | Capture new artifacts, update index |
-| 4 | mak4i-savings-log-update | Session ends | Record token savings, update running total |
-
-Skills 3 and 4 can be combined into one end-of-session routine.
-
----
-
-## Updated Summary (as of July 9, 2026)
-
-| Type | Count |
-|------|-------|
-| document | 2 |
-| reasoning | 2 |
-| workflow | 6 |
-| code | 1 |
-| prompt | 1 |
-| context | 1 |
-| **Total** | **13** |
-
----
-
-## July 9, 2026 Final Update — MAK4I Operating System
-
-### mak4i-operating-system v1.0.0
-**File:** `artifacts/workflow/mak4i-operating-system-v1.0.0.json`
-**Token savings:** ~300 per session (system prompt overhead)
-**What it is:** The master skill. Defines WHEN all other skills trigger automatically. Inject into Claude Project Instructions once — all skills fire automatically forever after. No manual triggering needed.
-**Trigger:** Always active once injected
-
-SKILLS.md (workflow trigger map) has been moved out of this public repo
-and is maintained separately as an internal document.
-
-## Final Summary (as of July 9, 2026)
-
-| Type | Count |
-|------|-------|
-| document | 2 |
-| reasoning | 2 |
-| workflow | 7 |
-| code | 1 |
-| prompt | 1 |
-| context | 1 |
-| **Total** | **14** |
-
-## The MAK4I Daily Operating System
-
-| # | Skill | Trigger | Artifact |
-|---|-------|---------|----------|
-| 1 | Session Start | First message | mak4i-session-start |
-| 2 | Check Before Create | Before any creation | mak4i-check-before-create |
-| 3 | Store New Artifact | After building anything new | mak4i-session-end |
-| 4 | Session End + Log | Session wrapping up | mak4i-session-end + mak4i-savings-log-update |
-| * | Master OS | Always | mak4i-operating-system |
+| # | Step | Trigger | Artifact |
+|---|------|---------|----------|
+| 1 | Session start | First message | mak4i-session-start |
+| 2 | Check before create | Before any creation | mak4i-check-before-create |
+| 3 | Store new artifact | After building anything new | mak4i-session-end |
+| 4 | Session end and log | Session wrapping up | mak4i-session-end + mak4i-savings-log-update |
+| * | Master workflow | Always | mak4i-operating-system |

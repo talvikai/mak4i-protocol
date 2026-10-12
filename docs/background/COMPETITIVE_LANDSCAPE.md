@@ -1,12 +1,16 @@
 # Competitive Landscape
 
+> **Background, non-normative.** This document is context about the MAK4I
+> project, not part of the protocol specification. Where it differs from the
+> standards, the standards govern.
+
 *Last researched: August 17, 2026. This document is reviewed before every major release. It intentionally omits star counts, funding figures, and other metrics that change daily — the comparisons below focus on what each project architecturally does, which is stable regardless of when you're reading this.*
 
-**See also:** [ARCHITECTURE.md](ARCHITECTURE.md) for how MAK4I positions itself as a runtime layer *above* the formats and stores named below, rather than a competing format or store.
+**See also:** [ARCHITECTURE.md](../../ARCHITECTURE.md) for how MAK4I positions itself as a runtime layer *above* the formats and stores named below, rather than a competing format or store.
 
 Before going public, we did the research most protocols skip: who else is solving this problem, and does MAK4I still say something true and specific once you account for them? This document is revisited on a real cadence, not written once — the entries below reflect a second full pass, not the original.
 
-**What changed since the first pass (August 2, 2026):** the ecosystem moved fast. Several projects that were pure stores in early August have since added provenance, trust metadata, and lifecycle fields. That's a real shift, and it narrows one part of what MAK4I originally claimed. It does not narrow the part that actually matters most: Based on this review, we did not identify another open protocol that specifies reuse-before-generate as protocol-level behavior. That distinction is explained in detail below, not asserted.
+**What changed since the first pass (August 2, 2026):** the ecosystem moved fast. Several projects that were pure stores in early August have since added provenance, trust metadata, and lifecycle fields. That's a real shift, and it narrows one part of what MAK4I originally claimed. It does not narrow the part that actually matters most: Based on this review, we did not identify another open protocol built around reuse-before-generate as its core discipline. That distinction is explained below, including where it is supported by the protocol today and where it is still a discipline rather than an enforced rule.
 
 ---
 
@@ -40,7 +44,7 @@ A vendor-neutral spec for AI tools to store, retrieve, and share memory about us
 
 ### Enterprise artifact/skill registries — newly relevant category
 
-A cluster of enterprise products has emerged around the specific language of "discover and reuse before rebuilding" — closer in *marketing* to MAK4I's positioning than the memory-layer products above, worth naming directly rather than lumping in with stores. Products in this space (TrueFoundry's Skills Registry, and similar "artifact registry for AI" offerings from infrastructure vendors) market centralized discovery, versioning, and governance of agent skills as reusable, portable, executable assets — genuinely adjacent framing. The distinction that still holds: these are commercial registry *products*, not an open protocol, and in every case found, reuse is a capability the registry offers a user, not a rule the protocol enforces before generation is allowed to happen. If reuse is optional, it is a feature. MAK4I's claim is narrower and stricter: reuse-before-generate is specified as protocol behavior, not left to whether a team remembers to check the registry first.
+A cluster of enterprise products has emerged around the specific language of "discover and reuse before rebuilding" — closer in *marketing* to MAK4I's positioning than the memory-layer products above, worth naming directly rather than lumping in with stores. Products in this space (TrueFoundry's Skills Registry, and similar "artifact registry for AI" offerings from infrastructure vendors) market centralized discovery, versioning, and governance of agent skills as reusable, portable, executable assets — genuinely adjacent framing. The distinction that still holds: these are commercial registry *products*, not an open protocol, and in every case found, reuse is a capability the registry offers a user, not a rule the protocol enforces before generation is allowed to happen. If reuse is optional, it is a feature. MAK4I's claim is narrower: reuse-before-generate is the discipline the protocol is designed around, supported by deterministic lookup of current knowledge, client guidance (MAK-0008 §13.9) and SDK tooling. It is not enforced today; a normative check-before-create rule is approved future scope.
 
 ### Native platform memory (the baseline, not a competitor)
 
@@ -52,7 +56,7 @@ Every major AI platform now ships persistent memory, and several have added cros
 
 ### MCP and the Agentic AI Foundation — infrastructure, not a competitor
 
-MCP is now governed by the Linux Foundation's Agentic AI Foundation, with continued work on server discovery (metadata files that let a client find and evaluate an MCP server before connecting, similar in spirit to a package registry's listing page). This is relevant infrastructure MAK4I can build on — a natural transport for artifact discovery calls — but it is a tool-connection standard, not a memory or artifact-reuse standard. No MCP-native artifact registry or reuse-discipline standard has emerged from this governance body. Complementary, not competitive, consistent with [MCP.md](MCP.md).
+MCP is now governed by the Linux Foundation's Agentic AI Foundation, with continued work on server discovery (metadata files that let a client find and evaluate an MCP server before connecting, similar in spirit to a package registry's listing page). This is relevant infrastructure MAK4I can build on — a natural transport for artifact discovery calls — but it is a tool-connection standard, not a memory or artifact-reuse standard. No MCP-native artifact registry or reuse-discipline standard has emerged from this governance body. Complementary, not competitive, consistent with [MCP.md](../../MCP.md).
 
 ---
 
@@ -73,25 +77,25 @@ If MAK4I launches saying only these things, the first credible comment on Hacker
 
 ## What MAK4I Still Defends
 
-**1. Reuse discipline as protocol-level, enforced behavior — the primary differentiator, and the only one that hasn't been matched.**
-Every competitor above — including OKF v0.2, including ByteRover, including the enterprise registries marketing "discover before you build" — makes reuse *possible* or *legible*. None of them make it *required*. OKF v0.2 lets you know an artifact is stale or verified; it doesn't stop an agent from writing a duplicate one. ByteRover's lifecycle model decays old entries; it doesn't block generation of a new entry that duplicates a live one. The enterprise registries are searchable catalogs — search is optional. MAK4I specifies discovery-before-generation as protocol behavior, not an optional client-side convention:
+**1. Reuse discipline as the protocol's organizing principle — the primary differentiator.**
+Every competitor above — including OKF v0.2, including ByteRover, including the enterprise registries marketing "discover before you build" — makes reuse *possible* or *legible*. MAK4I doesn't make it *required* either, today. What it adds is structure around the discipline: current knowledge is looked up deterministically, competing writes about the same subject surface as explicit conflicts instead of silently coexisting, and every version carries authenticated provenance:
 
 - **Discovery** — search the registry before generating anything new
 - **Reuse** — return an exact match directly, no regeneration
 - **Adaptation** — modify an existing artifact when a close-but-not-exact match exists
 - **Provenance and lifecycle metadata** — consumed where available (including from OKF-formatted sources), not reinvented
-- **Enforcement** — the check-before-create step is a protocol guarantee, not a habit a well-behaved client happens to follow
+- **Enforcement** — *not yet*: check-before-create is client guidance and SDK tooling today; making it a protocol rule is approved future scope
 
-A competitor could add a "check first" convention to their own SDK tomorrow; making it a protocol-level guarantee, enforced the same way regardless of which client calls it, is a different and harder commitment than a client-side habit. This gap has not closed in this review cycle — if anything, the broader industry conversation about hallucinated resource names and unvetted skill installs (see Security Positioning, below) makes the case for enforcement stronger than it was two weeks ago.
+A competitor could add a "check first" convention to their own SDK tomorrow. MAK4I's difference is that conflicts and provenance make skipped checks visible at the protocol level; turning the check itself into a protocol rule is a harder commitment that remains future work. The broader industry conversation about hallucinated resource names and unvetted skill installs (see Security Positioning, below) strengthens the case for doing so.
 
 **2. A continuously logged reuse record — evidence the discipline works, not the discipline itself.**
-Competitors make efficiency claims in marketing copy (a percentage figure against a benchmark, stated once). MAK4I's SAVINGS_LOG is designed as a running, dated ledger of actual reuse events — every reuse-vs-new-build decision logged as it happens, not summarized after the fact. Today that ledger reflects development-time observations (see [PROBLEM.md](PROBLEM.md)); the intent is for it to extend to real production usage as the reference implementation is adopted. This matters as *proof*, not as the mechanism: the protocol is the check-before-create discipline above; the log is what's meant to demonstrate that discipline produces value over time, closer to an audit trail than a benchmark claim.
+Competitors make efficiency claims in marketing copy (a percentage figure against a benchmark, stated once). MAK4I's SAVINGS_LOG is designed as a running, dated ledger of actual reuse events — every reuse-vs-new-build decision logged as it happens, not summarized after the fact. Today that ledger reflects development-time observations (see [PROBLEM.md](../../PROBLEM.md)); the intent is for it to extend to real production usage as the reference implementation is adopted. This matters as *proof*, not as the mechanism: the protocol is the check-before-create discipline above; the log is what's meant to demonstrate that discipline produces value over time, closer to an audit trail than a benchmark claim.
 
-**3. Skills as a registry-distributed unit, not a config file.**
-OKF stores knowledge as markdown files living in *your* repo. Mem0 and ByteRover store memories as API-retrievable or file-based entries scoped to a session or project. None of them treat a *reusable process* (a deployment runbook, a triage framework, a document-generation pattern) as a versioned, publishable, installable package the way `mak4i install company/deployment-standards` does. This is closer to npm's model than any competitor's.
+**3. Reusable procedures as registry-distributed units (planned).**
+OKF stores knowledge as markdown files living in *your* repo. Mem0 and ByteRover store memories as API-retrievable or file-based entries scoped to a session or project. None of them treat a *reusable process* (a deployment runbook, a triage framework, a document-generation pattern) as a versioned, publishable, installable package the way a future `mak4i install company/deployment-standards` would. This is planned (registry and skills are approved future scope), closer to npm's model than any competitor's; it does not exist today.
 
-**4. MAK4I Certified — a conformance mark, not just a spec.**
-No competitor above has a certification program for implementations. If MAK4I becomes the reference for "an AI reuse-discipline protocol," the certification mark is a coordination point competitors don't have.
+**4. Conformance profiles, with certification planned.**
+MAK4I defines conformance profiles with observable acceptance criteria today. A published suite and certification program are approved future scope; no competitor above has either.
 
 ---
 
@@ -107,21 +111,11 @@ Independent security research published mid-2026 documented AI coding assistants
 
 **What MAK4I is not:** the first or only open memory format, and — as of this review — no longer the only project describing provenance or lifecycle metadata. OKF got there first on distribution. Mem0 has more funding and more developers today. ByteRover independently arrived at a similar lifecycle model.
 
-**What MAK4I is:** the protocol that treats *not rebuilding what you already built* as an enforced discipline, not an optional convenience — Among the projects reviewed here that makes discovery-before-generation a protocol guarantee rather than a feature a client can choose to skip. This is evidenced by a continuously logged reuse record, and distributed through a registry of reusable Skills, not just stored facts.
+**What MAK4I is:** the protocol built around *not rebuilding what you already built*: governed, attributable project and organization knowledge that any AI client can look up before generating, with competing writes surfaced as explicit conflicts. The check itself is a supported discipline today, not yet an enforced rule; a registry of reusable procedures is planned.
 
 If a team's problem is "the AI doesn't remember my preferences" → Mem0 or native platform memory solves that.
 If a team's problem is "our knowledge should live in files, not a vendor's database, and I want provenance and staleness tracked" → OKF v0.2 solves that, and MAK4I can consume it.
-If a team's problem is "we keep paying to regenerate things we already built, and nothing actually stops that from happening again" → that's the MAK4I problem, and nobody else reviewed here enforces the fix.
-
----
-
-## What This Means for Launch
-
-- Lead with the reuse-*enforcement* framing in README.md and the launch post — not "portable AI memory," and not "provenance and lifecycle metadata" as a headline claim, since that's no longer differentiated.
-- Position MAK4I as complementary to OKF v0.2 explicitly, including in any launch post — a reader who knows OKF will ask this question regardless, and answering it before being asked is stronger than answering it defensively in the comments.
-- Cite OKF, Mem0, and ByteRover by name. Silence on obvious prior art reads as either not having done the research or hoping nobody asks — both worse than addressing it directly.
-- The SAVINGS_LOG becomes the centerpiece of the pitch, not a supporting appendix. It is the one piece of evidence competitors cannot copy retroactively.
-- Do not claim MAK4I invented provenance, trust metadata, or lifecycle tracking. That claim was defensible on August 2. It is not defensible on August 17, and saying it anyway would be the first thing a technically sharp reader catches.
+If a team's problem is "we keep paying to regenerate things we already built, and the knowledge to avoid it is scattered across tools" → that's the MAK4I problem.
 
 ---
 

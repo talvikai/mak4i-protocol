@@ -78,7 +78,7 @@ projects such as Git, Kubernetes, and OpenTelemetry.
 
 ## How MAK4I Is Different
 
-The AI memory space is crowded — [Mem0](https://mem0.ai), [Google's Open Knowledge Format](https://github.com/google/okf), [Open Memory Protocol](https://github.com/SMJAI/open-memory-protocol), and every major platform's native memory all solve some version of "the AI doesn't remember." MAK4I was designed after evaluating the existing landscape of AI memory, knowledge, and interoperability projects. See [COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
+The AI memory space is crowded — [Mem0](https://mem0.ai), [Google's Open Knowledge Format](https://github.com/google/okf), [Open Memory Protocol](https://github.com/SMJAI/open-memory-protocol), and every major platform's native memory all solve some version of "the AI doesn't remember." MAK4I was designed after evaluating the existing landscape of AI memory, knowledge, and interoperability projects. See [COMPETITIVE_LANDSCAPE.md](docs/background/COMPETITIVE_LANDSCAPE.md) for the full comparison.
 
 MAK4I isn't trying to out-remember them. It solves a narrower, different problem:
 
@@ -87,9 +87,9 @@ MAK4I isn't trying to out-remember them. It solves a narrower, different problem
 | "The AI doesn't remember my preferences" | Mem0, native platform memory |
 | "Our knowledge should live in files, not a vendor's database" | Google's OKF |
 | "I want lifecycle and staleness tracked, but nothing stops duplicate work" | OKF v0.2, ByteRover |
-| "We keep paying to regenerate things we already built, and nothing actually stops that from happening again" | **MAK4I** |
+| "We keep paying to regenerate things we already built, and the knowledge to avoid it is scattered across tools" | **MAK4I** |
 
-MAK4I is a **reuse discipline**, enforced as a protocol behavior: check the registry before generating anything, reuse or adapt what exists, and only create new when nothing matches. That check is a protocol guarantee, not an optional convention a client can skip — the distinction that matters, since tracking that an artifact *could* be reused is different from a runtime that *requires* checking first. Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Reference Implementation](#reference-implementation) below).
+MAK4I is built around a **reuse discipline**: look up existing knowledge before generating anything, reuse or adapt what exists, and only create new when nothing matches. The protocol supports that discipline — deterministic lookup of current knowledge, explicit conflicts when competing writes collide, authenticated provenance on every version, and client guidance and SDK tooling for checking first ([MAK-0008 §13.9](standards/MAK-0008.md#13-client-requirements)). It doesn't enforce the check today; a normative check-before-create rule is approved future scope ([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)). Every reuse decision is logged with a real token-savings estimate — not a benchmark claim, a running ledger designed to track actual reuse over time (currently reflecting development-time observations — see [Reference Implementation](#reference-implementation) below).
 
 ---
 
@@ -130,15 +130,15 @@ Together they provide complete project continuity across any AI tool.
 ## How It Works
 
 The registry-backed `install` / `inject` workflow below is the intended
-end-state (see [ROADMAP.md](ROADMAP.md)). Today the reference
-implementation exposes a smaller operator surface — `mak4i create`,
-`supersede`, `search`, `get-current`, `history` — plus MCP access for
-connected AI clients.
+end-state and is **planned, illustrative** (see [ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)). Today
+the reference implementation provides MCP access for AI clients (the ten
+[MAK-0008](standards/MAK-0008.md) tools, including conflict resolution) and an operator CLI
+for records, conflicts and administration.
 
 ```bash
 # Install memory packs
 mak4i install company/backend-standards
-mak4i install schedovia/context
+mak4i install example-org/app-context
 
 # Inject before any AI session
 mak4i inject
@@ -153,14 +153,14 @@ mak4i inject
 
 ```json
 {
-  "id": "schedovia-stack-context",
-  "version": "1.0.0",
+  "id": "example-app-stack-context",
+  "version": "1.0.1",
   "type": "semantic",
   "layer": "context",
-  "name": "Schedovia Stack Context",
-  "description": "Full stack context for Schedovia — eliminates re-explaining architecture each session",
+  "name": "Example App Stack Context",
+  "description": "Stack context for an example appointment-scheduling SaaS, so sessions don't re-explain the architecture",
   "token_estimate": 1500,
-  "tags": ["schedovia", "stack", "context"]
+  "tags": ["stack", "context", "saas", "example"]
 }
 ```
 
@@ -190,9 +190,9 @@ traffic.
 |--------|-------|
 | Tokens saved (dev-time observation) | 38,400+ |
 | Sessions tracked | 29 |
-| Artifacts registered | 9 across 6 types |
+| Sample artifacts in this repository | 13 ([ARTIFACT_INDEX.md](ARTIFACT_INDEX.md)) |
 
-See [docs/MAK4I_SAVINGS_LOG.md](docs/MAK4I_SAVINGS_LOG.md) for the full,
+See [docs/background/MAK4I_SAVINGS_LOG.md](docs/background/MAK4I_SAVINGS_LOG.md) for the full,
 dated session-by-session breakdown.
 
 ---

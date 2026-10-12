@@ -51,7 +51,7 @@ What MAK4I adds is what sits above all of them: the enforced
 check-before-create discipline and audit trail that no format or store
 provides on its own, regardless of how well that format or store
 describes the artifact once it exists. See
-[COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for the full comparison.
+[COMPETITIVE_LANDSCAPE.md](docs/background/COMPETITIVE_LANDSCAPE.md) for the full comparison.
 
 ---
 
@@ -121,16 +121,20 @@ service.
 
 ---
 
-## The Registry Model
+## The Registry Model (planned)
 
-Skills, Knowledge, and History become reusable dependencies —
-just like npm packages.
+*Planned and illustrative: the registry (MAK-0007), the `install` /
+`inject` commands and first-class skills are approved future scope
+([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)). None of this exists today.*
+
+Procedures ("Skills"), Knowledge, and History become reusable
+dependencies — just like npm packages.
 
 ```bash
 # Install what you need
 mak4i install company/backend-standards
 mak4i install company/deployment-skills
-mak4i install schedovia/context
+mak4i install example-org/app-context
 
 # Inject before any AI session
 mak4i inject
@@ -142,8 +146,9 @@ mak4i inject
 
 ### Community marketplace
 
-Just as npm has millions of packages, the MAK4I registry will have
-Skills, Knowledge packs, and History templates contributed by the community.
+Just as npm has millions of packages, the planned MAK4I registry would
+host procedure packs, Knowledge packs, and History templates contributed
+by the community.
 
 | Category | Example packs |
 |----------|--------------|

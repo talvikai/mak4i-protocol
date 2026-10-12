@@ -1,18 +1,29 @@
 {
   "id": "mak4i-check-before-create",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "procedural",
   "layer": "workflow",
-  "name": "MAK4I Check Before Create — DRY Enforcement Skill",
-  "description": "Run this skill BEFORE creating any document, artifact, code pattern, workflow, or prompt. Checks if the work was done before, reuses existing artifacts if found, stores new artifacts when first created, and logs token savings after every use. This is the skill that makes MAK4I self-compounding. The more you use it, the more tokens you save.",
+  "name": "MAK4I Check Before Create — DRY Enforcement Workflow",
+  "description": "Run this workflow BEFORE creating any document, artifact, code pattern, workflow, or prompt. Checks if the work was done before, reuses existing artifacts if found, stores new artifacts when first created, and logs token savings after every use. This is the workflow that makes MAK4I self-compounding. The more you use it, the more tokens you save.",
   "token_estimate": 100,
-  "ai_platforms": ["claude", "any"],
+  "ai_platforms": [
+    "claude",
+    "any"
+  ],
   "injection_hint": "system",
-  "tags": ["daily", "dry", "reuse", "check", "skill", "core", "savings-log"],
-  "author": "aswin@wdtechnologysolutions.com",
+  "tags": [
+    "daily",
+    "dry",
+    "reuse",
+    "check",
+    "workflow",
+    "core",
+    "savings-log"
+  ],
+  "author": "maintainers@talvik.ai",
   "license": "MIT",
   "created_at": "2026-07-09",
-  "updated_at": "2026-07-09",
+  "updated_at": "2026-10-12",
   "content": {
     "trigger": "Before creating ANY document, artifact, code pattern, workflow, or prompt",
     "principle": "Don't Repeat Yourself (DRY) applied to AI sessions. Never rebuild something that already exists as a MAK4I artifact.",
@@ -59,7 +70,7 @@
         "condition": "Only if this was built for the first time (no existing artifact found)",
         "command": "This was built from scratch. Create a MAK4I artifact JSON file for it:\n- Assign an id (kebab-case, descriptive)\n- Set version: 1.0.0\n- Set type: procedural | semantic | episodic\n- Write a clear description\n- Estimate tokens_saved per future use honestly\n- Add to artifacts/ directory in correct subfolder\n- Add to ARTIFACT_INDEX.md",
         "artifact_types_guide": {
-          "procedural": "A repeatable process or skill — how to do something consistently",
+          "procedural": "A repeatable process or workflow — how to do something consistently",
           "semantic": "Knowledge about a project, system, or domain — what is true",
           "episodic": "A decision made, incident resolved, or history recorded — why something happened"
         }

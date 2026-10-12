@@ -186,7 +186,25 @@ understand the same MAK4I information consistently.
 
 ------------------------------------------------------------------------
 
-## 4. The Five Phase 1 MAK Standards
+## 4. The Phase 1 MAK Standards
+
+> **Status note (2026-10-12).** This guide explains the original five-part
+> design. Today:
+> - MAK-0001, MAK-0004 (Part A), MAK-0005 (Part A), MAK-0006 and MAK-0008
+>   are Drafts with acceptance criteria;
+> - MAK-0009 (knowledge scopes, resources, rule inheritance) is an
+>   architecture-defined Draft;
+> - MAK-0002 and MAK-0003 are reserved, with approved future scope (see
+>   [STANDARDS.md](../STANDARDS.md) and [ROADMAP.md](../ROADMAP.md#approved-future-protocol-scope)).
+>
+> MAK-0004 Part A never auto-resolves a conflict: competing records are
+> returned as an explicit conflict until an authorized principal resolves
+> it. Where the scenario below shows automatic resolution or a
+> `clarification_required` status, read it as illustrative of the original
+> design, not as current behavior. Two standards not in the table below
+> complete the picture:
+> - MAK-0006 (identity and access control);
+> - MAK-0008 (MCP binding and authorization).
 
 The Phase 1 standards divide the core interoperability problem into
 separate responsibilities.
@@ -209,8 +227,8 @@ separate responsibilities.
                                                   supplied to an AI
                                                   consumer.
 
-  **MAK-0003 --- Memory / **Which artifacts       Defines how available
-  Artifact Resolution**   apply?**                artifacts are evaluated
+  **MAK-0003 --- Memory  **Which artifacts       Defines how available
+  Resolution Algorithm**  apply?**                artifacts are evaluated
                                                   for eligibility,
                                                   relevance, and
                                                   applicability to the
@@ -480,5 +498,5 @@ behavior, the specification is not complete enough.
 ------------------------------------------------------------------------
 
 *This document is explanatory and does not replace the normative MAK
-specifications. Where this guide and an accepted MAK specification
-differ, the accepted specification governs.*
+specifications. Where this guide and a MAK specification (Draft or
+Accepted) differ, the specification governs.*

@@ -12,16 +12,16 @@
   conventions, and design principles.*
 - *[GOVERNANCE.md](GOVERNANCE.md) — Stewardship model, proposal
   process, versioning policy, and protocol evolution.*
-- *[CONFORMANCE.md](CONFORMANCE.md) — MAK4I Certified requirements
+- *[CONFORMANCE.md](CONFORMANCE.md) — conformance profiles and acceptance criteria
   and conformance expectations.*
 - *[SECURITY.md](SECURITY.md) — Security policy, vulnerability
   reporting, and future security roadmap.*
 - *[MCP.md](MCP.md) — How MAK4I relates to the Model Context Protocol
   (MCP) and where they complement one another.*
-- *[COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) — Comparison
+- *[COMPETITIVE_LANDSCAPE.md](docs/background/COMPETITIVE_LANDSCAPE.md) — Comparison
   with existing AI memory systems, registries, and interoperability
   initiatives.*
-- *[BUSINESS_MODEL.md](BUSINESS_MODEL.md) — Talvik's commercial
+- *[BUSINESS_MODEL.md](docs/background/BUSINESS_MODEL.md) — Talvik's commercial
   ecosystem, open protocol strategy, and implementation partner
   model.*
 - *[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) — CLI, SDKs, tooling, and
@@ -33,7 +33,7 @@
 
 ## The Long-Term Vision
 
-MAK4I makes your Projects, Artifacts, and Skills permanent and portable
+MAK4I makes your Projects, Artifacts, and Skills (procedures, stored as procedural artifacts; first-class skills are planned) permanent and portable
 across every AI model, platform, and organization.
 
 Just as Git standardized source control and npm standardized package distribution,
@@ -209,7 +209,7 @@ Once stored as a MAK4I artifact:
 | **MAK4I** | **How AI Skills, Knowledge, and History are stored and injected** | **Talvik Registry, Enterprise** |
 
 The protocol is open forever. The ecosystem is built on top. See
-[BUSINESS_MODEL.md](BUSINESS_MODEL.md) for how that ecosystem generates
+[BUSINESS_MODEL.md](docs/background/BUSINESS_MODEL.md) for how that ecosystem generates
 revenue without compromising the open protocol.
 
 ---
@@ -219,14 +219,15 @@ revenue without compromising the open protocol.
 MAK4I uses the **MAK-XXXX** convention for protocol standards.
 
 ```
-MAK-0001  Artifact Metadata Schema         (draft)
-MAK-0002  Context Injection Specification  (planned)
-MAK-0003  Memory Resolution Algorithm      (planned)
-MAK-0004  Conflict Resolution              (draft)
-MAK-0005  Versioning and Compatibility     (draft)
-MAK-0006  Identity and Access Control      (draft)
-MAK-0007  Registry API Contract            (planned)
-MAK-0008  MCP Binding and Authorization    (draft)
+MAK-0001  Artifact Metadata Schema                          (draft)
+MAK-0002  Context Injection Specification                   (reserved)
+MAK-0003  Memory Resolution Algorithm                       (reserved)
+MAK-0004  Conflict Resolution Specification                 (draft)
+MAK-0005  Versioning and Compatibility Specification        (draft)
+MAK-0006  Identity and Access Control                       (draft)
+MAK-0007  Registry API Contract                             (reserved)
+MAK-0008  MCP Binding and Authorization                     (draft)
+MAK-0009  Knowledge Scopes, Resources and Rule Inheritance  (draft, architecture-defined)
 ```
 
 Anyone can propose a new MAK standard via GitHub.
@@ -234,8 +235,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the process.
 
 ### Conformance
 
-Every implementation can be tested against the MAK4I Conformance Suite.
-The **MAK4I Certified** badge signals full protocol conformance.
+Every implementation can be assessed against the acceptance criteria in
+[CONFORMANCE.md](CONFORMANCE.md); a published, shared conformance suite is planned.
+Implementations claim conformance per profile and protocol version; a certification badge is planned (approved future scope).
 Similar to CNCF conformance for Kubernetes.
 
 ---
@@ -251,7 +253,7 @@ access. Summary:
 | Phase | Status | Scope |
 |-------|--------|-------|
 | 0 — Foundation | Complete | Public repo, protocol design, problem statement, vision |
-| 1 — Protocol Spec | Active development | SPEC.md and the MAK-0001…MAK-0005 standards; community RFC |
+| 1 — Protocol Spec | Active development | SPEC.md and the MAK standards (MAK-0001, 0004/0005 Part A, 0006, 0008, 0009 Draft; 0002/0003/0007 reserved); community RFC |
 | 2 — Reference Implementation | Initial MVP complete | Core workflow (create, retrieve, search, supersede, history, provenance), operator CLI, MCP access; hardening ongoing |
 | 3 — Reusable Artifacts | Planned | Community artifacts; reuse-workflow validation with early design partners |
 | 4 — Hosted Registry | Planned | Public registry with governance and access controls |
