@@ -1,0 +1,8 @@
+{
+  "principal_id": "prn_ci",
+  "organization_id": "org_1",
+  "principal_type": "service",
+  "role": "member",
+  "display_name": "CI pipeline",
+  "status": "active"
+}

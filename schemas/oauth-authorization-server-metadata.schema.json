@@ -19,19 +19,19 @@
   ],
   "properties": {
     "issuer": {
-      "$ref": "common.schema.json#/$defs/httpsUrl"
+      "$ref": "common.schema.json#/$defs/httpsOrLoopbackUrl"
     },
     "authorization_endpoint": {
-      "$ref": "common.schema.json#/$defs/httpsUrl"
+      "$ref": "common.schema.json#/$defs/httpsOrLoopbackUrl"
     },
     "token_endpoint": {
-      "$ref": "common.schema.json#/$defs/httpsUrl"
+      "$ref": "common.schema.json#/$defs/httpsOrLoopbackUrl"
     },
     "revocation_endpoint": {
-      "$ref": "common.schema.json#/$defs/httpsUrl"
+      "$ref": "common.schema.json#/$defs/httpsOrLoopbackUrl"
     },
     "registration_endpoint": {
-      "$ref": "common.schema.json#/$defs/httpsUrl"
+      "$ref": "common.schema.json#/$defs/httpsOrLoopbackUrl"
     },
     "response_types_supported": {
       "const": [

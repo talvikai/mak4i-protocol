@@ -64,7 +64,8 @@
           "title",
           "created_at",
           "created_by",
-          "content_sha256"
+          "content_sha256",
+          "provenance"
         ],
         "properties": {
           "artifact_id": {
@@ -93,7 +94,8 @@
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Required key (MAK-0004 \u00a7A5); null only for legacy versions without provenance."
           },
           "content_sha256": {
             "$ref": "common.schema.json#/$defs/sha256"
@@ -108,7 +110,8 @@
             }
           }
         }
-      }
+      },
+      "minItems": 1
     },
     "hidden_candidate_count": {
       "type": "integer",
@@ -125,5 +128,33 @@
       ]
     }
   },
-  "$comment": "For open/resolving conflicts, len(candidates)+hidden_candidate_count >= 2 (checked by implementations; not expressible in JSON Schema)."
+  "$comment": "For open/resolving conflicts, len(candidates)+hidden_candidate_count >= 2 (checked by implementations; not expressible in JSON Schema).",
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "resolved"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "required": [
+          "resolution"
+        ],
+        "properties": {
+          "resolution": {
+            "$ref": "resolution-record.schema.json"
+          }
+        }
+      },
+      "description": "A resolved conflict carries its resolution record."
+    }
+  ]
 }

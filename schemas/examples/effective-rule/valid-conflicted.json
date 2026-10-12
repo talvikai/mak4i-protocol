@@ -1,0 +1,68 @@
+{
+  "rule_key": "api.versioning",
+  "target_scope": {
+    "type": "project",
+    "id": "prj_1"
+  },
+  "state": "conflicted",
+  "effective": null,
+  "originating_scope": null,
+  "chain": [
+    {
+      "source": {
+        "profile": "project_record",
+        "artifact_id": "ver-a",
+        "project": "prj_1",
+        "revision": "1.0"
+      },
+      "scope": {
+        "type": "project",
+        "id": "prj_1"
+      },
+      "enforcement": "default",
+      "status": "conflicted",
+      "overrides": null,
+      "provenance": {
+        "principal_id": "prn_alice",
+        "principal_type": "human",
+        "agent_id": null,
+        "display_name": "Alice",
+        "auth_method": "oauth",
+        "credential_id": null,
+        "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+        "client": null,
+        "recorded_at": "2026-10-10T12:00:00Z"
+      }
+    },
+    {
+      "source": {
+        "profile": "project_record",
+        "artifact_id": "ver-b",
+        "project": "prj_1",
+        "revision": "1.0"
+      },
+      "scope": {
+        "type": "project",
+        "id": "prj_1"
+      },
+      "enforcement": "default",
+      "status": "conflicted",
+      "overrides": null,
+      "provenance": {
+        "principal_id": "prn_agent_a",
+        "principal_type": "agent",
+        "agent_id": "release-bot",
+        "display_name": "Release bot",
+        "auth_method": "credential",
+        "credential_id": "cred_1",
+        "oauth_client_id": null,
+        "client": {
+          "name": "claude-code",
+          "version": "2.1",
+          "verified": false
+        },
+        "recorded_at": "2026-10-10T12:00:00Z"
+      }
+    }
+  ]
+}

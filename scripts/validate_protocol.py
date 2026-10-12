@@ -8,17 +8,30 @@ Checks (each prints PASS/FAIL; exit status 1 if any check fails):
 2. examples   - every schemas/examples/<schema>/valid-*.json validates and
                 every invalid-*.json is rejected. For mcp-tools the file name
                 is <tool>.<input|output>.<valid|invalid>-<label>.json.
-3. artifacts  - every artifacts/**/*.json satisfies the MAK-0001 validation
-                rules.
+3. artifacts  - every artifacts/**/*.json validates against
+                schemas/artifact.schema.json (MAK-0001) and is named
+                <id>-v<version>.json.
 4. links      - every relative Markdown link and #anchor resolves (links in
                 fenced code blocks are ignored).
 5. standards  - every standards/MAK-*.md is listed in STANDARDS.md and the
                 SPEC.md standards table with the status in its header, and
                 every listed file exists.
+6. status     - architecture-defined definitions ("x-mak4i-status":
+                "architecture", SPEC.md "Specification status markers") stay
+                out of the implemented contract: no MCP tool schema
+                references them, no schema requires an architecture-marked
+                property, and every standard whose header says
+                "Conformance status: Architecture" has no CONFORMANCE.md
+                criteria section.
+
+7. consistency - MAK-0008 tool table = x-mak4i-tools = $defs; every tool
+                has valid input and output examples; MAK-0008 error table =
+                error.schema.json codes; one x-mak4i-schema-version across
+                schemas, matching SPEC.md's MAJOR.MINOR.
 
 Usage:
-    uv run --with 'jsonschema>=4.23' python scripts/validate_protocol.py
-    # or: pip install 'jsonschema>=4.23' && python scripts/validate_protocol.py
+    pip install -r scripts/requirements.txt
+    python scripts/validate_protocol.py
 """
 
 from __future__ import annotations
@@ -32,7 +45,7 @@ try:
     from jsonschema import Draft202012Validator, FormatChecker
     from referencing import Registry, Resource
 except ImportError:  # pragma: no cover - environment problem, not a check
-    sys.exit("jsonschema>=4.23 is required: pip install 'jsonschema>=4.23'")
+    sys.exit("missing dependencies: pip install -r scripts/requirements.txt")
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = ROOT / "schemas"
@@ -149,12 +162,13 @@ def check_examples(schemas: dict[str, dict], registry: Registry) -> int:
 
 # --------------------------------------------------------------------------- MAK-0001 artifacts
 
-ID_RE = re.compile(r"^[a-z0-9/-]+$")
-SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
-ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}([T ][0-9:.]+(Z|[+-]\d{2}:?\d{2})?)?$")
 
-
-def check_artifacts() -> int:
+def check_artifacts(schemas: dict[str, dict], registry: Registry) -> int:
+    schema = schemas.get("artifact.schema.json")
+    if schema is None:
+        fail("artifacts", "schemas/artifact.schema.json is missing")
+        return 0
+    validator = validator_for(schema, registry)
     paths = sorted((ROOT / "artifacts").rglob("*.json"))
     for path in paths:
         rel = path.relative_to(ROOT)
@@ -163,21 +177,73 @@ def check_artifacts() -> int:
         except json.JSONDecodeError as exc:
             fail("artifacts", f"{rel}: invalid JSON: {exc}")
             continue
-        for field in ("id", "version", "type", "name", "description"):
-            if not data.get(field):
-                fail("artifacts", f"{rel}: required field {field!r} missing or empty")
-        if data.get("id") and not ID_RE.match(str(data["id"])):
-            fail("artifacts", f"{rel}: id {data['id']!r} violates MAK-0001 rule 2")
-        if data.get("version") and not SEMVER_RE.match(str(data["version"])):
-            fail("artifacts", f"{rel}: version {data['version']!r} is not X.Y.Z")
-        if data.get("type") and data["type"] not in ("procedural", "semantic", "episodic"):
-            fail("artifacts", f"{rel}: type {data['type']!r} is not procedural|semantic|episodic")
-        if "token_estimate" in data and not (isinstance(data["token_estimate"], int) and data["token_estimate"] > 0):
-            fail("artifacts", f"{rel}: token_estimate must be a positive integer")
-        for field in ("created_at", "updated_at"):
-            if field in data and not ISO_RE.match(str(data[field])):
-                fail("artifacts", f"{rel}: {field} is not an ISO 8601 date")
+        errors = sorted(validator.iter_errors(data), key=lambda e: list(e.absolute_path))
+        for error in errors[:3]:
+            where = "/".join(str(p) for p in error.absolute_path) or "(root)"
+            fail("artifacts", f"{rel}: {where}: {error.message}")
+        expected = f"{str(data.get('id', '')).split('/')[-1]}-v{data.get('version', '')}.json"
+        if path.name != expected:
+            fail("artifacts", f"{rel}: file name must be {expected} (id and version)")
     return len(paths)
+
+
+# --------------------------------------------------------------------------- cross-document consistency
+
+
+TOOL_ROW_RE = re.compile(r"^\|\s*`(mak4i_[a-z_]+)`\s*\|", re.M)
+ERROR_ROW_RE = re.compile(r"^\|\s*`([a-z_]+)`\s*\|", re.M)
+
+
+def section(text: str, heading_prefix: str) -> str:
+    start = text.index(heading_prefix)
+    nxt = re.search(r"^### ", text[start + 1:], re.M)
+    return text[start: start + 1 + nxt.start()] if nxt else text[start:]
+
+
+def check_consistency(schemas: dict[str, dict]) -> int:
+    checks = 0
+    mak8 = (ROOT / "standards" / "MAK-0008.md").read_text()
+    tools_schema = schemas.get("mcp-tools.schema.json", {})
+    listed = tools_schema.get("x-mak4i-tools", [])
+    defs = sorted(tools_schema.get("$defs", {}))
+    table = TOOL_ROW_RE.findall(section(mak8, "### §10 Tool catalog"))
+    checks += 1
+    if sorted(listed) != defs or sorted(set(table)) != defs:
+        fail("consistency", f"tool lists differ: MAK-0008 §10.1 {sorted(set(table))}, x-mak4i-tools {sorted(listed)}, $defs {defs}")
+    examples = {p.name for p in (EXAMPLES / "mcp-tools").glob("*.json")}
+    for tool in defs:
+        checks += 1
+        for direction in ("input", "output"):
+            if not any(n.startswith(f"{tool}.{direction}.valid") for n in examples):
+                fail("consistency", f"{tool}: no valid {direction} example in schemas/examples/mcp-tools/")
+    codes = set(ERROR_ROW_RE.findall(section(mak8, "### §9 Error model")))
+    enum: set[str] = set()
+
+    def collect(node):
+        if isinstance(node, dict):
+            if "enum" in node and "access_denied" in node["enum"]:
+                enum.update(node["enum"])
+            for value in node.values():
+                collect(value)
+        elif isinstance(node, list):
+            for value in node:
+                collect(value)
+
+    collect(schemas.get("error.schema.json", {}))
+    checks += 1
+    if codes != enum:
+        fail("consistency", f"error codes differ: MAK-0008 §9 {sorted(codes)}, error.schema.json {sorted(enum)}")
+    versions = {s.get("x-mak4i-schema-version") for s in schemas.values()}
+    checks += 1
+    if len(versions) != 1:
+        fail("consistency", f"schemas disagree on x-mak4i-schema-version: {sorted(map(str, versions))}")
+    spec = (ROOT / "SPEC.md").read_text()
+    match = re.search(r"\*\*Version:\*\* (\d+)\.(\d+)", spec)
+    (version,) = versions or {None}
+    checks += 1
+    if not match or not str(version).startswith(f"{match.group(1)}.{match.group(2)}."):
+        fail("consistency", f"SPEC.md version and schema version {version} disagree on MAJOR.MINOR")
+    return checks
 
 
 # --------------------------------------------------------------------------- links
@@ -288,15 +354,46 @@ def check_standards() -> int:
 # --------------------------------------------------------------------------- main
 
 
+# --------------------------------------------------------------------------- status
+
+
+ARCHITECTURE = "architecture"
+
+
+def check_status(schemas: dict[str, dict]) -> int:
+    architecture = {name for name, s in schemas.items() if s.get("x-mak4i-status") == ARCHITECTURE}
+    for name, schema in schemas.items():
+        if schema.get("x-mak4i-status") not in (None, ARCHITECTURE):
+            fail("status", f"{name}: unknown x-mak4i-status {schema['x-mak4i-status']!r}")
+        props = schema.get("properties", {})
+        for prop in schema.get("required", []):
+            if isinstance(props.get(prop), dict) and props[prop].get("x-mak4i-status") == ARCHITECTURE:
+                fail("status", f"{name}: architecture-defined property {prop!r} must not be required")
+    tools = schemas.get("mcp-tools.schema.json", {})
+    for ref in iter_refs(tools):
+        target = ref.split("#")[0].rsplit("/", 1)[-1]
+        if target in architecture:
+            fail("status", f"mcp-tools.schema.json references architecture-defined {target}; "
+                 "an interface binding needs the standard's conformance criteria first")
+    conformance = (ROOT / "CONFORMANCE.md").read_text()
+    for path in sorted((ROOT / "standards").glob("MAK-*.md")):
+        if re.search(r"^\*\*Conformance status:\*\* Architecture", path.read_text(), re.M):
+            if re.search(rf"^### {path.stem}\b", conformance, re.M):
+                fail("status", f"{path.stem} is architecture-defined but CONFORMANCE.md has a criteria section for it")
+    return len(architecture)
+
+
 def main() -> int:
     schemas, registry = load_schemas()
     check_refs(schemas, registry)
     results = [
         ("schemas", f"{len(schemas)} schema(s)"),
         ("examples", f"{check_examples(schemas, registry)} example(s)"),
-        ("artifacts", f"{check_artifacts()} artifact(s)"),
+        ("artifacts", f"{check_artifacts(schemas, registry)} artifact(s)"),
         ("links", f"{check_links()} Markdown file(s)"),
         ("standards", f"{check_standards()} standard(s)"),
+        ("status", f"{check_status(schemas)} architecture-defined schema(s)"),
+        ("consistency", f"{check_consistency(schemas)} cross-document check(s)"),
     ]
     for check, summary in results:
         failed = [f for f in FAILURES if f.startswith(f"[{check}]")]

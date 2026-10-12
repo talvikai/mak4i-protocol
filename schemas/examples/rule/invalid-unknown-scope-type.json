@@ -1,0 +1,9 @@
+{
+  "rule_key": "x",
+  "enforcement": "default",
+  "applies_to": {
+    "type": "team",
+    "id": "t1"
+  },
+  "overrides": null
+}

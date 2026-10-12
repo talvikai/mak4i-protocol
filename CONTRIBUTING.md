@@ -26,9 +26,9 @@ MAK standards define the protocol. Anyone can propose one.
 4. Talvik reviews, assigns a MAK number, and opens it for community comment
 5. After review period, Talvik accepts, revises, or declines with explanation
 
-**MAK standard status flow:**
+**MAK standard status flow** (see [GOVERNANCE.md](GOVERNANCE.md#protocol-standards-mak-xxxx)):
 ```
-Proposed → Draft → Review → Accepted → Deprecated
+Reserved → Draft → Review → Accepted → Deprecated
 ```
 
 **Existing standards for reference:** see [STANDARDS.md](STANDARDS.md)
@@ -45,14 +45,16 @@ Artifacts are the heart of MAK4I. Contributing a high-quality artifact helps the
 **What makes a good artifact:**
 - Solves a real, recurring problem (not a one-off)
 - Has a clear, specific description
-- Includes an honest `token_estimate`
+- Includes an honest `token_estimate` (estimated size of `content` in tokens)
 - Is tested against at least one AI platform
 - Does not contain sensitive or proprietary information
 
 **How to contribute an artifact:**
 
 1. Create your artifact JSON file following [MAK-0001](standards/MAK-0001.md)
-2. Place it in the correct `artifacts/` subdirectory by type:
+2. Name the file `<id>-v<version>.json` (the validator checks this) and
+   place it in the matching `artifacts/` subdirectory. Subdirectories group
+   samples by kind; they are not the MAK-0001 `type`:
    ```
    artifacts/
      document/    → templates, frameworks, reference docs
@@ -66,7 +68,7 @@ Artifacts are the heart of MAK4I. Contributing a high-quality artifact helps the
 4. Open a Pull Request with:
    - The artifact JSON file
    - The ARTIFACT_INDEX.md update
-   - A brief description of the problem it solves and tokens saved
+   - A brief description of the problem it solves
 
 **Example artifact PR title:**
 ```
@@ -110,7 +112,7 @@ If you are using MAK4I in production (even informally), we want to hear:
 - What problems you haven't been able to solve yet
 
 Open a GitHub Issue with the label `evidence` or add to the
-[SAVINGS_LOG](docs/MAK4I_SAVINGS_LOG.md) via Pull Request.
+[SAVINGS_LOG](docs/background/MAK4I_SAVINGS_LOG.md) via Pull Request.
 
 ---
 
@@ -156,16 +158,17 @@ Anyone. No affiliation with Talvik required.
 ### Review timeline
 - **Draft → Review:** 2 weeks community comment period
 - **Review → Accepted:** Talvik decision within 1 week after comment period
-- **Accepted → Implemented:** Reference implementation follows acceptance
+- **Implementation:** Draft standards may be implemented experimentally
+  with a pinned protocol revision; findings return to the protocol first
+  (see [GOVERNANCE.md](GOVERNANCE.md#protocol-standards-mak-xxxx))
 
 ### Naming convention
 
-Standards are numbered sequentially as they're proposed and accepted —
-see [SPEC.md](SPEC.md#standards) for the current list (MAK-0001 through
-MAK-0008 so far, covering the artifact schema, context injection, memory
-resolution, conflict resolution, versioning, identity and access
-control, the registry API, and the MCP binding). There is no reserved numeric range per topic;
-numbers are assigned in proposal order, not by category.
+Standards are numbered sequentially in proposal order. See
+[SPEC.md](SPEC.md#standards) for the current list (MAK-0001 through
+MAK-0009). MAK-0002 (context injection), MAK-0003 (memory resolution) and
+MAK-0007 (registry API) were reserved by topic before this rule and keep
+the status *Reserved* until drafted. No other number is reserved.
 
 ### Stewardship
 Talvik, Inc. is the steward of the MAK4I protocol. We are committed to:

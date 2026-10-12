@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/distributable-artifact.schema.json",
+  "title": "Distributable artifact version",
+  "description": "One immutable package version of organization-scoped knowledge shared with that organization's projects (MAK-0009 \u00a72.2). Architecture-defined; lifecycle states and MAK-0001 field mapping are open (MAK-0009 U-9).",
+  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-status": "architecture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "organization_id",
+    "package_version",
+    "artifact_type",
+    "title",
+    "content",
+    "provenance",
+    "created_at",
+    "status"
+  ],
+  "properties": {
+    "artifact_id": {
+      "$ref": "common.schema.json#/$defs/artifactId"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "package_version": {
+      "$ref": "common.schema.json#/$defs/packageVersion"
+    },
+    "artifact_type": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "title": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "content": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/nonEmptyString"
+      }
+    },
+    "rule": {
+      "anyOf": [
+        {
+          "$ref": "rule.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "provenance": {
+      "$ref": "provenance.schema.json"
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "deprecated",
+        "withdrawn"
+      ],
+      "description": "MAK-0009 \u00a72.2. Changing status never alters a published package version."
+    },
+    "deprecated_by": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Replacement artifact (maps MAK-0001 deprecated_by)."
+    },
+    "targets": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/projectId"
+          }
+        }
+      ],
+      "description": "null/absent = applies to every project of the organization; otherwise only the listed projects (MAK-0009 \u00a72.2)."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "rule"
+        ],
+        "properties": {
+          "rule": {
+            "type": "object"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "rule": {
+            "properties": {
+              "applies_to": {
+                "properties": {
+                  "type": {
+                    "const": "organization"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "An organization artifact's rule applies at organization scope."
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "active"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "deprecated_by": {
+            "type": "null"
+          }
+        }
+      },
+      "description": "Only a deprecated artifact names a replacement."
+    }
+  ]
+}

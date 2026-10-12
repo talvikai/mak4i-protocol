@@ -25,6 +25,7 @@
             "identity_mismatch",
             "validation_error",
             "not_found",
+            "artifact_exists",
             "artifact_not_active",
             "stale_head",
             "subject_key_change",
@@ -47,5 +48,8 @@
         }
       }
     }
+  },
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
   }
 }

@@ -1,0 +1,11 @@
+{
+  "resource_id": "res_api_rules",
+  "organization_id": "org_1",
+  "name": "API rules",
+  "resource_type": "rules",
+  "group_id": "grp_backend",
+  "description": null,
+  "created_at": "2026-10-12T12:00:00Z",
+  "updated_at": "2026-10-12T12:00:00Z",
+  "status": "active"
+}

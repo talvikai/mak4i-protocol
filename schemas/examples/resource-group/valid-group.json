@@ -1,0 +1,10 @@
+{
+  "group_id": "grp_backend",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "name": "Backend",
+  "description": null,
+  "created_at": "2026-10-12T12:00:00Z",
+  "updated_at": "2026-10-12T12:00:00Z",
+  "status": "active"
+}

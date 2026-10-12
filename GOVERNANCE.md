@@ -13,12 +13,12 @@ documents reference this one rather than repeating it.
 
 - The protocol specification (SPEC.md and the MAK-XXXX standards) is
   MIT licensed and open forever — stewardship is not the same as
-  exclusive control. See [MCP.md](MCP.md#why-keeping-the-protocol-open-is-rational)
+  exclusive control. See [MCP.md](docs/background/OPEN_PROTOCOL_STRATEGY.md#why-keeping-the-protocol-open-is-rational)
   for why this distinction matters and why keeping the protocol open
   is the rational choice, not a concession.
 - Talvik, Inc. operates the commercial layer built on top of the
   protocol (the hosted Registry, Enterprise offerings) — see
-  [BUSINESS_MODEL.md](BUSINESS_MODEL.md).
+  [BUSINESS_MODEL.md](docs/background/BUSINESS_MODEL.md).
 - Guiding the protocol's direction does not require using Talvik's
   commercial products. Anyone can implement the spec independently.
 
@@ -53,17 +53,36 @@ A new or modified standard — a schema change, a new specification like
 context injection or access control — follows the process in
 [CONTRIBUTING.md](CONTRIBUTING.md#1-propose-a-new-mak-standard-mak-xxxx):
 
-1. Open a GitHub Issue titled `[MAK-PROPOSAL] ...` (template provided)
-2. A Talvik maintainer reviews and assigns a MAK number
-3. **2-week community comment period** (Draft → Review)
-4. **A Talvik maintainer reviews within 1 week** after the comment
-   period closes, and either accepts, requests changes, or declines
-   with a stated reason (Review → Accepted)
-5. Reference implementation follows acceptance
+1. Open a GitHub Issue titled `[MAK-PROPOSAL] ...` (template provided),
+   or a pull request that includes the draft.
+2. A Talvik maintainer reviews it and assigns the next sequential MAK
+   number.
+3. The standard is published as **Draft**.
+4. **2-week community comment period** (Draft → Review). It is announced
+   in the CHANGELOG with its start and end dates.
+5. **A Talvik maintainer decides within 1 week** after the comment period
+   closes: accept, request changes, or decline with a stated reason
+   (Review → Accepted).
 
-Numbers are assigned sequentially as proposals are accepted, not
-reserved by topic — see [CONTRIBUTING.md](CONTRIBUTING.md#naming-convention)
-and [SPEC.md](SPEC.md#standards) for the current list.
+**Status ladder:** Reserved → Draft → Review → Accepted → Deprecated.
+- *Reserved* applies only to MAK-0002, MAK-0003 and MAK-0007, which were
+  reserved by topic before this rule.
+- Every new number is assigned sequentially, in proposal order.
+
+**Implementing Drafts.** Implementations, including the Reference, MAY
+implement Draft standards experimentally, provided they:
+- pin the exact protocol revision they implement;
+- report it (for MCP servers, `mak4i_whoami.protocol`).
+
+Findings from implementation return to the protocol as dated revision
+entries (protocol first, then implementation). Acceptance happens only
+through the comment period above.
+
+**Comment periods for the current Drafts.** MAK-0004 Part A, MAK-0005
+Part A, MAK-0006, MAK-0008 and MAK-0009 were merged and revised without a
+comment period. Their 2-week comment period starts when the protocol
+release that contains this governance text is published. The CHANGELOG
+records the dates.
 
 ### Everything else (docs, artifacts, code, bug fixes)
 
@@ -82,7 +101,7 @@ PR review.
 | Breaking change to an existing standard | Talvik maintainers — must remain backward compatible per the stewardship principles above, or be proposed as a new major version |
 | New artifact added to the registry | Whoever proposes it, via normal PR review — no special approval beyond following [MAK-0001](standards/MAK-0001.md) schema |
 | Documentation fixes, typos, clarity improvements | Normal PR review |
-| Conformance suite / MAK4I Certified criteria | Talvik maintainers — see [CONFORMANCE.md](CONFORMANCE.md) |
+| Conformance profiles and criteria | Talvik maintainers — see [CONFORMANCE.md](CONFORMANCE.md) |
 
 **Release manager:** Official releases of the MAK4I specification are
 published by Talvik maintainers.
@@ -107,18 +126,24 @@ The protocol follows [Semantic Versioning (SemVer)](https://semver.org/):
 adds functionality in a backward-compatible way; PATCH is a
 backward-compatible fix or clarification.
 
-- **Individual artifacts** use the same SemVer scheme per
-  [MAK-0001](standards/MAK-0001.md) — the schema defines this at the
-  artifact level, independent of the protocol specification's own
-  version.
-- **The protocol specification** (SPEC.md) versions independently —
-  currently v0.1 (Draft). v1.0 is targeted for the end of Phase 1 and
-  is expected to be the first version carrying a backward-compatibility
-  guarantee going forward.
-- **Breaking changes** to the core schema or an accepted standard
-  require a new MAK-XXXX proposal, not a silent edit to an existing
-  one — this keeps prior implementations valid rather than breaking
-  them retroactively.
+There is **one protocol release number**:
+- **Releases.** The repository is tagged `vMAJOR.MINOR.PATCH`, and
+  SPEC.md's version matches it.
+- **Schemas.** Every schema's `x-mak4i-schema-version` equals the release
+  number (the validator checks this).
+- **Standards** keep their own draft revision number (`0.1`, `0.2`) with
+  a dated row in their revision history for every change, plus an
+  accurate *Last Updated* date.
+- **Unreleased changes** are listed under "Unreleased" in the CHANGELOG
+  until a maintainer tags the release.
+- **Not protocol versions.** Distributable-artifact package versions
+  ([MAK-0009 §2.3](standards/MAK-0009.md#2-knowledge-profiles)) and project-record revisions are not protocol
+  versions.
+- **Breaking changes.** During v0.x, Draft standards may change
+  incompatibly. Every such change must be listed in the CHANGELOG under
+  "Breaking" with its migration note. From v1.0, breaking changes to an
+  Accepted standard need a new MAJOR protocol version or a new MAK
+  standard. A silent edit is never allowed.
 
 ---
 

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/rule.schema.json",
+  "title": "Rule",
+  "description": "The rule object carried by a project record or distributable artifact (MAK-0009 \u00a74.1). Architecture-defined: no conformance criteria or tool binding at this revision.",
+  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-status": "architecture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rule_key",
+    "enforcement",
+    "applies_to",
+    "overrides"
+  ],
+  "properties": {
+    "rule_key": {
+      "$ref": "common.schema.json#/$defs/ruleKey"
+    },
+    "enforcement": {
+      "$ref": "common.schema.json#/$defs/enforcement"
+    },
+    "applies_to": {
+      "$ref": "common.schema.json#/$defs/scopeRef"
+    },
+    "overrides": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope"
+          ],
+          "properties": {
+            "scope": {
+              "$ref": "common.schema.json#/$defs/scopeRef"
+            }
+          },
+          "description": "The ancestor scope whose inherited rule with the same rule_key this rule replaces (MAK-0009 \u00a74.4)."
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "applies_to": {
+            "properties": {
+              "type": {
+                "const": "organization"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "overrides": {
+            "type": "null"
+          }
+        }
+      },
+      "description": "An organization rule is at the top of every chain and overrides nothing."
+    },
+    {
+      "not": {
+        "required": [
+          "overrides"
+        ],
+        "properties": {
+          "overrides": {
+            "type": "object",
+            "properties": {
+              "scope": {
+                "properties": {
+                  "type": {
+                    "const": "resource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "A resource has no descendants, so it can't be an override target."
+    }
+  ]
+}

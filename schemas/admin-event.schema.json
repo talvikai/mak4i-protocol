@@ -24,7 +24,15 @@
       "$ref": "common.schema.json#/$defs/timestamp"
     },
     "organization_id": {
-      "$ref": "common.schema.json#/$defs/organizationId"
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/organizationId"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "null only for instance-level events before or without an organization (MAK-0006 \u00a78.5)."
     },
     "actor": {
       "type": "object",
@@ -35,7 +43,14 @@
       ],
       "properties": {
         "principal_id": {
-          "$ref": "common.schema.json#/$defs/principalId"
+          "anyOf": [
+            {
+              "$ref": "common.schema.json#/$defs/principalId"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "auth_method": {
           "enum": [
@@ -44,7 +59,29 @@
             "operator"
           ]
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "principal_id": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "principal_id"
+            ]
+          },
+          "then": {
+            "properties": {
+              "auth_method": {
+                "const": "operator"
+              }
+            }
+          },
+          "description": "Only instance-operator actions may lack a principal (MAK-0006 \u00a77.6)."
+        }
+      ]
     },
     "action": {
       "type": "string",
@@ -75,5 +112,8 @@
     "correlation_id": {
       "$ref": "common.schema.json#/$defs/nonEmptyString"
     }
+  },
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
   }
 }

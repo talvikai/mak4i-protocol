@@ -5,8 +5,8 @@ where a section explicitly says otherwise, the tools described in this
 document are roadmap targets and are not yet generally available.*
 
 *CLI, SDK, Registry UI, and editor/CI integrations for building with
-MAK4I. See [ARCHITECTURE.md](ARCHITECTURE.md) for the underlying API
-these tools call, and [MCP.md](MCP.md) for the MCP integration path.*
+MAK4I. The normative interface these tools call is the MCP binding,
+[MAK-0008](standards/MAK-0008.md); see also [MCP.md](MCP.md).*
 
 ------------------------------------------------------------------------
 
@@ -15,13 +15,15 @@ these tools call, and [MCP.md](MCP.md) for the MCP integration path.*
 MAK4I is in Developer Preview.
 
 A working reference implementation of the core protocol workflow exists.
-It provides an **operator CLI** and **MCP access** today — `mak4i create`,
-`supersede`, `search`, `get-current`, `history`, and a `doctor` integrity
-check — and connected MCP clients reach the same engine. Its source is
+It provides **MCP access** today (the ten [MAK-0008](standards/MAK-0008.md) tools, including
+conflict listing and resolution), and an **operator CLI** for records,
+conflicts and administration. Each implementation documents its own
+tool ↔ CLI mapping ([MAK-0008 §10.3](standards/MAK-0008.md#10-tool-catalog)). Its source is
 public at [talvikai/mak4i-reference](https://github.com/talvikai/mak4i-reference).
 
-The hosted Registry UI, language SDKs, VS Code extension, GitHub Action,
-and the broader registry-oriented CLI described below are planned. Their
+The Python SDK (contract: [MAK-0008 §13](standards/MAK-0008.md#13-client-requirements)), the hosted Registry UI,
+other-language SDKs, a VS Code extension, a GitHub Action, and the
+broader registry-oriented CLI described below are planned. Their
 commands, APIs, interfaces, and behavior may change.
 
 The examples in this document illustrate the intended developer
@@ -49,16 +51,20 @@ There are two distinct users of MAK4I:
 
 ### MAK4I CLI
 
-**Today (reference implementation):** an operator CLI over the core
-workflow —
+**Today (reference implementation):** an operator CLI. Illustrative
+command names; the reference implementation's documentation is
+authoritative —
 
 ``` bash
-mak4i create ...        # record a new artifact
-mak4i supersede ...     # replace a current artifact, preserving lineage
-mak4i search ...        # deterministic lookup by type / tags / status
-mak4i get-current ...   # current applicable artifacts, conflict-checked
-mak4i history ...       # every version in a lineage
-mak4i doctor            # fail-closed integrity report
+mak4i create ...            # record a new project record
+mak4i supersede ...         # next version of a lineage
+mak4i search ...            # deterministic lookup by type / tags / status
+mak4i get-current ...       # current records plus conflicts
+mak4i history ...           # every version in a lineage
+mak4i conflict list|show|resolve ...   # MAK-0004 conflicts
+mak4i doctor                # integrity report
+# administration: organizations, projects, principals, grants,
+# credentials, OAuth clients and authorizations, audit events
 ```
 
 **Planned:** a broader registry-oriented CLI as the primary command-line
@@ -79,32 +85,27 @@ Comparable to: npm CLI, pip, git
 
 ------------------------------------------------------------------------
 
-### Planned Tool 2 --- MAK4I SDK
+### Planned Tool 2 --- MAK4I Python SDK
 
-For developers who want to integrate MAK4I into their own code.
+For developers who want to integrate MAK4I into their own code. The SDK
+is a separate package, `mak4i-sdk` (import `mak4i_sdk`), that talks to
+the same MCP endpoint AI clients use. Its client contract is
+[MAK-0008 §13](standards/MAK-0008.md#13-client-requirements) and the CONFORMANCE Client/SDK profile.
 
 ``` python
-# Python SDK (planned)
-from mak4i import MAK4IClient
+# Python SDK (planned; interface subject to the SDK's own release)
+from mak4i_sdk import AsyncMAK4IClient, BearerAuth
 
-client = MAK4IClient(api_key="...")
-
-# Inject context before an AI call
-context = client.inject(project="schedovia")
-
-# Publish a new artifact programmatically
-client.artifacts.publish({
-    "id": "my-fastapi-scaffold",
-    "type": "procedural",
-    "content": scaffold_template,
-    "token_estimate": 800
-})
-
-# Search the registry
-results = client.artifacts.search("kubernetes deployment")
+async with AsyncMAK4IClient("https://mak4i.example.com/mcp", auth=BearerAuth.from_env()) as c:
+    current = await c.get_current("prj_123", artifact_type="caching_decision")
+    existing = await c.find_existing("prj_123", artifact_type="caching_decision", subject_key="primary-cache")
+    if existing is None:
+        await c.create("prj_123", artifact_id="cache-choice", artifact_type="caching_decision",
+                       title="Cache", content="Use Redis", subject_key="primary-cache")
 ```
 
-Additional language SDKs may follow in later phases.
+A REST API and SDKs in other languages are approved future scope
+([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)); the Python SDK does not imply them.
 
 Comparable to: Stripe SDK, Twilio SDK, Anthropic SDK
 

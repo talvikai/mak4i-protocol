@@ -1,0 +1,9 @@
+{
+  "rule_key": "logging.format",
+  "enforcement": "default",
+  "applies_to": {
+    "type": "organization",
+    "id": "org_1"
+  },
+  "overrides": null
+}

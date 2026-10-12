@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/resource-group.schema.json",
+  "title": "Resource group",
+  "description": "An optional, non-nested grouping of resources inside one project (MAK-0009 \u00a73.2). Architecture-defined.",
+  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-status": "architecture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "group_id",
+    "organization_id",
+    "project",
+    "name",
+    "created_at",
+    "updated_at",
+    "status"
+  ],
+  "properties": {
+    "group_id": {
+      "$ref": "common.schema.json#/$defs/resourceGroupId"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "project": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "name": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "description": "Archived, never deleted (MAK-0009 \u00a73)."
+    }
+  }
+}

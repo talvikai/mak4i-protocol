@@ -1,0 +1,16 @@
+{
+  "event_id": "evt_2",
+  "occurred_at": "2026-10-10T12:00:00Z",
+  "organization_id": "org_1",
+  "actor": {
+    "principal_id": "prn_bob",
+    "auth_method": "oauth"
+  },
+  "action": "grant.create",
+  "targets": {
+    "principal_id": "prn_bob",
+    "project_id": "prj_2"
+  },
+  "outcome": "denied",
+  "correlation_id": "c-2"
+}

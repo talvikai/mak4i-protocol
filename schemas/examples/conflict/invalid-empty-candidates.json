@@ -1,0 +1,14 @@
+{
+  "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
+  "state": "open",
+  "generation": 0,
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "subject_key": "primary-cache",
+  "identical_content": false,
+  "reason": "2 lineages claim artifact_type=caching_decision subject_key=primary-cache",
+  "candidates": [],
+  "hidden_candidate_count": 2,
+  "resolution": null
+}

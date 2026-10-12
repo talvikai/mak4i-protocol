@@ -1,0 +1,35 @@
+{
+  "artifact_id": "logging-standard",
+  "organization_id": "org_1",
+  "package_version": "1.2.0",
+  "artifact_type": "engineering_rule",
+  "title": "Structured logs",
+  "content": "Services log JSON to stdout.",
+  "tags": [
+    "logging"
+  ],
+  "rule": {
+    "rule_key": "logging.format",
+    "enforcement": "default",
+    "applies_to": {
+      "type": "organization",
+      "id": "org_1"
+    },
+    "overrides": null
+  },
+  "provenance": {
+    "principal_id": "prn_alice",
+    "principal_type": "human",
+    "agent_id": null,
+    "display_name": "Alice",
+    "auth_method": "oauth",
+    "credential_id": null,
+    "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+    "client": null,
+    "recorded_at": "2026-10-10T12:00:00Z"
+  },
+  "created_at": "2026-10-12T12:00:00Z",
+  "status": "active",
+  "deprecated_by": null,
+  "targets": null
+}

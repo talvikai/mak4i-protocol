@@ -74,7 +74,10 @@
           ],
           "properties": {
             "name": {
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "version": {
               "type": "string"

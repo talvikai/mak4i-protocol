@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/resource.schema.json",
+  "title": "Resource",
+  "description": "A logical collection inside one project (MAK-0009 \u00a73.1). Architecture-defined.",
+  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-status": "architecture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "resource_id",
+    "organization_id",
+    "project",
+    "name",
+    "resource_type",
+    "group_id",
+    "created_at",
+    "updated_at",
+    "status"
+  ],
+  "properties": {
+    "resource_id": {
+      "$ref": "common.schema.json#/$defs/resourceId"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "project": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "name": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "resource_type": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString",
+      "description": "Open vocabulary, e.g. requirements, issues, rules. Never hard-coded into core behavior."
+    },
+    "group_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/resourceGroupId"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "At most one group, in the same project; null = no group."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "description": "Archived, never deleted (MAK-0009 \u00a73)."
+    }
+  }
+}

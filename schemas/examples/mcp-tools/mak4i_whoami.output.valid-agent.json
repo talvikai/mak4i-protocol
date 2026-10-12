@@ -17,5 +17,14 @@
     "role": "member",
     "agent_id": "release-bot"
   },
-  "auth_method": "credential"
+  "auth_method": "credential",
+  "protocol": {
+    "version": "0.2",
+    "profiles": [
+      "server-project-records",
+      "transport-http-credential",
+      "transport-http-oauth"
+    ]
+  },
+  "scopes": null
 }

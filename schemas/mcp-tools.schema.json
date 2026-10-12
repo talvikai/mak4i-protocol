@@ -20,7 +20,9 @@
           "required": [
             "connection",
             "organization",
-            "principal"
+            "principal",
+            "protocol",
+            "scopes"
           ],
           "properties": {
             "connection": {
@@ -118,6 +120,9 @@
                 }
               ],
               "description": "OAuth scopes of the access token; null for a principal credential (no scope ceiling, MAK-0008 \u00a77.4)."
+            },
+            "protocol": {
+              "$ref": "common.schema.json#/$defs/protocolInfo"
             }
           }
         }
@@ -172,6 +177,9 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^x_[a-z0-9]+_[a-z0-9_]+$": {}
           }
         }
       }
@@ -190,12 +198,12 @@
               "$ref": "common.schema.json#/$defs/projectId"
             },
             "artifact_type": {
-              "type": "string"
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
             },
             "tags": {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "common.schema.json#/$defs/nonEmptyString"
               }
             },
             "status": {
@@ -204,8 +212,7 @@
                 "superseded",
                 "withdrawn"
               ],
-              "default": "active",
-              "description": "MAK-0008 \u00a710.6: withdrawn/superseded only when requested."
+              "default": "active"
             }
           }
         },
@@ -222,6 +229,9 @@
                 "$ref": "project-record.schema.json"
               }
             }
+          },
+          "patternProperties": {
+            "^x_[a-z0-9]+_[a-z0-9_]+$": {}
           }
         }
       }
@@ -240,12 +250,12 @@
               "$ref": "common.schema.json#/$defs/projectId"
             },
             "artifact_type": {
-              "type": "string"
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
             },
             "tags": {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "common.schema.json#/$defs/nonEmptyString"
               }
             }
           }
@@ -294,7 +304,7 @@
               }
             },
             "subject_key": {
-              "type": "string"
+              "$ref": "common.schema.json#/$defs/subjectKey"
             }
           }
         },
@@ -338,7 +348,7 @@
               }
             },
             "subject_key": {
-              "type": "string"
+              "$ref": "common.schema.json#/$defs/subjectKey"
             },
             "release_subject_key": {
               "type": "boolean"
@@ -382,6 +392,9 @@
                 "$ref": "project-record.schema.json"
               }
             }
+          },
+          "patternProperties": {
+            "^x_[a-z0-9]+_[a-z0-9_]+$": {}
           }
         }
       }
@@ -400,7 +413,7 @@
               "$ref": "common.schema.json#/$defs/projectId"
             },
             "artifact_type": {
-              "type": "string"
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
             },
             "state": {
               "enum": [
@@ -425,6 +438,9 @@
                 "$ref": "conflict.schema.json"
               }
             }
+          },
+          "patternProperties": {
+            "^x_[a-z0-9]+_[a-z0-9_]+$": {}
           }
         }
       }

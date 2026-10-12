@@ -1,0 +1,25 @@
+{
+  "artifact_id": "glossary",
+  "organization_id": "org_1",
+  "package_version": "0.3.1",
+  "artifact_type": "glossary",
+  "title": "Glossary",
+  "content": "Tenant = organization.",
+  "tags": [],
+  "rule": null,
+  "provenance": {
+    "principal_id": "prn_alice",
+    "principal_type": "human",
+    "agent_id": null,
+    "display_name": "Alice",
+    "auth_method": "oauth",
+    "credential_id": null,
+    "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+    "client": null,
+    "recorded_at": "2026-10-10T12:00:00Z"
+  },
+  "created_at": "2026-10-12T12:00:00Z",
+  "status": "active",
+  "deprecated_by": null,
+  "targets": null
+}

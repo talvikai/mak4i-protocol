@@ -1,0 +1,11 @@
+{
+  "id": "example-org/fastapi-scaffold",
+  "version": "1.0.0",
+  "type": "procedural",
+  "name": "FastAPI Scaffold",
+  "description": "Standard FastAPI project structure and bootstrap code",
+  "content": "app/\n  main.py\n  routers/",
+  "token_estimate": 40,
+  "created_at": "2026-10-12",
+  "x_example_origin": "sample"
+}

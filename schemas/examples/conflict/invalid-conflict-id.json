@@ -31,8 +31,8 @@
         },
         "recorded_at": "2026-10-10T12:00:00Z"
       },
-      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "content": "..."
+      "content_sha256": "3c8bc0f6ffe00c2ca00a157c314613f8999b7a309961a9d8e830df01bad00d54",
+      "content": "Use cache RED"
     },
     {
       "artifact_id": "cache-yellow",
@@ -52,8 +52,8 @@
         "client": null,
         "recorded_at": "2026-10-10T12:00:00Z"
       },
-      "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      "content": "..."
+      "content_sha256": "bee9d10d70d8c11bed1e3033cd90552e62a2fe1f70767f240056b29dbc751967",
+      "content": "Use cache YELLOW"
     }
   ],
   "hidden_candidate_count": 0

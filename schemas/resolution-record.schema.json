@@ -24,7 +24,8 @@
     "resulting_heads",
     "state",
     "created_at",
-    "completed_at"
+    "completed_at",
+    "idempotency_key"
   ],
   "properties": {
     "resolution_id": {
@@ -67,7 +68,8 @@
       "minItems": 2,
       "items": {
         "$ref": "common.schema.json#/$defs/artifactId"
-      }
+      },
+      "uniqueItems": true
     },
     "actor": {
       "$ref": "provenance.schema.json"
@@ -105,7 +107,31 @@
               }
             ]
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "effect": {
+                  "const": "superseded"
+                }
+              },
+              "required": [
+                "effect"
+              ]
+            },
+            "then": {
+              "required": [
+                "successor_artifact_id"
+              ],
+              "properties": {
+                "successor_artifact_id": {
+                  "$ref": "common.schema.json#/$defs/artifactId"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "resulting_heads": {
@@ -135,9 +161,15 @@
       ]
     },
     "idempotency_key": {
-      "type": [
-        "string",
-        "null"
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
+        {
+          "type": "null"
+        }
       ]
     },
     "created_at": {
@@ -159,17 +191,142 @@
       "if": {
         "properties": {
           "state": {
-            "const": "completed"
+            "const": "pending"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "completed_at": {
+            "type": "null"
           }
         }
       },
-      "then": {
+      "else": {
         "properties": {
           "completed_at": {
             "$ref": "common.schema.json#/$defs/timestamp"
           }
         }
+      },
+      "description": "completed_at is null exactly while pending (MAK-0004 \u00a7A8.2)."
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "select_winner"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "then": {
+        "properties": {
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "winner_artifact_id"
+            ],
+            "properties": {
+              "winner_artifact_id": {
+                "$ref": "common.schema.json#/$defs/artifactId"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "merge"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "then": {
+        "properties": {
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "into_artifact_id",
+              "content"
+            ],
+            "properties": {
+              "into_artifact_id": {
+                "$ref": "common.schema.json#/$defs/artifactId"
+              },
+              "content": {
+                "$ref": "common.schema.json#/$defs/nonEmptyString"
+              },
+              "title": {
+                "$ref": "common.schema.json#/$defs/nonEmptyString"
+              },
+              "rationale": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "separate_subjects"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "then": {
+        "properties": {
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "assignments"
+            ],
+            "properties": {
+              "assignments": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "artifact_id",
+                    "subject_key"
+                  ],
+                  "properties": {
+                    "artifact_id": {
+                      "$ref": "common.schema.json#/$defs/artifactId"
+                    },
+                    "subject_key": {
+                      "$ref": "common.schema.json#/$defs/subjectKey"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
-  ]
+  ],
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+  }
 }

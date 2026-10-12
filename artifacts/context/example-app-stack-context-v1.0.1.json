@@ -1,0 +1,25 @@
+{
+  "id": "example-app-stack-context",
+  "version": "1.0.1",
+  "type": "semantic",
+  "layer": "context",
+  "name": "Example App Stack Context",
+  "description": "Stack context for an example appointment-scheduling SaaS, so sessions don't re-explain the architecture: managed auth, React, Node.js on a container platform, PostgreSQL, Redis, SMS and email providers, and a payments provider.",
+  "token_estimate": 1500,
+  "ai_platforms": [
+    "claude",
+    "chatgpt",
+    "any"
+  ],
+  "injection_hint": "prepend",
+  "tags": [
+    "stack",
+    "context",
+    "saas",
+    "example"
+  ],
+  "author": "maintainers@talvik.ai",
+  "license": "MIT",
+  "created_at": "2026-06-23",
+  "updated_at": "2026-10-12"
+}

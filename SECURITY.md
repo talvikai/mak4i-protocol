@@ -3,8 +3,8 @@
 ## Current Scope
 
 This repository contains protocol documentation, the draft specification,
-artifact metadata (JSON), and the `frameworks/wd-docx-framework`
-document-generation tool. A public reference implementation is available
+JSON Schemas and examples, sample artifact metadata (JSON) and the
+validation script. A public reference implementation is available
 separately at [talvikai/mak4i-reference](https://github.com/talvikai/mak4i-reference) in
 Developer Preview, but there is no production or generally available hosted
 service. This policy covers this repository; it
