@@ -34,7 +34,7 @@ described as "MAK4I Certified".
 | **Client/SDK** (`client-sdk`) | Clients and SDKs | K1–K12 |
 | **Artifact** (`artifact`) | MAK-0001 packaging metadata documents | A1–A4 |
 
-Architecture-defined standards (below) belong to no profile.
+Architecture-defined standards and Drafts (In Progress) (below) belong to no profile.
 
 ---
 
@@ -201,3 +201,13 @@ The project-record fields it reserves (`resource_id`, `rule`), and the
 added in the milestone that binds and implements MAK-0009
 ([MAK-0009 §8.4](standards/MAK-0009.md#8-conformance-status-at-this-revision)). The validator check *status*
 (`scripts/validate_protocol.py`) enforces this boundary.
+
+## Drafts in progress (no criteria)
+
+[MAK-0002](standards/MAK-0002.md), [MAK-0003](standards/MAK-0003.md) and [MAK-0007](standards/MAK-0007.md) are
+**Drafts (In Progress)**:
+- no acceptance criteria are defined for them;
+- no profile depends on them;
+- no implementation may claim conformance to them.
+
+The validator check *status* enforces this.

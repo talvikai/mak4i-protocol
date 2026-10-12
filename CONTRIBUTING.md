@@ -167,8 +167,8 @@ Anyone. No affiliation with Talvik required.
 Standards are numbered sequentially in proposal order. See
 [SPEC.md](SPEC.md#standards) for the current list (MAK-0001 through
 MAK-0009). MAK-0002 (context injection), MAK-0003 (memory resolution) and
-MAK-0007 (registry API) were reserved by topic before this rule and keep
-the status *Reserved* until drafted. No other number is reserved.
+MAK-0007 (registry API) were reserved by topic before this rule; they are
+now Drafts (In Progress). No number is reserved.
 
 ### Stewardship
 Talvik, Inc. is the steward of the MAK4I protocol. We are committed to:

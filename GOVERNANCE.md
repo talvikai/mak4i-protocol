@@ -65,8 +65,12 @@ context injection or access control — follows the process in
    (Review → Accepted).
 
 **Status ladder:** Reserved → Draft → Review → Accepted → Deprecated.
-- *Reserved* applies only to MAK-0002, MAK-0003 and MAK-0007, which were
-  reserved by topic before this rule.
+- *Reserved* was used only for MAK-0002, MAK-0003 and MAK-0007, which were
+  reserved by topic before this rule. All three are now published Drafts.
+- A Draft may be marked **Draft (In Progress)** when it has unresolved
+  sections. Such a document states its settled design separately from
+  open items and non-normative design notes. It has no conformance
+  criteria and can't enter Review until its open items are settled.
 - Every new number is assigned sequentially, in proposal order.
 
 **Implementing Drafts.** Implementations, including the Reference, MAY

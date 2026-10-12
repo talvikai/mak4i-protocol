@@ -194,7 +194,7 @@ understand the same MAK4I information consistently.
 >   are Drafts with acceptance criteria;
 > - MAK-0009 (knowledge scopes, resources, rule inheritance) is an
 >   architecture-defined Draft;
-> - MAK-0002 and MAK-0003 are reserved, with approved future scope (see
+> - MAK-0002, MAK-0003 and MAK-0007 are Drafts (In Progress): published, not complete (see
 >   [STANDARDS.md](../STANDARDS.md) and [ROADMAP.md](../ROADMAP.md#approved-future-protocol-scope)).
 >
 > MAK-0004 Part A never auto-resolves a conflict: competing records are
