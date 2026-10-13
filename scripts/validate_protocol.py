@@ -21,8 +21,8 @@ Checks (each prints PASS/FAIL; exit status 1 if any check fails):
                 out of the implemented contract: no MCP tool schema
                 references them, no schema requires an architecture-marked
                 property, and every standard whose header says
-                "Conformance status: Architecture" has no CONFORMANCE.md
-                criteria section.
+                "Conformance status: Architecture" or "In progress" (Drafts
+                In Progress) has no CONFORMANCE.md criteria section.
 
 7. consistency - MAK-0008 tool table = x-mak4i-tools = $defs; every tool
                 has valid input and output examples; MAK-0008 error table =
@@ -310,7 +310,7 @@ def check_links() -> int:
 
 # --------------------------------------------------------------------------- standards index
 
-STATUS_RE = re.compile(r"^\*\*Status:\*\*\s*([A-Za-z]+)", re.M)
+STATUS_RE = re.compile(r"^\*\*Status:\*\*\s*([A-Za-z]+(?: \(In Progress\))?)", re.M)
 
 
 def table_rows(text: str) -> dict[str, list[str]]:
@@ -377,9 +377,13 @@ def check_status(schemas: dict[str, dict]) -> int:
                  "an interface binding needs the standard's conformance criteria first")
     conformance = (ROOT / "CONFORMANCE.md").read_text()
     for path in sorted((ROOT / "standards").glob("MAK-*.md")):
-        if re.search(r"^\*\*Conformance status:\*\* Architecture", path.read_text(), re.M):
-            if re.search(rf"^### {path.stem}\b", conformance, re.M):
-                fail("status", f"{path.stem} is architecture-defined but CONFORMANCE.md has a criteria section for it")
+        text = path.read_text()
+        marker = re.search(r"^\*\*Conformance status:\*\* (Architecture|In progress)", text, re.M)
+        in_progress = re.search(r"^\*\*Status:\*\* Draft \(In Progress\)", text, re.M)
+        if in_progress and not (marker and marker.group(1) == "In progress"):
+            fail("status", f"{path.stem} is a Draft (In Progress) but lacks 'Conformance status: In progress'")
+        if marker and re.search(rf"^### {path.stem}\b", conformance, re.M):
+            fail("status", f"{path.stem} has conformance status {marker.group(1)!r} but CONFORMANCE.md has a criteria section for it")
     return len(architecture)
 
 

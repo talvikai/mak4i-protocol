@@ -123,7 +123,7 @@ service.
 
 ## The Registry Model (planned)
 
-*Planned and illustrative: the registry (MAK-0007), the `install` /
+*Planned and illustrative: the registry ([MAK-0007](standards/MAK-0007.md), Draft in progress), the `install` /
 `inject` commands and first-class skills are approved future scope
 ([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope)). None of this exists today.*
 

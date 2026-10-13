@@ -44,10 +44,10 @@ MAK4I defines how AI knowledge is:
   ([MAK-0008](standards/MAK-0008.md)), which clients should consult before creating;
 - **Versioned**: record revisions and package versions;
 - **Governed**: identity, permissions, provenance, conflicts and rules;
-- **Injected** *(planned, [MAK-0002](STANDARDS.md))*: assembled into an AI session
+- **Injected** *(in progress, [MAK-0002](standards/MAK-0002.md))*: assembled into an AI session
   before work begins;
 - **Shared**: within an organization today (architecture-defined); via
-  public registries in the future ([MAK-0007](STANDARDS.md), planned).
+  public registries in the future ([MAK-0007](standards/MAK-0007.md), in progress).
 
 ---
 
@@ -103,7 +103,9 @@ Organization ─┬─ Distributable Artifacts (organization-scoped, shared with
 | **Architecture-defined** | Normative design that fixes the model for future implementations. It has no acceptance criteria and no interface binding yet. Schemas, and individual schema properties, carry `"x-mak4i-status": "architecture"`; standards say `Conformance status: Architecture`. Implementations MUST NOT claim support for it, and `scripts/validate_protocol.py` keeps it out of the MCP tool contract. |
 
 At this revision, MAK-0009 (distributable artifacts, resources, resource
-groups, rules and inheritance) is architecture-defined. Everything in
+groups, rules and inheritance) is architecture-defined. MAK-0002, MAK-0003
+and MAK-0007 are Drafts (In Progress), with no acceptance criteria and
+no binding. Everything in
 MAK-0004 Part A, MAK-0005 Part A, MAK-0006 and MAK-0008 that CONFORMANCE.md
 lists is the implemented contract.
 
@@ -157,7 +159,7 @@ See [MAK-0001](standards/MAK-0001.md) for the complete artifact metadata schema.
 ## Injection Flow (planned, illustrative)
 
 *Illustrative only. Context assembly (MAK-0002) and memory resolution
-(MAK-0003) are approved future scope ([ROADMAP.md](ROADMAP.md#approved-future-protocol-scope));
+([MAK-0003](standards/MAK-0003.md)) are Drafts (In Progress), not complete ([MAK-0002](standards/MAK-0002.md));
 there is no `mak4i inject` command today. Until they are specified,
 [MAK-0008 §10.6](standards/MAK-0008.md#10-tool-catalog) is the only injection rule.*
 
@@ -235,7 +237,7 @@ Encryption of sensitive artifact content is approved future scope
 ## CLI Interface (planned, illustrative)
 
 *Illustrative only. These registry commands depend on MAK-0002 and
-MAK-0007, which are planned. Implementations document their own CLIs and
+[MAK-0007](standards/MAK-0007.md), which are Drafts (In Progress). Implementations document their own CLIs and
 map them to the MAK-0008 tools ([MAK-0008 §10.3](standards/MAK-0008.md#10-tool-catalog)).*
 
 ```bash
@@ -326,12 +328,12 @@ not this future object.
 | Standard | Title | Status |
 |----------|-------|--------|
 | MAK-0001 | Artifact Metadata Schema | Draft |
-| MAK-0002 | Context Injection Specification | Reserved |
-| MAK-0003 | Memory Resolution Algorithm | Reserved |
+| MAK-0002 | Context Injection Specification | Draft (In Progress) |
+| MAK-0003 | Memory Resolution Algorithm | Draft (In Progress) |
 | MAK-0004 | Conflict Resolution Specification | Draft |
 | MAK-0005 | Versioning and Compatibility Specification | Draft |
 | MAK-0006 | Identity and Access Control | Draft |
-| MAK-0007 | Registry API Contract | Reserved |
+| MAK-0007 | Registry API Contract | Draft (In Progress) |
 | MAK-0008 | MCP Binding and Authorization | Draft |
 | MAK-0009 | Knowledge Scopes, Resources and Rule Inheritance | Draft |
 

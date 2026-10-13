@@ -14,12 +14,12 @@ standard is proposed and approved.
 | Standard | Title | Status | File |
 |----------|-------|--------|------|
 | MAK-0001 | Artifact Metadata Schema | Draft | [standards/MAK-0001.md](standards/MAK-0001.md) |
-| MAK-0002 | Context Injection Specification | Reserved | — |
-| MAK-0003 | Memory Resolution Algorithm | Reserved | — |
+| MAK-0002 | Context Injection Specification | Draft (In Progress) | [standards/MAK-0002.md](standards/MAK-0002.md) |
+| MAK-0003 | Memory Resolution Algorithm | Draft (In Progress) | [standards/MAK-0003.md](standards/MAK-0003.md) |
 | MAK-0004 | Conflict Resolution Specification | Draft | [standards/MAK-0004.md](standards/MAK-0004.md) |
 | MAK-0005 | Versioning and Compatibility Specification | Draft | [standards/MAK-0005.md](standards/MAK-0005.md) |
 | MAK-0006 | Identity and Access Control | Draft | [standards/MAK-0006.md](standards/MAK-0006.md) |
-| MAK-0007 | Registry API Contract | Reserved | — |
+| MAK-0007 | Registry API Contract | Draft (In Progress) | [standards/MAK-0007.md](standards/MAK-0007.md) |
 | MAK-0008 | MCP Binding and Authorization | Draft | [standards/MAK-0008.md](standards/MAK-0008.md) |
 | MAK-0009 | Knowledge Scopes, Resources and Rule Inheritance | Draft | [standards/MAK-0009.md](standards/MAK-0009.md) |
 
@@ -33,15 +33,22 @@ it fixes the model for organization knowledge, resources and rule
 inheritance, but has no acceptance criteria or interface binding yet, and
 no implementation may claim support for it.
 
-"Reserved" numbers were assigned by topic before the sequential rule in
-[GOVERNANCE.md](GOVERNANCE.md#protocol-standards-mak-xxxx) and have no draft on `main`. Their
-future scope is listed in [ROADMAP.md](ROADMAP.md#approved-future-protocol-scope).
+**Draft (In Progress)** (MAK-0002, MAK-0003, MAK-0007) means: published
+so the design can be reviewed in the open, but **not complete, not
+accepted and not implemented**. Each such document separates:
+- a short *Settled design* (agreed, citing the standards it comes from);
+- *Open items*;
+- non-normative *design notes*.
+
+No conformance requirement depends on these documents, and publishing a
+file doesn't make its specification complete. What they need to leave
+"In Progress" is in [ROADMAP.md](ROADMAP.md#criteria-for-mak-0002-mak-0003-and-mak-0007).
 
 Canonical JSON Schemas for these standards are in [`schemas/`](schemas/);
 validate the repository with `python scripts/validate_protocol.py`.
 
 MAK numbers are assigned sequentially, in proposal order. MAK-0002,
-MAK-0003 and MAK-0007 are the only topic reservations — see
+MAK-0003 and MAK-0007 were reserved by topic before that rule — see
 [CONTRIBUTING.md](CONTRIBUTING.md#naming-convention).
 
 ## Design Principles
