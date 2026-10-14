@@ -1,0 +1,16 @@
+{
+  "event_id": "evt_0001",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "occurred_at": "2026-10-14T12:00:00Z",
+  "sequence": 3,
+  "kind": "record.superseded",
+  "artifact_id": "x-002",
+  "lineage_id": "x",
+  "artifact_type": "caching_decision",
+  "actor": {
+    "principal_id": "prn_7f3c2a10-0000-4000-8000-000000000001",
+    "agent_id": "red-bot",
+    "auth_method": "oauth"
+  }
+}

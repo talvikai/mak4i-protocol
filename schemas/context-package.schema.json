@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/context-package.schema.json",
   "title": "Current knowledge result (get_current)",
-  "description": "Result of mak4i_get_current: current authoritative records, conflicted subjects, integrity errors and the reader instruction (MAK-0004 \u00a7A6, MAK-0008 \u00a710). File name kept for compatibility; the term 'context package' is reserved for MAK-0002 context assembly.",
+  "description": "Result of mak4i_get_current: current authoritative records, conflicted subjects, integrity errors and the reader instruction (MAK-0004 §A6, MAK-0008 §10). File name kept for compatibility; the term 'context package' is reserved for MAK-0002 context assembly.",
   "x-mak4i-schema-version": "0.2.0",
   "type": "object",
   "required": [
@@ -54,7 +54,7 @@
     },
     "resolution_trace_id": {
       "type": "string",
-      "description": "Opaque, implementation-defined; clients MUST NOT parse (MAK-0008 \u00a710.5a)."
+      "description": "Opaque, implementation-defined; clients MUST NOT parse (MAK-0008 §10.5a)."
     },
     "resolution_trace": {
       "type": "array",
@@ -62,6 +62,11 @@
         "type": "string"
       },
       "description": "Opaque, implementation-defined explanation; clients MUST NOT parse."
+    },
+    "change_sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Project change-feed watermark taken before the result was computed (MAK-0008 §14.4a). Required for servers claiming server-change-feed; absent otherwise."
     }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "event_id": "evt_0004",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "occurred_at": "2026-10-14T12:00:00Z",
+  "sequence": 9,
+  "kind": "project.archived",
+  "actor": null
+}

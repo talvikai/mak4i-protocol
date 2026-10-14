@@ -6,6 +6,21 @@ implementation's release version.
 
 ## Unreleased
 
+### Change feed and MCP resources (optional profile)
+
+Requested in talvikai/mak4i-reference#20.
+
+- **New MAK-0008 §14:** a durable, ordered change feed per project.
+  - Events: `record.created`, `record.superseded`, `record.withdrawn`, `resolution.completed`, `project.archived`. They carry identifiers and the authenticated actor, never content.
+  - Ordering: a `sequence` and a watermark, so readers never skip.
+  - Crash reconciliation, and at least 7 days of retention.
+- **New tool** `mak4i_changes` (cursor-based; `read`), new error code `cursor_expired`, and `change_sequence` in `mak4i_get_current`, so "read current, then follow changes" misses nothing.
+- **MCP resources** for project current knowledge, record versions and conflicts, with URIs built from immutable IDs.
+  - Subscriptions through `resources/subscribe` (MCP 2025-11-25) and `subscriptions/listen` (2026-07-28).
+  - `notifications/resources/updated` carries only the URI; live authorization is re-checked at delivery; `list_changed` when the readable project set changes.
+  - Notifications are hints without replay; the feed is the reliable mechanism; neither is the audit record.
+- **New optional conformance profile** `server-change-feed` (F1–F14) and schema `change-event.schema.json`. No existing profile, tool or field changes behavior for servers that don't claim it.
+
 Owner decisions of 2026-10-12. These are four architecture decisions and
 the resolution of every open item in the protocol gap/decision register.
 - **Not tagged.** The release number is assigned when a maintainer tags it

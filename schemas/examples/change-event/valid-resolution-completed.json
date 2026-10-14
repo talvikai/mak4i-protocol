@@ -1,0 +1,16 @@
+{
+  "event_id": "evt_0003",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "occurred_at": "2026-10-14T12:00:00Z",
+  "sequence": 5,
+  "kind": "resolution.completed",
+  "resolution_id": "res_1",
+  "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
+  "subject_key": "session-cache",
+  "actor": {
+    "principal_id": "prn_owner",
+    "agent_id": null,
+    "auth_method": "operator"
+  }
+}

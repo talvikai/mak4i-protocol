@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": "cursor_expired",
+    "message": "cursor is older than the retained change feed; re-read current knowledge",
+    "retryable": false,
+    "correlation_id": "c0ffee00-0000-4000-8000-000000000000"
+  }
+}
