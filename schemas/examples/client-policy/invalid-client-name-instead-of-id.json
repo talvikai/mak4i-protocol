@@ -1,0 +1,14 @@
+{
+  "policy_id": "cpol_5",
+  "organization_id": "org_1",
+  "principal_id": "prn_admin",
+  "project_id": "prj_mak4i",
+  "client": {
+    "kind": "oauth_client",
+    "id": "mak4c_x",
+    "name": "ChatGPT"
+  },
+  "permissions": [
+    "read"
+  ]
+}

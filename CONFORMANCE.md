@@ -27,6 +27,7 @@ described as "MAK4I Certified".
 | Profile (`profiles` value) | Applies to | Requires |
 |---|---|---|
 | **Server: Project Records** (`server-project-records`) | Servers storing governed records | All criteria of MAK-0005 Part A (P), MAK-0004 Part A (C), MAK-0006 (I), and MAK-0008 tool, error and catalog criteria (M15, M17, M19, M20, M34–M37) |
+| **Server: Client policies** (`server-client-policies`, optional) | Servers offering client-scoped project access (MAK-0006 §5.7) | CP1–CP12 plus the server profile |
 | **Transport: stdio** (`transport-stdio`) | Servers offering stdio | I17 plus the server profile |
 | **Transport: HTTP + credential** (`transport-http-credential`) | Servers offering Streamable HTTP with principal credentials | M1 (with OAuth disabled: `realm` challenge), M7, M11, M14, M18, M21, M22, M38, M39 |
 | **Transport: HTTP + OAuth** (`transport-http-oauth`) | Servers offering the OAuth service | All M criteria not listed elsewhere, including M16 (two real clients) |
@@ -122,6 +123,21 @@ suite) can map evidence to them one-to-one.
 - [ ] I22 Every refused write by an authenticated principal (grant, scope, identity, validation, concurrency, lifecycle) emits a security event with the §8.6 fields and no secrets; a 403 scope refusal is attributed to the principal (§8.6).
 - [ ] I23 If an external identity adapter is provided, it maps a stable external subject, verifies assertions, and never alters grants as a side effect (§9).
 
+
+### MAK-0006 §5.7: client-scoped access (Client policies profile)
+
+- [ ] CP1 The client identity is derived only from the authentication: a credential's `credential_id`, or the OAuth client of the token's authorization. Changing `clientInfo`, `User-Agent` or the client name has no effect on access (§5.7.1).
+- [ ] CP2 Policies name only credentials of the principal, clients pre-registered in the organization, or metadata-document URLs; naming a dynamically registered client is refused (§5.7.1, §5.7.2).
+- [ ] CP3 At most one policy per (principal, project, client); policies validate against `client-policy.schema.json` (§5.7.2).
+- [ ] CP4 Same principal and project, two OAuth clients: a read-only policy denies writes through one client; a read+write policy allows writes through the other (§5.7.4).
+- [ ] CP5 A policy never widens: a policy listing `write` gives no write without a grant that includes `write` (§5.7.2, §5.3).
+- [ ] CP6 Mode `off` with no policies behaves exactly as without the profile; mode `on` denies a client without a policy (§5.7.3).
+- [ ] CP7 Creating, narrowing or removing a policy, and switching the mode, take effect on the next request of an existing session and token (§5.7.5).
+- [ ] CP8 A refresh token presented with another client's `client_id` fails with `invalid_grant` and revokes the authorization (MAK-0008 §6.5).
+- [ ] CP9 A client-ceiling denial is `access_denied` with `reason: client_not_permitted` and names no other client. A principal without a grant gets the unchanged §5.5 denial (§5.7.6).
+- [ ] CP10 `mak4i_list_projects` lists only projects with non-empty effective permissions for the requesting client, with those permissions. `mak4i_whoami.client` reports the verified client identity (MAK-0008 §10.1, §10.5).
+- [ ] CP11 Only owners of the organization manage policies and modes. Each change is an administrative event (`client_policy.set`, `client_policy.remove`, `project.client_restrictions`). Refused writes carry the reason in the security event (§5.7.7).
+- [ ] CP12 Provenance of writes records the verified `credential_id` or `oauth_client_id` (§5.7.8).
 
 ### MAK-0008: MCP binding and authorization
 

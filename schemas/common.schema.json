@@ -153,6 +153,8 @@
           "items": {
             "enum": [
               "server-project-records",
+              "server-client-policies",
+              "server-change-feed",
               "transport-stdio",
               "transport-http-credential",
               "transport-http-oauth",
@@ -165,6 +167,26 @@
         }
       },
       "description": "MAK-0008 \u00a710.5; profiles from CONFORMANCE.md."
+    },
+    "clientIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "credential",
+            "oauth_client"
+          ]
+        },
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "description": "Verified client identity derived from the authentication (MAK-0006 \u00a75.7.1). `id` is a credential_id for kind credential and an OAuth client_id (pre-registered or metadata-document URL) for kind oauth_client."
     }
   }
 }
