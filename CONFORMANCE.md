@@ -31,6 +31,7 @@ described as "MAK4I Certified".
 | **Transport: HTTP + credential** (`transport-http-credential`) | Servers offering Streamable HTTP with principal credentials | M1 (with OAuth disabled: `realm` challenge), M7, M11, M14, M18, M21, M22, M38, M39 |
 | **Transport: HTTP + OAuth** (`transport-http-oauth`) | Servers offering the OAuth service | All M criteria not listed elsewhere, including M16 (two real clients) |
 | **OAuth option: CIMD** (`oauth-cimd`) / **DCR** (`oauth-dcr`) | Servers enabling these registration modes | M12, M32 for the enabled mode |
+| **Server: Change feed** (`server-change-feed`), optional | Servers offering the change feed and MCP resources (MAK-0008 §14) | F1–F14, plus the server profile |
 | **Client/SDK** (`client-sdk`) | Clients and SDKs | K1–K12 |
 | **Artifact** (`artifact`) | MAK-0001 packaging metadata documents | A1–A4 |
 
@@ -163,6 +164,23 @@ suite) can map evidence to them one-to-one.
 - [ ] M37 `mak4i_whoami` always carries `scopes` (null for credentials) and `protocol` (§10.5).
 - [ ] M38 Token, revocation and registration endpoints are rate-limited (§11.1); signing keys, if any, are persisted outside configuration and rotatable (§11.3).
 - [ ] M39 The configuration contract is validated at startup and the implementation refuses to start when it is invalid (§12).
+
+### MAK-0008 §14: change feed and MCP resources (Change feed profile)
+
+- [ ] F1 Every committed create, supersession, withdrawal, completed resolution and project archive produces exactly one change event of the matching `kind`; refused, failed or aborted operations produce none (§14.2).
+- [ ] F2 Events validate against `change-event.schema.json`, carry identifiers and the actor from authenticated provenance, and never carry record content, titles, rationale or reasons (§14.2).
+- [ ] F3 The event of a record created or superseded as a candidate of an open or resolving conflict carries that `conflict_id` (§14.2).
+- [ ] F4 `sequence` strictly increases in commit order within a project; a reader is never given an event above the watermark, so paging by cursor never skips a later-committing lower sequence (§14.3).
+- [ ] F5 A process stopped between committing a change and recording its event is reconciled at start-up: the committed change gets its event; an uncommitted one never does (§14.3).
+- [ ] F6 Events are retained at least 7 days, and the retention period is documented (§14.3).
+- [ ] F7 `mak4i_changes` requires `read`; pages by `after` / `next` / `more`; without `after` returns no events and `next` = `watermark`; `after` below the floor fails `cursor_expired`, and above the watermark fails `validation_error` (§14.4).
+- [ ] F8 Every `mak4i_get_current` result carries `change_sequence` taken before the result was computed; reading current knowledge and then following `mak4i_changes(after=change_sequence)` misses no change (§14.4a).
+- [ ] F9 Resource URIs use immutable identifiers; `resources/list` lists the `current` resource of each readable project; the other forms are offered as templates; reads are authorized like tool calls, and unreadable or missing resources are refused indistinguishably (§14.5).
+- [ ] F10 Subscriptions work through `resources/subscribe` (2025-11-25) and `subscriptions/listen` (2026-07-28); subscribing to an unreadable URI is refused (§14.6).
+- [ ] F11 After a commit, subscribed sessions receive `notifications/resources/updated` carrying only the URI, for the project's `current` resource and the affected record or conflict resources they subscribed to (§14.6).
+- [ ] F12 Authorization is re-checked at delivery: a session whose principal was deactivated, whose credential or authorization was revoked, or whose `read` grant was removed receives no further notifications for that project (§14.6).
+- [ ] F13 A session receives `notifications/resources/list_changed` when the set of projects its principal can read changes (§14.6, SHOULD).
+- [ ] F14 Feeds and subscriptions never cross organizations or projects; `mak4i_changes` and subscriptions are rate-limited (§14.8).
 
 ### MAK-0008 §13: clients and SDKs (Client/SDK profile)
 

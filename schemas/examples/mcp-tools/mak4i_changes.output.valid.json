@@ -1,0 +1,42 @@
+{
+  "events": [
+    {
+      "event_id": "evt_0002",
+      "organization_id": "org_1",
+      "project": "prj_1",
+      "occurred_at": "2026-10-14T12:00:00Z",
+      "sequence": 2,
+      "kind": "record.superseded",
+      "artifact_id": "cache-decision-002",
+      "lineage_id": "cache-decision",
+      "artifact_type": "caching_decision",
+      "subject_key": "session-cache",
+      "previous_artifact_id": "cache-decision",
+      "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
+      "actor": {
+        "principal_id": "prn_7f3c2a10-0000-4000-8000-000000000001",
+        "agent_id": "red-bot",
+        "auth_method": "oauth"
+      }
+    },
+    {
+      "event_id": "evt_0003",
+      "organization_id": "org_1",
+      "project": "prj_1",
+      "occurred_at": "2026-10-14T12:00:00Z",
+      "sequence": 5,
+      "kind": "resolution.completed",
+      "resolution_id": "res_1",
+      "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
+      "subject_key": "session-cache",
+      "actor": {
+        "principal_id": "prn_owner",
+        "agent_id": null,
+        "auth_method": "operator"
+      }
+    }
+  ],
+  "next": 5,
+  "watermark": 5,
+  "more": false
+}

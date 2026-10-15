@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/change-event.schema.json",
+  "title": "Change event",
+  "description": "One committed change in a project's change feed (MAK-0008 \u00a714.2). Carries identifiers and attribution, never record content.",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sequence",
+    "event_id",
+    "kind",
+    "organization_id",
+    "project",
+    "occurred_at",
+    "actor"
+  ],
+  "properties": {
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Strictly increasing in commit order within the project (\u00a714.3)."
+    },
+    "event_id": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "kind": {
+      "enum": [
+        "record.created",
+        "record.superseded",
+        "record.withdrawn",
+        "resolution.completed",
+        "project.archived"
+      ]
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "project": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "artifact_id": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "lineage_id": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "artifact_type": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "subject_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "previous_artifact_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resolution_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conflict_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^cfl_[0-9a-f]{32}$"
+    },
+    "actor": {
+      "description": "Who made the change (authenticated provenance summary, MAK-0006 \u00a77); null for instance-level recovery.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "principal_id",
+            "auth_method"
+          ],
+          "properties": {
+            "principal_id": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString"
+            },
+            "agent_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "auth_method": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "record.created",
+              "record.superseded",
+              "record.withdrawn"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "artifact_id",
+          "lineage_id",
+          "artifact_type"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "record.superseded"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "previous_artifact_id"
+        ],
+        "properties": {
+          "previous_artifact_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "resolution.completed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "resolution_id",
+          "conflict_id"
+        ],
+        "properties": {
+          "resolution_id": {
+            "type": "string"
+          },
+          "conflict_id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+  }
+}

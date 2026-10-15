@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/error.schema.json",
   "title": "Tool error",
-  "description": "structuredContent of a failed tool result (MAK-0008 \u00a79).",
+  "description": "structuredContent of a failed tool result (MAK-0008 §9).",
   "x-mak4i-schema-version": "0.2.0",
   "type": "object",
   "additionalProperties": false,
@@ -33,6 +33,7 @@
             "conflict_changed",
             "conflict_not_open",
             "subject_collision",
+            "cursor_expired",
             "rate_limited",
             "internal_error"
           ]
