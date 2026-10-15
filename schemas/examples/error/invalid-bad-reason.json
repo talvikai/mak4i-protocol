@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": "access_denied",
+    "reason": "Client Not Permitted",
+    "message": "denied",
+    "retryable": false
+  }
+}

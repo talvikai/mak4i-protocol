@@ -30,6 +30,25 @@ the resolution of every open item in the protocol gap/decision register.
   dates are recorded here at that time.
 
 ### Added
+- **Client-scoped project access** (CLIENT-AUTH-001; optional profile
+  `server-client-policies`; [MAK-0006 §5.7](standards/MAK-0006.md#5-permissions-and-grants)):
+  - The same principal can have different effective permissions on a
+    project depending on the verified client: a credential, or a
+    pre-registered or metadata-document OAuth client. Client-reported
+    names are never used.
+  - Client policies are ceilings in the §5.3 intersection. Each project
+    has a restriction mode (`off` by default; `on` = deny clients
+    without a policy).
+  - New `client-policy.schema.json` and common `clientIdentity`.
+  - Optional error `reason` (`client_not_permitted`) and
+    `mak4i_whoami.client`.
+  - Refresh tokens are bound to their client (MAK-0008 §6.5).
+  - Conformance criteria CP1–CP12.
+
+### Fixed
+- `common.schema.json` `protocolInfo.profiles` now lists
+  `server-change-feed` (MAK-0008 §14). The profile was defined in #10, but a
+  `mak4i_whoami` claiming it failed schema validation.
 - **[MAK-0009](standards/MAK-0009.md) Knowledge Scopes, Resources and Rule
   Inheritance** (Draft, *architecture-defined*: no conformance criteria or
   binding yet):

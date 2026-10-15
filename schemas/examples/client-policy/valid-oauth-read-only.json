@@ -1,0 +1,14 @@
+{
+  "policy_id": "cpol_1",
+  "organization_id": "org_1",
+  "principal_id": "prn_admin",
+  "project_id": "prj_mak4i",
+  "client": {
+    "kind": "oauth_client",
+    "id": "mak4c_claude"
+  },
+  "permissions": [
+    "read"
+  ],
+  "created_at": "2026-10-15T15:00:00Z"
+}

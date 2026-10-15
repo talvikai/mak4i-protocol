@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/client-policy.schema.json",
+  "title": "Client policy",
+  "description": "Ceiling on one principal's permissions on one project when it connects through one verified client (MAK-0006 \u00a75.7).",
+  "x-mak4i-schema-version": "0.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_id",
+    "organization_id",
+    "principal_id",
+    "project_id",
+    "client",
+    "permissions"
+  ],
+  "properties": {
+    "policy_id": {
+      "$ref": "common.schema.json#/$defs/nonEmptyString"
+    },
+    "organization_id": {
+      "$ref": "common.schema.json#/$defs/organizationId"
+    },
+    "principal_id": {
+      "$ref": "common.schema.json#/$defs/principalId"
+    },
+    "project_id": {
+      "$ref": "common.schema.json#/$defs/projectId"
+    },
+    "client": {
+      "$ref": "common.schema.json#/$defs/clientIdentity"
+    },
+    "permissions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.schema.json#/$defs/permission"
+      },
+      "description": "Ceiling for this client. Empty means no access to the project through this client (\u00a75.7.2)."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    }
+  },
+  "patternProperties": {
+    "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+  }
+}

@@ -123,6 +123,35 @@
             },
             "protocol": {
               "$ref": "common.schema.json#/$defs/protocolInfo"
+            },
+            "client": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "id",
+                "registration"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "credential",
+                    "oauth_client"
+                  ]
+                },
+                "id": {
+                  "$ref": "common.schema.json#/$defs/nonEmptyString"
+                },
+                "registration": {
+                  "enum": [
+                    "pre_registered",
+                    "metadata_document",
+                    "dynamic",
+                    null
+                  ]
+                }
+              },
+              "description": "Verified client identity of this request; present when the server claims server-client-policies (MAK-0008 \u00a710.5, MAK-0006 \u00a75.7.1)."
             }
           }
         }

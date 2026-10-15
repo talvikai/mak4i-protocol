@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "access_denied",
+    "reason": "client_not_permitted",
+    "message": "This client may not write to this project. Use a client allowed to write, or ask an organization owner.",
+    "retryable": false,
+    "correlation_id": "c0ffee00-0000-4000-8000-000000000001"
+  }
+}

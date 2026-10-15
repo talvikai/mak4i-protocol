@@ -1,0 +1,13 @@
+{
+  "policy_id": "cpol_6",
+  "organization_id": "org_1",
+  "principal_id": "prn_admin",
+  "project_id": "prj_mak4i",
+  "client": {
+    "kind": "client_info",
+    "id": "openai-mcp"
+  },
+  "permissions": [
+    "read"
+  ]
+}
