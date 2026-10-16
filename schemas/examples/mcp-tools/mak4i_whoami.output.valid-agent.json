@@ -19,7 +19,7 @@
   },
   "auth_method": "credential",
   "protocol": {
-    "version": "0.2",
+    "version": "0.3",
     "profiles": [
       "server-project-records",
       "transport-http-credential",

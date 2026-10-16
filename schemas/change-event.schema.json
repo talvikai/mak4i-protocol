@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/change-event.schema.json",
   "title": "Change event",
   "description": "One committed change in a project's change feed (MAK-0008 \u00a714.2). Carries identifiers and attribution, never record content.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "additionalProperties": false,
   "required": [

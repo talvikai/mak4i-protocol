@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/artifact-pin.schema.json",
   "title": "Organization artifact pin",
   "description": "A project's pin of an organization artifact to one published package version (MAK-0009 \u00a72.2). Ignored for artifacts carrying a mandatory rule and for withdrawn artifacts. Architecture-defined.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "x-mak4i-status": "architecture",
   "type": "object",
   "additionalProperties": false,

@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/client-id-metadata-document.schema.json",
   "title": "Accepted client ID metadata document",
   "description": "What a MAK4I authorization server accepts when a client_id is an HTTPS URL (MAK-0008 \u00a78.3). Unknown members are ignored.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "required": [
     "client_id",

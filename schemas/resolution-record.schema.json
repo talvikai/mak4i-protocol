@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/resolution-record.schema.json",
   "title": "Conflict resolution record",
   "description": "Durable record of one resolution (MAK-0004 \u00a7A7.6).",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "additionalProperties": false,
   "required": [

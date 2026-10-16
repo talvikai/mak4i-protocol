@@ -19,7 +19,7 @@
   },
   "auth_method": "oauth",
   "protocol": {
-    "version": "0.2",
+    "version": "0.3",
     "profiles": [
       "server-project-records",
       "server-client-policies",

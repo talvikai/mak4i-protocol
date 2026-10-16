@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/distributable-artifact.schema.json",
   "title": "Distributable artifact version",
   "description": "One immutable package version of organization-scoped knowledge shared with that organization's projects (MAK-0009 \u00a72.2). Architecture-defined; lifecycle states and MAK-0001 field mapping are open (MAK-0009 U-9).",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "x-mak4i-status": "architecture",
   "type": "object",
   "additionalProperties": false,

@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/client-policy.schema.json",
   "title": "Client policy",
   "description": "Ceiling on one principal's permissions on one project when it connects through one verified client (MAK-0006 \u00a75.7).",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "additionalProperties": false,
   "required": [

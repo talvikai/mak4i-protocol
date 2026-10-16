@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/common.schema.json",
   "title": "MAK4I common definitions",
   "description": "Shared definitions used by the MAK4I schemas (MAK-0004, MAK-0005, MAK-0006, MAK-0008, MAK-0009).",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "$defs": {
     "timestamp": {
       "type": "string",

@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/admin-event.schema.json",
   "title": "Administrative audit event",
   "description": "Attributable record of an administrative action (MAK-0006 \u00a78.5). Never contains secrets.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "additionalProperties": false,
   "required": [

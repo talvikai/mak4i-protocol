@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/conflict.schema.json",
   "title": "Subject conflict",
   "description": "An open, resolving or resolved conflict between lineages claiming one subject (MAK-0004 \u00a7A4\u2013\u00a7A5).",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
