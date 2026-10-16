@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/oauth-authorization-server-metadata.schema.json",
   "title": "MAK4I authorization server metadata profile",
   "description": "RFC 8414 metadata constrained by MAK-0008 \u00a74.3. Additional RFC 8414 members are allowed.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "required": [
     "issuer",

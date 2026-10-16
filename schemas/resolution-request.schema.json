@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/resolution-request.schema.json",
   "title": "Conflict resolution request",
   "description": "Arguments of a resolution (MAK-0004 \u00a7A7.2).",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "oneOf": [
     {
       "type": "object",

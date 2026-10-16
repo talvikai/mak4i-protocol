@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/artifact.schema.json",
   "title": "MAK-0001 artifact packaging metadata",
   "description": "Packaging metadata for a Distributable Artifact (MAK-0001; MAK-0009 \u00a72.2). `version` is a package version.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "additionalProperties": false,
   "patternProperties": {

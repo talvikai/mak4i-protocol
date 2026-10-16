@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/effective-rule.schema.json",
   "title": "Effective rule",
   "description": "The rule that applies for one rule_key at one scope, with its explanation (MAK-0009 \u00a74.6). Architecture-defined: no tool returns it at this revision.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "x-mak4i-status": "architecture",
   "type": "object",
   "additionalProperties": false,

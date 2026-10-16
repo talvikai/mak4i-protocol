@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/oauth-protected-resource-metadata.schema.json",
   "title": "MAK4I protected resource metadata profile",
   "description": "RFC 9728 metadata constrained by MAK-0008 \u00a74.1.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "required": [
     "resource",

@@ -1,9 +1,9 @@
 # MAK4I Conformance
 
 **Status:** Draft  
-**Version:** 0.2  
+**Version:** 0.3  
 **Created:** August 2026  
-**Last Updated:** 2026-10-12
+**Last Updated:** 2026-10-16
 
 ---
 
@@ -11,7 +11,7 @@
 
 An implementation claims conformance **per profile and protocol
 version**: "conformant to *Server: Project Records* and *Transport: HTTP
-+ OAuth* at protocol 0.2". It backs the claim with evidence for every
++ OAuth* at protocol 0.3". It backs the claim with evidence for every
 criterion of those profiles, for example its own tests mapped one-to-one
 to the criterion ids below. It reports the claimed profiles in
 `mak4i_whoami.protocol.profiles`

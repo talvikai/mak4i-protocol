@@ -1,8 +1,8 @@
 # MAK4I Protocol Specification
 
-**Version:** 0.2 (Draft). Unreleased changes are listed in [CHANGELOG.md](CHANGELOG.md); the next release number is assigned when a maintainer tags it ([GOVERNANCE.md](GOVERNANCE.md#versioning))  
+**Version:** 0.3 (Draft). Changes since the last tag are listed in [CHANGELOG.md](CHANGELOG.md); a release is tagged by a maintainer ([GOVERNANCE.md](GOVERNANCE.md#versioning))  
 **Status:** Work in Progress  
-**Last updated:** 2026-10-12  
+**Last updated:** 2026-10-16  
 **Author:** Talvik, Inc.  
 **Created:** August 2026  
 **License:** MIT  

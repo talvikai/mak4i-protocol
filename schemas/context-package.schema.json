@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/context-package.schema.json",
   "title": "Current knowledge result (get_current)",
   "description": "Result of mak4i_get_current: current authoritative records, conflicted subjects, integrity errors and the reader instruction (MAK-0004 §A6, MAK-0008 §10). File name kept for compatibility; the term 'context package' is reserved for MAK-0002 context assembly.",
-  "x-mak4i-schema-version": "0.2.0",
+  "x-mak4i-schema-version": "0.3.0",
   "type": "object",
   "required": [
     "artifacts",

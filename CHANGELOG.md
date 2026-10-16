@@ -6,6 +6,17 @@ implementation's release version.
 
 ## Unreleased
 
+Nothing yet.
+
+## v0.3 (Draft) — prepared, not yet tagged
+
+Everything merged since v0.2: the v2 alignment (#7, #9), the change feed
+and MCP resources (#10), and client-scoped project access (#11). It is
+tagged together with MAK4I Reference v2.1.0-rc.1, after the November 4
+acceptance checks; the date is added then. Every schema's
+`x-mak4i-schema-version` is `0.3.0`, and `protocolInfo.version` examples
+report `0.3`.
+
 ### Change feed and MCP resources (optional profile)
 
 Requested in talvikai/mak4i-reference#20.
@@ -23,8 +34,6 @@ Requested in talvikai/mak4i-reference#20.
 
 Owner decisions of 2026-10-12. These are four architecture decisions and
 the resolution of every open item in the protocol gap/decision register.
-- **Not tagged.** The release number is assigned when a maintainer tags it
-  ([GOVERNANCE](GOVERNANCE.md#versioning)).
 - **Comment period.** It starts on publication for MAK-0004 Part A,
   MAK-0005 Part A, MAK-0006, MAK-0008 and MAK-0009; the start and end
   dates are recorded here at that time.
@@ -186,9 +195,9 @@ the resolution of every open item in the protocol gap/decision register.
 ### Compatibility
 - **Existing records** remain valid. The new record fields (`resource_id`,
   `rule`) are optional and architecture-defined.
-- **Reference implementation:** the Reference at `62fca93` doesn't yet
-  meet the Breaking items above. Its alignment is tracked separately and
-  follows this release (protocol first).
+- **Reference implementation:** MAK4I Reference v2.0.0-rc.1 implements the
+  Breaking items above. Reference v2.1.0-rc.1 implements v0.3, including
+  the optional profiles `server-change-feed` and `server-client-policies`.
 
 ## v0.2 (Draft) — 2026-10-10
 
