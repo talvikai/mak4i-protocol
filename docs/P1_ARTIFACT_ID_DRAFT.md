@@ -4,7 +4,12 @@ Related: [Protocol #15](https://github.com/talvikai/mak4i-protocol/issues/15), [
 
 This review draft captures the approved identity requirements for governed project records. It does not change the current protocol or the current MCP schema. The identity contract and P1 search, duplicate and retry behavior ship together.
 
-Status: **review draft**. The settled identity rules (§1) and their proposed specification text (§3) are ready for review. The choices listed in §5 are open and are not decided here. Wherever the proposed text depends on one, it is marked **[OPEN Ox]**. Nothing in `standards/` or `schemas/*.schema.json` changes in this PR. The added example records (§4.2) validate against the current v0.3 schemas.
+Status: **review draft**.
+- §1 holds the settled identity rules. §3 has their proposed specification text.
+- §5 records the owner's direction of 2026-11-10 on the six choices O1–O6, with proposed text for each.
+- §6 lists the narrower questions that direction leaves open. Text that depends on one of them is marked **[OPEN Sx]**.
+- §7 compares Reference implementation options for O5.
+- Nothing in `standards/` or `schemas/*.schema.json` changes in this PR. The example records added in §4.2 validate against the current v0.3 schemas.
 
 ## 1. Settled requirements
 
@@ -19,18 +24,22 @@ Status: **review draft**. The settled identity rules (§1) and their proposed sp
 | Rule today | Where | Effect on this work |
 |---|---|---|
 | `artifact_id` is unique within the project and never reused | MAK-0005 §A2 | Kept. Generated IDs also satisfy it. |
-| `lineage_id` = `artifact_id` of the lineage's first version | MAK-0005 §A2, §A3.1; CONFORMANCE P1 | Kept for existing lineages. For new lineages the rule depends on **[OPEN O2]**. |
-| Server-assigned fields MUST NOT be accepted from writers | MAK-0005 §A2 | `artifact_id` joins that list. How a legacy create that sends one is treated is **[OPEN O1]**. |
-| A successor's `artifact_id` is assigned by the server and opaque | MAK-0008 §10.5a | Already the contract for `mak4i_supersede`. The change extends it to create and to resolutions, and adds the format. |
-| `mak4i_create` *requires* a caller `artifact_id`; a clash fails with `artifact_exists` | `mcp-tools.schema.json`; MAK-0008 §9; CONFORMANCE P16 | This is the contract change. Its shape depends on **[OPEN O1]**. |
+| `lineage_id` = `artifact_id` of the lineage's first version | MAK-0005 §A2, §A3.1; CONFORMANCE P1 | Kept. A new lineage's ID is its first `art_` ID (O2). |
+| Server-assigned fields MUST NOT be accepted from writers | MAK-0005 §A2 | `artifact_id` joins that list. A legacy create that sends one is rejected (O1). |
+| A successor's `artifact_id` is assigned by the server and opaque | MAK-0008 §10.5a | Already the contract for `mak4i_supersede`. The change extends it to create and resolutions, and adds the format. |
+| `mak4i_create` *requires* a caller `artifact_id`; a clash fails with `artifact_exists` | `mcp-tools.schema.json`; MAK-0008 §9; CONFORMANCE P16 | Replaced (O1). |
+| Creating a record on an occupied subject always succeeds and creates or extends a conflict; writes are never refused for that reason | MAK-0004 §A3.6, §A8.5 | Changed: an ordinary create is refused (O3), atomically (O5). An explicitly requested competing record keeps today's behavior. |
 | A merge or separate-subjects resolution supersedes a head with a new version | MAK-0004 §A7.4, §A7.5 | These versions get generated IDs as well (§3.3). |
 | A pending resolution is completed, not abandoned, on retry or recovery | MAK-0004 §A8.2 | Generated successor IDs must be fixed before the first durable step (§3.1, A8.4). |
-| Concurrent creations claiming one subject all succeed and form a conflict | MAK-0004 §A8.5, §A3.6 | Unchanged by this slice. Changing it is **[OPEN O3/O5]**. |
+| `idempotency_key` exists only for resolutions (8–200 characters) | MAK-0004 §A8.4; MAK-0008 §13.7 | Added to create (O4). |
+| `mak4i_search` filters by type, tags and status, and returns full records | MAK-0008 §10.1, §10.5a, §10.6 | Extended (O6). |
 | Every ID field in every schema is `common.schema.json#/$defs/artifactId` (any non-empty string) | `schemas/` | Must stay that way so legacy IDs keep validating (§3.5). |
+| `write` does not imply `read`; an operation that returns record content also requires `read` | MAK-0006 §5.1 | Governs what a refused create may disclose (O3). |
+| The existence and count of unreadable conflict candidates may be disclosed, but not their identity | MAK-0004 §A6.4, D-007 | Same rule applied to an occupied subject (O3). |
 
-## 3. Proposed specification text
+## 3. Proposed specification text: identifiers
 
-The text below is written as it would land in the standards. Section numbers are proposals.
+Written as it would land in the standards. Section numbers are proposals.
 
 ### 3.1 MAK-0005: new §A8 "Record identifiers"
 
@@ -40,7 +49,7 @@ The text below is written as it would land in the standards. Section numbers are
 >
 > **A8.3 Uniqueness.** An assigned identifier MUST be unique among *all* versions in the project, including legacy versions (A8.5) whose identifiers happen to have the same shape. It is never reused, including after a failed write. The server MUST write a new version only if its identifier is absent (create-if-absent), and on a collision MUST assign another identifier instead of failing the operation.
 >
-> **A8.4 One identifier per persisted version.** An operation that persists no version assigns no visible identifier. This covers a rejected, failed or aborted write; a `select_winner` resolution; a resolution reservation (MAK-0004 §A8.2 step 2); and **[OPEN O4]** a recognised retry. If a write takes more than one durable step (§A4.5, MAK-0004 §A8.2), the successor identifier MUST be fixed *before* the first durable step that refers to it: the old head's `superseded_by`, or the pending resolution record's `effects[].successor_artifact_id`. A retry or recovery of that write MUST complete with that same identifier, never a newly assigned one, so that no lineage gains two successors.
+> **A8.4 One identifier per persisted version.** An operation that persists no version assigns no visible identifier. This covers a rejected, failed or aborted write; a `select_winner` resolution; a resolution reservation (MAK-0004 §A8.2 step 2); and a recognised create retry, which returns the identifier of the original version (§5, O4). If a write takes more than one durable step (§A4.5, MAK-0004 §A8.2), the successor identifier MUST be fixed *before* the first durable step that refers to it: the old head's `superseded_by`, or the pending resolution record's `effects[].successor_artifact_id`. A retry or recovery of that write MUST complete with that same identifier, never a newly assigned one, so that no lineage gains two successors.
 >
 > **A8.5 Legacy identifiers.** Versions persisted before this revision keep their identifiers exactly as stored, in any form the earlier revision allowed. Implementations MUST NOT rename, rewrite, backfill or re-derive them, or the `lineage_id`, `supersedes`, `superseded_by`, `merged_from` and resolution references that point to them. A lineage MAY mix legacy and server-assigned identifiers. Every operation that accepts a record reference MUST accept a legacy identifier wherever it accepted one before: lookup, history, `old_id`, resolution candidates and assignments, and change-feed fields. It MUST NOT require references to match A8.2.
 >
@@ -51,63 +60,63 @@ The text below is written as it would land in the standards. Section numbers are
 Consequential edits in MAK-0005:
 
 - **§A2 table, `artifact_id` row:** "Server-assigned (A8). Unique within the project; never reused; opaque."
-- **§A2, after the table:** `artifact_id` is added to the server-assigned fields that "MUST NOT be accepted from writers". Treatment of an existing client that still sends it is **[OPEN O1]**.
-- **§A2, `lineage_id` row, and §A3.1:** "`lineage_id` = `artifact_id` of the lineage's first version" stays true for every existing lineage. For lineages created under this revision it is **[OPEN O2]**: either the same rule (the first version's `art_` ID) or a separately assigned lineage identifier. Either way, A8.5 applies to existing lineages.
+- **§A2, after the table:** `artifact_id` is added to the server-assigned fields that "MUST NOT be accepted from writers" (O1).
+- **§A2 `lineage_id` row and §A3.1:** unchanged wording: "`artifact_id` of the lineage's first version". For a new lineage that is its first `art_` identifier (O2). No separate lineage namespace.
 - **§A4.3:** append "The successor's `artifact_id` is assigned per A8. It is never derived from `old_id`."
-- **Revision history:** a 0.3 row (or 0.4, matching the release) summarising A8.
+- **Revision history:** a row for the release summarising A8, A5.6 and A5.7 (§5).
 
-### 3.2 MAK-0008 (MCP binding)
+### 3.2 MAK-0008 (MCP binding), identifier part
 
 - **§10.5a, replace the successor bullet with:**
   > Every tool that persists a record version assigns its `artifact_id` on the server (MAK-0005 §A8). Clients read the identifier from the result: the record returned by `mak4i_create` and `mak4i_supersede`, and `effects[].successor_artifact_id` and `resulting_heads` in the resolution record returned by `mak4i_resolve_conflict`. Supplying both a different `subject_key` and `release_subject_key: true` fails with `subject_key_change`, and so does releasing on a lineage that has no key.
 - **§10.1 table, `mak4i_create`:** "Create a record (new lineage); the server assigns its identifier."
-- **`mak4i_create` input:** the caller `artifact_id` is no longer the identity of the new record. **[OPEN O1]** decides whether the property is removed (closed inputs, §10.2, then reject it with `validation_error`) or kept for a transition. During a transition it is accepted but never used as the new identifier, and the result reports that.
-- **§9 error table, `artifact_exists`:** it cannot occur on the new create path. Whether it is kept for a transition or marked as no longer produced is **[OPEN O1]**. The code stays reserved either way (§9.5).
 - **§13.7 Writes, add:**
   > A client MUST NOT construct, guess or derive record identifiers. It MUST use the identifier returned by the server for any later reference, MUST NOT parse identifiers (MAK-0005 §A8.2), and MUST NOT order records by identifier.
-
-  How a client retries a create without creating a second record depends on **[OPEN O4]**.
-- **§13.9 Check before create:** rewritten together with the search and duplicate decisions **[OPEN O3, O6]**. This slice only removes any wording that suggests a client-chosen ID prevents duplicates.
 - **§14 change feed:** no text change. `artifact_id`, `lineage_id` and `previous_artifact_id` carry whatever identifiers the versions have, legacy or generated.
+- Create input, errors, retries and search: §5.
 
-### 3.3 MAK-0004 (conflict resolution)
+### 3.3 MAK-0004 (conflict resolution), identifier part
 
 - **§A7.4 merge, add:** "The new version's `artifact_id` is assigned by the server (MAK-0005 §A8), and is reported as the `successor_artifact_id` of `into_artifact_id` and in `resulting_heads`."
 - **§A7.5 separate_subjects, add:** the same for each candidate whose key changes.
 - **§A7.3 select_winner:** no change, because it persists no version (MAK-0005 §A8.4).
 - **§A8.2 step 1, add:** "The record created in state `pending` fixes the `successor_artifact_id` of every effect that will write a version. Steps 3 and 4, any retry and any recovery use those identifiers (MAK-0005 §A8.4)."
-- **§A8.5:** unchanged in this slice. See O3 and O5.
+- §A3.6 and §A8.5: changed by O3 and O5 (§5).
 
 ### 3.4 CONFORMANCE.md (proposed criteria; added when the standards text lands)
 
-| Criterion | Depends on |
+| Criterion | From |
 |---|---|
-| Every create, supersession, merge and separate-subjects version gets a new `art_` identifier in the A8.2 form, distinct from every version in the project. | settled |
-| A successor of a legacy head gets a generated identifier, keeps `lineage_id`, and has `supersedes` equal to the legacy identifier unchanged. | settled |
-| History of a mixed lineage returns every version in `version` order with its stored identifier. No identifier is rewritten. | settled |
-| A superseded legacy or generated identifier used as `old_id` fails `artifact_not_active`. A transformed identifier (suffix stripped or incremented) is not resolved. | settled |
-| A crash or retry of a multi-step supersession or resolution completes with the successor identifier fixed before the first durable step. No lineage gains two successors. | settled |
-| Possessing an identifier confers no access. The existing `access_denied` / `not_found` rules apply unchanged. | settled |
-| P1 "lineage_id = artifact_id" | **O2** |
-| P16 "create with an existing `artifact_id` fails `artifact_exists`" (replaced or removed) | **O1** |
-| Create retry, duplicate-subject and concurrency criteria | **O3, O4, O5** |
+| Every create, supersession, merge and separate-subjects version gets a new `art_` identifier in the A8.2 form, distinct from every version in the project. | §1 |
+| A successor of a legacy head gets a generated identifier, keeps `lineage_id`, and has `supersedes` equal to the legacy identifier unchanged. | §1 |
+| History of a mixed lineage returns every version in `version` order with its stored identifier. No identifier is rewritten. | §1 |
+| A superseded legacy or generated identifier used as `old_id` fails `artifact_not_active`. A transformed identifier (suffix stripped or incremented) is not resolved. | §1 |
+| A crash or retry of a multi-step supersession or resolution completes with the successor identifier fixed before the first durable step. No lineage gains two successors. | §1 |
+| Possessing an identifier confers no access. The existing `access_denied` / `not_found` rules apply unchanged. | §1 |
+| P1: a new lineage's `lineage_id` equals its first `art_` identifier. | O2 |
+| P16, replaced: a create that sends `artifact_id` fails `validation_error`, writes nothing, and reports the server-assigned reason. | O1 |
+| An ordinary create on an occupied subject fails `subject_exists` and writes nothing. Current identifiers are returned only to a caller with `read`. | O3 |
+| A competing create succeeds only when requested and authorized, and forms or extends a conflict. | O3, S1 |
+| The same principal, key and request returns the original record. The same key with a different request fails without writing. N concurrent identical requests create exactly one record. | O4 |
+| N concurrent ordinary creates on one free subject: exactly one succeeds and N−1 fail `subject_exists`. No competing record is persisted. Test on every store the implementation supports. | O5 |
+| Search finds a record by exact `subject_key` and by title text without tag knowledge. It returns only current, authorized records as summaries, in the §5 order. | O6 |
 
 ### 3.5 Schemas
 
-No schema in `schemas/*.schema.json` changes in this PR. Proposed changes and their dependencies:
+No schema in `schemas/*.schema.json` changes in this PR. Proposed changes once the standards text lands:
 
-| Schema change | Status |
+| Schema change | From |
 |---|---|
-| Keep `common.schema.json#/$defs/artifactId` (any non-empty string) for every record field and every reference input (`old_id`, candidates, `lineage_id`, history). Narrowing it would reject legacy IDs. | settled: **no change** |
-| Add `$defs/assignedArtifactId` (`^art_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`), for use only where a value is always newly assigned. | proposed, independent of the open choices; spelling to confirm in review |
-| Use `assignedArtifactId` for `artifact_id` in the `mak4i_create` and `mak4i_supersede` outputs. Legacy reads keep `artifactId`. | proposed. For `mak4i_create` it also depends on **O1** (a transition that could return a caller-named record) and **O4** (a retry returning a record created before the release). |
-| `mak4i_create.input`: drop `artifact_id` from `required` and remove it, or keep it as optional and deprecated. | **O1** |
-| `mak4i_create.input`: retry key property (name, length and pattern, for example by analogy to the resolution `idempotency_key` of 8–200 characters). | **O4** |
-| `mak4i_create.input`: an explicit way to request an intentional competing record, and the default when the subject is occupied. | **O3** |
-| `mak4i_create.output`: an indicator of whether the record was newly created or returned by a recognised retry, and any transition notice. Today the output is exactly `project-record.schema.json`, so either needs a wrapper or a new top-level field. | **O1, O4** |
-| `error.schema.json` and MAK-0008 §9: new codes, for example an occupied subject or a reused retry key with different parameters. The validator requires the error table and the enum to change together. | **O3, O4** |
-| `lineage_id` for new lineages: no format change if O2 keeps "first version's ID". A separate identifier would still validate as `artifactId`, but A2, A3.1 and CONFORMANCE P1 change. | **O2** |
-| `mak4i_search` inputs and outputs (text, exact subject, limit, compact results, ranking). | **O6** |
+| Keep `common.schema.json#/$defs/artifactId` (any non-empty string) for every record field and every reference input. Narrowing it fails 44 existing example checks (tested on a scratch copy). | §1: **no change** |
+| Add `$defs/assignedArtifactId` = `^art_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`. | A8.2 |
+| `mak4i_supersede` output: `artifact_id` uses `assignedArtifactId`. `mak4i_create` output also uses it, except a retry may return a record created before the upgrade **[OPEN S4]**. | A8 |
+| `mak4i_create.input`: remove `artifact_id` (closed inputs then reject it). | O1 |
+| `mak4i_create.input`: add `idempotency_key` (string, 8–200 characters, same as resolutions). | O4 |
+| `mak4i_create.input`: add the competing-record option, e.g. `allow_competing: boolean`, default `false` (name to confirm). | O3 |
+| `mak4i_create.output`: a replay marker, if one is wanted **[OPEN S3]**. The output today is exactly `project-record.schema.json`, so a marker needs a wrapper or an allowed extra field. | O4 |
+| `error.schema.json` and MAK-0008 §9: new codes `subject_exists` and `idempotency_key_reused`. The validator requires the error table and the enum to change together. `artifact_exists` stays in the enum, with the row marked "not produced by `mak4i_create` since this revision". | O1, O3, O4 |
+| `error.schema.json`: an optional `details` object, so `subject_exists` can carry current identifiers for readers. Additive. | O3 |
+| `mak4i_search`: inputs `text`, `subject_key`, `limit`, `detail` (`summary` / `full`); output items `oneOf` a summary record or a full record. | O6 |
 | `x-mak4i-schema-version` and SPEC.md MAJOR.MINOR bump. | release step |
 
 ## 4. Acceptance examples
@@ -118,9 +127,9 @@ In these examples `art_…` stands for a fresh server-assigned identifier. Dates
 
 | # | Case | Expected result |
 |---|---|---|
-| 1 | Create through the new contract. | Server returns a fresh `art_…` ID, `version = "1.0"`, `status = active`, and `created_at = updated_at` set by the server. `lineage_id` follows **O2**. |
+| 1 | Create through the new contract. | Server returns a fresh `art_…` ID with `lineage_id` equal to it, `version = "1.0"`, `status = active`, and `created_at = updated_at` set by the server. |
 | 2 | Supersede legacy head `release-plan-v2-v2-v2` (version 4.0, lineage `release-plan`). | Successor `art_A`, `version = "5.0"`, `lineage_id = "release-plan"`, `supersedes = "release-plan-v2-v2-v2"`. The old head becomes `superseded` with `superseded_by = "art_A"`. Its ID, content and `created_at` are unchanged. |
-| 3 | Supersede the legacy dated head `pipeline-doe-20261030`. | Successor `art_B`. No identifier ending in `-20261031` (or any other derived value) is produced. The record's dates stay in content, title or tags as written, and the write time is in `created_at`. |
+| 3 | Supersede the legacy dated head `pipeline-doe-20261030`. | Successor `art_B`. No identifier ending in `-20261031` (or any other derived value) is produced. Dates stay in content, title or tags as written, and the write time is in `created_at`. |
 | 4 | Supersede `art_A` (from case 2) again. | Successor `art_C`, `version = "6.0"`, same lineage, `supersedes = "art_A"`. |
 | 5 | `mak4i_history` of lineage `release-plan` after cases 2 and 4. | Returns, in `version` order, `release-plan`, `release-plan-v2`, `release-plan-v2-v2`, `release-plan-v2-v2-v2`, `art_A`, `art_C`, each exactly as stored. `mak4i_get_current` returns only `art_C`. |
 | 6 | `mak4i_supersede` with `old_id` = `release-plan-v2-v2-v2` or `art_A` after case 4. | `artifact_not_active`. Nothing is written and no fork is created. |
@@ -129,12 +138,24 @@ In these examples `art_…` stands for a fresh server-assigned identifier. Dates
 | 9 | `separate_subjects` where legacy candidate `db-choice-20261012` gets a new key. | Its successor gets a fresh `art_…` ID with the same lineage. A candidate that keeps its key is `unchanged` and gets no new ID. |
 | 10 | `select_winner`. | No new version and no new ID. Losers become `withdrawn` under their existing IDs. |
 | 11 | A supersession or resolution crashes after the old head was marked superseded (or the pending record was written) but before the successor was stored. | Recovery or an identical retry writes the successor under the identifier already recorded. No second successor and no other new ID appear. |
-| 12 | Writes that are refused (`stale_head`, `artifact_not_active`, `subject_key_change`, `validation_error`, `access_denied`). | No version is persisted and no identifier is visible. A later successful write never reuses an identifier that was ever assigned. |
+| 12 | Writes that are refused (`stale_head`, `artifact_not_active`, `subject_key_change`, `subject_exists`, `validation_error`, `access_denied`). | No version is persisted and no identifier is visible. A later successful write never reuses an identifier that was ever assigned. |
 | 13 | A legacy record created by an older client was named `art_9b1…` by hand. | It stays valid. The server never assigns that identifier to another version (A8.3). |
 | 14 | Read or write outside project authority with a valid identifier. | Existing authorization applies. Holding an identifier does not grant access, and a denial does not reveal that it exists. |
-| 15 | A legacy client sends `mak4i_create` with `artifact_id`. | **[OPEN O1]**. In every option, the supplied value never becomes the identifier of a newly created record. |
-| 16 | The same create is sent twice because a response was lost. | **[OPEN O4]** |
-| 17 | Two *different* create requests claim the same `(artifact_type, subject_key)` at the same moment. | **[OPEN O3/O5]**. Today: both succeed and form a visible conflict (MAK-0004 §A8.5). |
+| 15 | A legacy client sends `mak4i_create` with `artifact_id`. | `validation_error`, reason `server_assigned_id`, with a message saying to omit it and read `artifact_id` from the result. Nothing is written. Its legacy IDs still work for lookup and history. |
+| 16 | Create on subject `(cache_decision, primary-cache)`, whose current head is `art_F`. Caller has `write` and `read`. | `subject_exists`, nothing written, `details.current_artifact_ids = ["art_F"]`. The caller supersedes `art_F` instead. |
+| 17 | Same as case 16, but the caller has `write` only. | `subject_exists`, nothing written, no identifiers, titles or content. The subject's existence is disclosed, as in MAK-0004 D-007. |
+| 18 | Same subject as case 16, created with the competing-record option by an authorized caller **[OPEN S1]**. | Succeeds and forms a conflict with `art_F` (today's §A3.6 behavior). |
+| 19 | Create on a subject that is already in an open conflict (two or more heads). | `subject_exists`. `details` lists only the readable candidates, plus `hidden_count`. |
+| 20 | Create on a subject whose only lineage released its key (`released_subject_key` set), or whose lineage was withdrawn. | Succeeds. The subject is free. |
+| 21 | The same create (same principal, `idempotency_key`, parameters) is sent twice because a response was lost. | The second call returns the original record, with the same `artifact_id` and nothing new written, even though the subject is now occupied by that record. The key is checked before the subject. |
+| 22 | The same principal reuses an `idempotency_key` with a different title or content. | `idempotency_key_reused`, nothing written. |
+| 23 | A different principal uses the same `idempotency_key` string. | Treated as a different request. Keys are scoped to the principal. |
+| 24 | 8 concurrent identical requests with one key. | Exactly one record. All 8 calls return it. |
+| 25 | 8 concurrent *different* ordinary creates (different keys or none) on one free subject. | Exactly one succeeds. 7 fail `subject_exists`. No competing record is persisted, and no conflict appears. |
+| 26 | A create races with a `separate_subjects` resolution that assigns the same key, or with a release. | The subject ends with one head. The losing write fails (`subject_exists`, or `subject_collision` for the resolution) and writes nothing. |
+| 27 | Records without `subject_key`. | Never refused for occupancy. Retries are protected only by `idempotency_key`. |
+| 28 | `mak4i_search` with `text: "Accel"` and no tags. | Returns current, authorized records whose title, subject key, tags or content match, as summaries ranked per §5 (O6). Unreadable projects and other organizations are never searched. |
+| 29 | `mak4i_search` with `subject_key: "primary-cache"`. | The exact normalized match, ranked first. Conflict candidates are returned with their conflict marked **[OPEN S7]**. |
 
 ### 4.2 Example records added in this PR
 
@@ -144,24 +165,118 @@ These validate under the current v0.3 schemas, which shows that the identity rul
 - [`mak4i_history.output.valid-mixed-legacy-and-generated.json`](../schemas/examples/mcp-tools/mak4i_history.output.valid-mixed-legacy-and-generated.json) (cases 2, 4 and 5, shortened)
 - [`valid-merge-generated-successor.json`](../schemas/examples/resolution-record/valid-merge-generated-successor.json) (case 8)
 
-## 5. Decisions still needed (not decided in this draft)
+Examples for O1–O6 need the schema changes in §3.5 and are added with them.
 
-| | Decision | Options on the table | What it changes |
+## 5. Owner direction 2026-11-10 (O1–O6) and proposed text
+
+| | Direction |
+|---|---|
+| **O1** Legacy create sends `artifact_id` | Reject it with a clear upgrade message under the new contract. Document what happens to existing clients before switching them over. Legacy IDs still work for lookups and history. |
+| **O2** New lineage ID | The first record's `art_<uuid>` is the stable lineage ID. No `lin_` namespace. |
+| **O3** Subject already exists | Reject by default. Return the current record ID only if the caller can read it. Allow a competing record only when it is explicitly requested and authorized. |
+| **O4** Retry key | `idempotency_key` is optional on create. The same caller, key and request return the original result. Reusing the key with a different request returns an error. |
+| **O5** Simultaneous creates | Enforce O3 atomically: two ordinary creates for the same subject yield one success and one conflict response, without persisting a competing record. Compare implementation options; the contract does not mandate a lock. |
+| **O6** Search defaults | Exact `subject_key` lookup and text search. Default to current, authorized records with short summaries, rank exact subject matches first, use a stable tie-breaker, and keep full content available through retrieval. |
+
+*Note: the O5 text received was cut off mid-sentence ("…without persisting a competing recode compare implementation options…"). It is read here as above. Please confirm.*
+
+### 5.1 O1: MAK-0008
+
+> **§10.2 addition.** `mak4i_create` has no `artifact_id` input. A request that supplies one MUST be rejected with `validation_error` and reason `server_assigned_id`, and nothing is written. The message SHOULD tell the client to omit the argument and read `artifact_id` from the result. Legacy identifiers remain valid in every read and reference input (MAK-0005 §A8.5).
+
+- §9.2: add `server_assigned_id` as the second defined `reason` (on `validation_error`).
+- §9 table: the `artifact_exists` row reads "Not produced by `mak4i_create` since this revision. The code stays reserved (§9.5)."
+- Backward / Forward Compatibility: "A v0.3 client that sends `artifact_id` on create is rejected. Clients that read the live tool schema (MCP `tools/list`) adapt without change. Scripts, CLIs and SDKs that pass an ID must drop it."
+- "Document before switching over": no per-request protocol negotiation exists, so the switch happens at the server upgrade. Before an installation is upgraded, the Reference release notes and upgrade guide list the affected clients and the change: the CLI create command, SDK calls, and stored scripts. Production switches only at an owner-approved upgrade.
+
+### 5.2 O2: MAK-0005 §A3.1
+
+No text change: "`lineage_id = artifact_id`". With A8 it becomes the first `art_` identifier.
+
+### 5.3 O3: MAK-0005 new §A5.6 and MAK-0004 §A3.6 amendment
+
+> **A5.6 Occupied subjects.** A subject `(artifact_type, normalized subject_key)` is *occupied* while at least one lineage has a current head carrying that key (MAK-0004 §A3.1), including the candidates of an open or resolving conflict. A lineage that released the key (A5.4), or whose head was withdrawn, does not occupy it. A create naming an occupied subject MUST fail with `subject_exists` and write nothing, unless the request asks for a competing record (A5.7). If the caller holds `read` on the project, the error's `details.current_artifact_ids` lists the current heads of the subject in `artifact_id` order, and `details.hidden_count` counts any heads it cannot read. A caller without `read` receives neither: the subject's occupancy is disclosed, but not its identity (MAK-0004 D-007, MAK-0006 §5.1). A create without a `subject_key` is never refused for occupancy.
+>
+> **A5.7 Competing records.** A create MAY ask for a competing record (`allow_competing: true`). If the caller is authorized for it **[OPEN S1]**, the create succeeds on an occupied subject and creates or extends a conflict exactly as MAK-0004 §A3.6 describes. Otherwise it fails with `access_denied` and writes nothing.
+
+- MAK-0004 §A3.6, replace the last two sentences: "A create that names an occupied subject is refused (MAK-0005 §A5.6), unless it asks for a competing record (§A5.7). A competing record then adds a candidate, creating or extending the conflict. Supersessions are never refused merely because they keep a candidate in conflict."
+- MAK-0008 §9: new row `subject_exists`: "A create named an occupied subject (MAK-0005 §A5.6); nothing was written. Supersede the current record, or request a competing record. Retry: No."
+- MAK-0008 §13.9: no longer "guidance only" for subjects. A client SHOULD still search first (O6). On `subject_exists` it SHOULD supersede the returned head rather than ask for a competing record, unless the user intends a competing decision.
+
+### 5.4 O4: MAK-0005 new §A8.8 and MAK-0008 §13.7
+
+> **A8.8 Create retries.** A create MAY carry an `idempotency_key` (8–200 characters). Keys are scoped to (organization, project, authenticated principal). The first create with a key binds the key to the request parameters and the resulting record. A later create with the same key and identical parameters MUST return that record and write nothing, whatever has happened to the subject since. With different parameters it MUST fail with `idempotency_key_reused` and write nothing. Concurrent requests with one key MUST produce at most one record. The key is checked before subject occupancy (A5.6). Keys are retained for **[OPEN S2]**.
+
+- "Identical parameters" means the normalized create input other than `idempotency_key`: type, title, content, rationale, tags as a set, the normalized subject key, and `allow_competing`. **[OPEN S5]**: whether a tag-order difference counts.
+- MAK-0008 §13.7: "A client SHOULD send an `idempotency_key` on `mak4i_create`, and MUST reuse the same key and parameters when retrying after an unknown outcome." This matches the existing resolution rule.
+- MAK-0008 §9: new row `idempotency_key_reused`: "The key was already used by this principal for a different create; nothing was written. Retry: No."
+
+### 5.5 O5: MAK-0004 §A8.5, replaced
+
+> **A8.5 Simultaneous writes.** The occupancy check of MAK-0005 §A5.6 and the create MUST take effect as one atomic step with respect to every other write that can occupy or free the subject: creates, supersessions that release a key, and resolutions that assign keys (§A7.5) or withdraw heads. Of any number of concurrent ordinary creates on one free subject, exactly one succeeds and the others fail with `subject_exists`, persisting nothing. Competing creates (MAK-0005 §A5.7) are not serialized against each other, so all of them succeed and form a conflict. The mechanism is implementation-defined. Concurrent supersessions of one head follow MAK-0005 §A4.2.
+
+- CONFORMANCE: a concurrency criterion with N parallel ordinary creates (case 25). An implementation states the stores and deployment shapes it claims it for, e.g. multi-instance.
+
+### 5.6 O6: MAK-0008 §10.1, §10.5a, §10.6
+
+> **`mak4i_search` lookup.** Optional inputs:
+> - `text`: case-insensitive; a record matches when every whitespace-separated term occurs in its title, subject key, tags or content.
+> - `subject_key`: exact match on the normalized key (MAK-0005 §A5.2).
+> - `limit`: default 20, maximum 100.
+> - `detail`: `summary` (default) or `full`.
+>
+> All filters combine with AND. The default `status = "active"` and the authorization rules are unchanged (§10.6). Only projects the caller can `read` are searched.
+>
+> **Ranking**, in order:
+> 1. exact `subject_key` match;
+> 2. a `text` match in the title;
+> 3. a match in the subject key or tags;
+> 4. a match in the content only.
+>
+> Ties are broken by `updated_at` (newest first), then by `artifact_id` in ascending order. Without `text` or `subject_key`, results are ordered by `updated_at` (newest first), then `artifact_id`.
+>
+> **A summary** carries `artifact_id`, `lineage_id`, `artifact_type`, `title`, `subject_key`, `tags`, `status`, `version`, `updated_at` and a `snippet` of at most 200 characters of the matching content. Clients retrieve full content with `mak4i_get_current` or `mak4i_history`, or with `detail: "full"`. Matching is deterministic text comparison only; no semantic matching.
+
+- **[OPEN S6]** Changing the default to summaries changes the result of *every* existing `mak4i_search` call, including type- and tag-only searches that clients read content from today. Two options:
+  1. summaries for every call (one rule, a breaking change listed under O1's upgrade notes);
+  2. summaries only when `text` or `subject_key` is given.
+- `limit` defaults to 20, a breaking change for clients that expect every match today. The same choice applies.
+
+## 6. Narrower questions the direction leaves open
+
+| | Question | Options | Default used in the text unless changed |
 |---|---|---|---|
-| **O1** | A legacy create request that sends `artifact_id` | Reject with `validation_error` (closed inputs), or a documented transition window in which the value is accepted, ignored and reported. In either case it never controls the new ID. | `mak4i_create` input and output schema, the `artifact_exists` row, CONFORMANCE P16, deprecation notes |
-| **O2** | ID for a new lineage | `lineage_id` = first version's `art_` ID (current rule), or a separately assigned lineage identifier | MAK-0005 §A2/§A3.1, CONFORMANCE P1, Reference lineage creation |
-| **O3** | A create whose `(artifact_type, subject_key)` already has a current head | Default refusal with a pointer to the head, or today's visible conflict. How a client asks for an intentional competing record. | `mak4i_create` input, error codes, MAK-0004 §A3.6/§A8.5, §13.9 |
-| **O4** | Retry-key semantics | Key scope (principal, project), lifetime, how a mismatched replay is reported, whether a replay returns the original record and how it is marked, and whether the key affects ID assignment | `mak4i_create` input and output, error codes, MAK-0005 §A8.4, §13.7 |
-| **O5** | Guarantee for simultaneous creates on one subject | At most a visible conflict, or exactly one winner (atomic check-and-create on the subject) | MAK-0004 §A8.5, Reference store design, concurrency tests |
-| **O6** | Search | Text and exact-subject lookup inputs, ranking, result limits and compact versus full default responses | `mak4i_search` schema, §10.5a/§10.6, §13.9 |
+| **S1** | Who is "authorized" to request a competing record? | (a) any caller with `write`, by asking explicitly; (b) `write` + `read`, so the caller has seen what it competes with; (c) `write` + `resolve`; (d) a new grant permission | none; marked **[OPEN S1]** |
+| **S2** | Retention of create idempotency keys | (a) for the life of the record, stored with it; (b) a fixed window, e.g. 7 days like the change feed | none; marked **[OPEN S2]** |
+| **S3** | Is a replayed create marked in the result? | (a) no, the same record is returned unchanged; (b) yes, e.g. `replayed: true`, which changes the output schema | none |
+| **S4** | Can a retry return a record created before the upgrade? | Only if old creates carried keys, which they did not, so no. Confirm so the create output can use `assignedArtifactId`. | no |
+| **S5** | Request equality for retries | Tags as a set or an ordered list; whitespace in text | tags as a set, text exact |
+| **S6** | Summary/limit default for searches without `text` or `subject_key` | see §5.6 | none |
+| **S7** | Should search mark conflict candidates? | (a) add a `conflict_id` to summaries; (b) leave to `mak4i_get_current` | none |
+| **S8** | O5 wording: confirm the reading of the truncated sentence (§5) | | as written in §5 |
 
-**Retry deduplication and subject concurrency are separate problems (O4 vs O3/O5).** A retry key recognises the *same* request sent again, for example after a lost response, and returns its one result. It does nothing about two *different* requests, from different clients or with different keys or none, that both claim one subject at the same moment. Preventing that needs a subject rule (O3), and to *guarantee* a single winner the check and the create must be one atomic step (O5). A pre-check alone races. The reverse is also true: a subject rule never makes a retry safe for a record without a `subject_key`. The contract has to state both guarantees separately, and the tests have to exercise each one on its own.
+## 7. O5: Reference implementation options (comparison, no code)
 
-Routine field updates without a full supersede, general lineage withdrawal (#4) and cross-type linking are outside this identity slice.
+The Reference has two artifact stores, LocalJSON (one server per installation, but CLI commands run alongside it) and GCS (several Cloud Run instances). Every deployment also has the control-plane SQL database: SQLite locally, Postgres in production. It already holds resolution records and the change feed, with pending/verify reconciliation at start-up.
 
-## 6. Compatibility and rollout notes
+| Option | How | For | Against | Effort |
+|---|---|---|---|---|
+| **A. Subject claim in the artifact store** | One claim object per `(org, project, type, key)`, written with the store's existing create-if-absent (`put_new`: LocalJSON lock, GCS `if_generation_match=0`) and taken over with compare-and-set (`put_if_match`). The claim names its lineage. A claim is valid only while that lineage's current head still carries the key, so a release, a withdrawal or a crash before the record write leaves a stale claim that the next create takes over by CAS. Legacy subjects without a claim are checked by scanning current heads before the claim is written. | Same primitives and tests as records, so LocalJSON/GCS parity holds. No migration. No release bookkeeping, because staleness is checked against the records. | A second object type in the store, which queries must skip. Resolutions that assign keys must claim through the same path. | ~1.5 days incl. multi-process tests |
+| **B. Unique row in the control-plane DB** | A `subject_claims` table with a unique `(org, project, type, key)` constraint. The claim is inserted in state pending, the record is written, then the claim is committed, with start-up reconciliation like the change feed. | The database enforces uniqueness. A pattern the Reference already uses. | Two systems must agree, so the crash window needs reconciliation. Schema migration on Postgres and SQLite. | ~2 days |
+| **C. Process or file lock around check-and-create** | A `FileLock` or in-process mutex per project. | Smallest change. | Not valid for GCS with several instances. LocalJSON only. | ~0.5 day, LocalJSON only |
 
-- The supersede side needs no tool-schema change: §10.5a already makes successor IDs opaque. A client that followed it keeps working. A client that *predicted* successor names (`x-v3`) was already non-conforming and now visibly breaks.
-- The create side is the only breaking surface for clients (O1). It ships in the same protocol release as O3–O6, not on its own.
-- Legacy data needs no migration. Mixed lineages are normal and permanent.
+Recommendation: **A**. It is atomic on both stores through primitives they already rely on, and it needs no cross-system reconciliation. LocalJSON's cross-process compare-and-set is tested in `test_store_compare_and_set_admits_exactly_one_writer_across_processes`. GCS uses generation preconditions, which are tested today only against the fake client, so a test against a real bucket belongs in the P1 acceptance run. B is the fallback if a claim object in the store is unwanted. C does not meet O5 for GCS.
+
+Revised effort for P1 with O1–O6 as directed: about 6.5–7.5 working days, including protocol text, schemas, vectors and Reference. O5 adds about 1.5 days to the Nov 5 estimate.
+
+## 8. Compatibility and rollout notes
+
+- The supersede side needs no tool-schema change: §10.5a already makes successor IDs opaque. A client that *predicted* successor names (`x-v3`) was already non-conforming and now visibly breaks.
+- Breaking changes for clients, all in one protocol release and listed in the upgrade notes:
+  - create without `artifact_id` (O1);
+  - occupied subjects are refused (O3/O5);
+  - search defaults, depending on S6.
+- Legacy data needs no migration. Mixed lineages are normal and permanent. Existing open conflicts are untouched and are resolved as today.
 - Reference runtime changes are out of scope for this PR. Server-generated IDs ship in the Reference together with P1 search-before-create and duplicate handling (talvikai/mak4i-reference#66).
+
+Routine field updates without a full supersede, general lineage withdrawal (#4) and cross-type linking are outside this slice.
