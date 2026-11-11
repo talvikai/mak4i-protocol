@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/project-record.schema.json",
   "title": "Governed project record version",
   "description": "One version of a governed project record (MAK-0005 Part A).",
-  "x-mak4i-schema-version": "0.3.0",
+  "x-mak4i-schema-version": "0.4.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -339,5 +339,78 @@
   ],
   "patternProperties": {
     "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+  },
+  "$defs": {
+    "summary": {
+      "title": "Project record summary",
+      "description": "A search lookup result (MAK-0008 \u00a710.5b). Full content is retrieved with mak4i_get_current, mak4i_history or detail = \"full\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "lineage_id",
+        "artifact_type",
+        "title",
+        "status",
+        "version",
+        "updated_at",
+        "snippet"
+      ],
+      "properties": {
+        "artifact_id": {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        "lineage_id": {
+          "$ref": "common.schema.json#/$defs/artifactId"
+        },
+        "artifact_type": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/nonEmptyString"
+        },
+        "subject_key": {
+          "anyOf": [
+            {
+              "$ref": "common.schema.json#/$defs/subjectKey"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/nonEmptyString"
+          }
+        },
+        "status": {
+          "enum": [
+            "active",
+            "superseded",
+            "withdrawn"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*\\.0$"
+        },
+        "updated_at": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        "snippet": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "conflict_id": {
+          "$ref": "common.schema.json#/$defs/conflictId",
+          "description": "Present when the record is a candidate of an open or resolving conflict; the record is not the settled answer for its subject (MAK-0004 \u00a7A6.1)."
+        }
+      },
+      "patternProperties": {
+        "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+      }
+    }
   }
 }

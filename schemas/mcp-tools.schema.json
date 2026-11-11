@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/mcp-tools.schema.json",
   "title": "MAK4I MCP tool catalog",
   "description": "Input and output schemas of the MAK4I MCP tools (MAK-0008 §10). Implementations MUST NOT accept identity/provenance arguments.",
-  "x-mak4i-schema-version": "0.3.0",
+  "x-mak4i-schema-version": "0.4.0",
   "$defs": {
     "mak4i_whoami": {
       "type": "object",
@@ -242,6 +242,27 @@
                 "withdrawn"
               ],
               "default": "active"
+            },
+            "text": {
+              "$ref": "common.schema.json#/$defs/nonEmptyString",
+              "description": "Lookup: every whitespace-separated term must occur in title, subject key, tags or content (MAK-0008 §10.5b)."
+            },
+            "subject_key": {
+              "$ref": "common.schema.json#/$defs/subjectKey",
+              "description": "Lookup: exact match on the normalized subject key."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Default 20 for a lookup; no default otherwise (MAK-0008 §10.5b)."
+            },
+            "detail": {
+              "enum": [
+                "summary",
+                "full"
+              ],
+              "description": "Default summary for a lookup, full otherwise (MAK-0008 §10.5b)."
             }
           }
         },
@@ -255,7 +276,14 @@
             "result": {
               "type": "array",
               "items": {
-                "$ref": "project-record.schema.json"
+                "oneOf": [
+                  {
+                    "$ref": "project-record.schema.json"
+                  },
+                  {
+                    "$ref": "project-record.schema.json#/$defs/summary"
+                  }
+                ]
               }
             }
           },
@@ -302,7 +330,6 @@
           "additionalProperties": false,
           "required": [
             "project",
-            "artifact_id",
             "artifact_type",
             "title",
             "content"
@@ -310,9 +337,6 @@
           "properties": {
             "project": {
               "$ref": "common.schema.json#/$defs/projectId"
-            },
-            "artifact_id": {
-              "$ref": "common.schema.json#/$defs/artifactId"
             },
             "artifact_type": {
               "$ref": "common.schema.json#/$defs/nonEmptyString"
@@ -334,11 +358,31 @@
             },
             "subject_key": {
               "$ref": "common.schema.json#/$defs/subjectKey"
+            },
+            "idempotency_key": {
+              "$ref": "common.schema.json#/$defs/idempotencyKey"
+            },
+            "allow_competing": {
+              "type": "boolean",
+              "default": false,
+              "description": "Request a competing record on an occupied subject; requires write and read (MAK-0005 §A5.7)."
             }
-          }
+          },
+          "description": "artifact_id is not an input: the server assigns it (MAK-0005 §A8.1, MAK-0008 §10.2)."
         },
         "output": {
-          "$ref": "project-record.schema.json"
+          "allOf": [
+            {
+              "$ref": "project-record.schema.json"
+            },
+            {
+              "properties": {
+                "artifact_id": {
+                  "$ref": "common.schema.json#/$defs/assignedArtifactId"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -385,7 +429,18 @@
           }
         },
         "output": {
-          "$ref": "project-record.schema.json"
+          "allOf": [
+            {
+              "$ref": "project-record.schema.json"
+            },
+            {
+              "properties": {
+                "artifact_id": {
+                  "$ref": "common.schema.json#/$defs/assignedArtifactId"
+                }
+              }
+            }
+          ]
         }
       }
     },

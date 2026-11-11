@@ -1,0 +1,12 @@
+{
+  "error": {
+    "code": "subject_exists",
+    "message": "Subject occupied.",
+    "retryable": false,
+    "details": {
+      "current_titles": [
+        "Cache"
+      ]
+    }
+  }
+}

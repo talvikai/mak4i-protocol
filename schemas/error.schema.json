@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/error.schema.json",
   "title": "Tool error",
   "description": "structuredContent of a failed tool result (MAK-0008 §9).",
-  "x-mak4i-schema-version": "0.3.0",
+  "x-mak4i-schema-version": "0.4.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -26,6 +26,8 @@
             "validation_error",
             "not_found",
             "artifact_exists",
+            "subject_exists",
+            "idempotency_key_reused",
             "artifact_not_active",
             "stale_head",
             "subject_key_change",
@@ -51,9 +53,31 @@
           "type": "string",
           "pattern": "^[a-z_]+$",
           "examples": [
-            "client_not_permitted"
+            "client_not_permitted",
+            "server_assigned_id"
           ],
           "description": "More specific cause within `code` (MAK-0008 \u00a79.2). Clients ignore unknown reasons."
+        },
+        "details": {
+          "type": "object",
+          "description": "Structured data defined per code (MAK-0008 §9.2). For subject_exists, present only when the caller holds read (MAK-0005 §A5.6).",
+          "additionalProperties": false,
+          "properties": {
+            "current_artifact_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/artifactId"
+              },
+              "description": "Readable current heads of the occupied subject, in artifact_id order. May hold legacy identifiers."
+            },
+            "hidden_count": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "patternProperties": {
+            "^x_[a-z0-9]+_[a-z0-9_]+$": {}
+          }
         }
       }
     }

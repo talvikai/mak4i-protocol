@@ -1,5 +1,5 @@
 {
-  "artifact_id": "cache-red",
+  "artifact_id": "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61",
   "artifact_type": "caching_decision",
   "organization_id": "org_1",
   "project": "prj_1",
@@ -11,7 +11,7 @@
   ],
   "status": "active",
   "version": "1.0",
-  "lineage_id": "cache-red",
+  "lineage_id": "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61",
   "supersedes": null,
   "superseded_by": null,
   "subject_key": "primary-cache",

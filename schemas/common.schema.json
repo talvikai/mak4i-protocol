@@ -3,7 +3,7 @@
   "$id": "https://raw.githubusercontent.com/talvikai/mak4i-protocol/main/schemas/common.schema.json",
   "title": "MAK4I common definitions",
   "description": "Shared definitions used by the MAK4I schemas (MAK-0004, MAK-0005, MAK-0006, MAK-0008, MAK-0009).",
-  "x-mak4i-schema-version": "0.3.0",
+  "x-mak4i-schema-version": "0.4.0",
   "$defs": {
     "timestamp": {
       "type": "string",
@@ -25,7 +25,13 @@
       "$ref": "#/$defs/nonEmptyString"
     },
     "artifactId": {
-      "$ref": "#/$defs/nonEmptyString"
+      "$ref": "#/$defs/nonEmptyString",
+      "description": "Any record identifier, legacy or server-assigned (MAK-0005 \u00a7A8.5). Never narrowed, so legacy identifiers stay valid in every reference."
+    },
+    "assignedArtifactId": {
+      "type": "string",
+      "pattern": "^art_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Server-assigned record identifier: `art_` + canonical lowercase hyphenated UUID (MAK-0005 \u00a7A8.2). Opaque; clients MUST NOT parse it."
     },
     "agentId": {
       "type": "string",
@@ -187,6 +193,12 @@
         }
       },
       "description": "Verified client identity derived from the authentication (MAK-0006 \u00a75.7.1). `id` is a credential_id for kind credential and an OAuth client_id (pre-registered or metadata-document URL) for kind oauth_client."
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 200,
+      "description": "Client-chosen retry key (MAK-0004 \u00a7A8.4, MAK-0005 \u00a7A8.8)."
     }
   }
 }

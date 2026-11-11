@@ -1,0 +1,19 @@
+{
+  "result": [
+    {
+      "artifact_id": "cache-red",
+      "lineage_id": "cache-red",
+      "artifact_type": "caching_decision",
+      "title": "Cache",
+      "subject_key": "primary-cache",
+      "tags": [
+        "cache"
+      ],
+      "status": "active",
+      "version": "1.0",
+      "updated_at": "2026-10-10T12:00:00Z",
+      "snippet": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "conflict_id": "cfl_0123456789abcdef0123456789abcdef"
+    }
+  ]
+}

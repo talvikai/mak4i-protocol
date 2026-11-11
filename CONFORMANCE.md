@@ -1,9 +1,9 @@
 # MAK4I Conformance
 
 **Status:** Draft  
-**Version:** 0.3  
+**Version:** 0.4  
 **Created:** August 2026  
-**Last Updated:** 2026-10-16
+**Last Updated:** 2026-11-11
 
 ---
 
@@ -11,7 +11,7 @@
 
 An implementation claims conformance **per profile and protocol
 version**: "conformant to *Server: Project Records* and *Transport: HTTP
-+ OAuth* at protocol 0.3". It backs the claim with evidence for every
++ OAuth* at protocol 0.4". It backs the claim with evidence for every
 criterion of those profiles, for example its own tests mapped one-to-one
 to the criterion ids below. It reports the claimed profiles in
 `mak4i_whoami.protocol.profiles`
@@ -26,14 +26,14 @@ described as "MAK4I Certified".
 
 | Profile (`profiles` value) | Applies to | Requires |
 |---|---|---|
-| **Server: Project Records** (`server-project-records`) | Servers storing governed records | All criteria of MAK-0005 Part A (P), MAK-0004 Part A (C), MAK-0006 (I), and MAK-0008 tool, error and catalog criteria (M15, M17, M19, M20, M34–M37) |
+| **Server: Project Records** (`server-project-records`) | Servers storing governed records | All criteria of MAK-0005 Part A (P), MAK-0004 Part A (C), MAK-0006 (I), and MAK-0008 tool, error and catalog criteria (M15, M17, M19, M20, M34–M37, M40) |
 | **Server: Client policies** (`server-client-policies`, optional) | Servers offering client-scoped project access (MAK-0006 §5.7) | CP1–CP12 plus the server profile |
 | **Transport: stdio** (`transport-stdio`) | Servers offering stdio | I17 plus the server profile |
 | **Transport: HTTP + credential** (`transport-http-credential`) | Servers offering Streamable HTTP with principal credentials | M1 (with OAuth disabled: `realm` challenge), M7, M11, M14, M18, M21, M22, M38, M39 |
 | **Transport: HTTP + OAuth** (`transport-http-oauth`) | Servers offering the OAuth service | All M criteria not listed elsewhere, including M16 (two real clients) |
 | **OAuth option: CIMD** (`oauth-cimd`) / **DCR** (`oauth-dcr`) | Servers enabling these registration modes | M12, M32 for the enabled mode |
 | **Server: Change feed** (`server-change-feed`), optional | Servers offering the change feed and MCP resources (MAK-0008 §14) | F1–F14, plus the server profile |
-| **Client/SDK** (`client-sdk`) | Clients and SDKs | K1–K12 |
+| **Client/SDK** (`client-sdk`) | Clients and SDKs | K1–K13 |
 | **Artifact** (`artifact`) | MAK-0001 packaging metadata documents | A1–A4 |
 
 Architecture-defined standards and Drafts (In Progress) (below) belong to no profile.
@@ -48,7 +48,7 @@ suite) can map evidence to them one-to-one.
 
 ### MAK-0005 Part A: project records
 
-- [ ] P1 Create starts a lineage at version 1.0 with `lineage_id = artifact_id` (§A3.1).
+- [ ] P1 Create starts a lineage at version 1.0 with `lineage_id = artifact_id`, the first version's server-assigned identifier (§A3.1, §A8.1).
 - [ ] P2 Supersede of a non-head fails `artifact_not_active`; nothing written (§A4.1).
 - [ ] P3 Two concurrent supersessions of one head: exactly one succeeds, the other fails `stale_head`, no partial write (§A4.2).
 - [ ] P4 Versions are immutable except lifecycle pointers (§A3.3).
@@ -63,15 +63,25 @@ suite) can map evidence to them one-to-one.
 - [ ] P13 Subject keys longer than 512 characters (after normalization) are rejected (§A5.2).
 - [ ] P14 `withdrawn` is set only by conflict resolution and is terminal (§A6).
 - [ ] P15 A head half-superseded by a pending resolution is not reported as `zero_active` (§A7).
-- [ ] P16 A create with an existing `artifact_id` fails `artifact_exists`; nothing is written (§A2, MAK-0008 §9).
+- [ ] P16 A create that supplies `artifact_id` fails `validation_error` with reason `server_assigned_id`; nothing is written (§A2, §A8.1, MAK-0008 §10.2). *(Replaces the v0.3 criterion "an existing `artifact_id` fails `artifact_exists`".)*
+- [ ] P17 Every version persisted by create, supersession, merge and separate_subjects gets a new identifier of the form `art_<uuid>`, distinct from every version in the project, including legacy identifiers of the same form (§A8.1–§A8.3).
+- [ ] P18 A successor of a legacy head gets a server-assigned identifier, keeps `lineage_id`, and has `supersedes` equal to the legacy identifier. History of a mixed lineage returns every version in `version` order with its stored identifier; nothing is renamed (§A8.5).
+- [ ] P19 A superseded identifier, legacy or server-assigned, used as `old_id` fails `artifact_not_active`. A transformed identifier (suffix stripped or incremented) is treated as unknown, never mapped to a head (§A8.6).
+- [ ] P20 A crash or retry of a multi-step supersession or resolution completes with the successor identifier fixed before the first durable step; no lineage gains two successors. Refused writes, `select_winner` and reservations assign no identifier (§A8.4).
+- [ ] P21 An ordinary create on an occupied subject fails `subject_exists` and writes nothing. A caller with `read` gets `details.current_artifact_ids` and `details.hidden_count`; a write-only caller gets no `details`. Creates without a subject key, and on a subject whose lineage released the key or was withdrawn, are not refused (§A5.6).
+- [ ] P22 A create with `allow_competing: true` by a caller with `write` and `read` succeeds on an occupied subject and forms or extends a conflict; the caller gains no `resolve`. Without `read` it fails `access_denied`, writes nothing and discloses nothing about the current heads (§A5.7).
+- [ ] P23 **Independent creates racing.** N ≥ 2 concurrent ordinary creates on one free subject, each from a different principal, or from one principal without a key or with different keys: exactly one version is persisted, the other N−1 fail `subject_exists`, and no conflict forms. Tested on every store and deployment shape the implementation claims, including several server instances where supported (§A5.6, MAK-0004 §A8.5).
+- [ ] P24 **Retries of one request.** N ≥ 2 creates with the same principal, `idempotency_key` and identical parameters, sent concurrently or one after another within 7 days: exactly one version is persisted and every call returns it with the same `artifact_id`. None fails `subject_exists`, and the result carries no replay marker (§A8.8).
+- [ ] P25 **Race or retry: boundary cases.** (a) The same `idempotency_key` from two different principals is two independent creates (P23 outcome). (b) The same principal and key with different parameters persist at most one version; the other request fails `idempotency_key_reused`. (c) A create repeated *without* a key after a lost response is an independent create and fails `subject_exists` (with the identifier for a reader). (d) The same request with its tags in a different order is a replay (§A8.8).
+- [ ] P26 A replay returns the original version as currently stored, also after it was superseded, and writes nothing. A create with a key bound more than 7 days earlier is a new request and goes through the occupancy check. A replay never returns a version created before the upgrade (§A8.8).
 
 
 ### MAK-0004 Part A: subject conflicts
 
 - [ ] C1 Same-lineage update supersedes; no conflict (§A3.6).
 - [ ] C2 Different subjects (type or key) coexist; shared tags never conflict (§A2, §A3.3).
-- [ ] C3 Two lineages with one subject (e.g. RED vs YELLOW) form a conflict; neither is returned as current; no newest-wins (§A3.1, §A6.1).
-- [ ] C4 A third contributor extends the same conflict (same `conflict_id`) (§A3.6, §A4.1).
+- [ ] C3 Two lineages with one subject (e.g. RED vs YELLOW, the second created as a competing record) form a conflict; neither is returned as current; no newest-wins (§A3.1, §A6.1).
+- [ ] C4 A third competing contributor extends the same conflict (same `conflict_id`) (§A3.6, §A4.1).
 - [ ] C5 Identical content still conflicts and reports `identical_content: true` (§A3.4).
 - [ ] C6 Filters never hide one side of a conflict (§A6.2).
 - [ ] C7 select_winner, merge and separate_subjects each produce the effects of §A7.3–§A7.5 and a complete record (§A7.6).
@@ -79,7 +89,7 @@ suite) can map evidence to them one-to-one.
 - [ ] C9 A principal without `resolve` (or without `read`) is denied and nothing changes (§A7.1).
 - [ ] C10 Stale candidate set → `conflict_changed`; second resolution of a generation → `conflict_not_open`; identical retry with the same idempotency key returns the same record (§A8).
 - [ ] C11 Concurrent resolutions of one conflict: exactly one completes (§A8.4).
-- [ ] C12 A new contribution after resolution creates a new conflict with a new `conflict_id` (§A7.7).
+- [ ] C12 A new competing contribution after resolution creates a new conflict with a new `conflict_id` (§A7.7).
 - [ ] C13 Releasing a candidate's key during an open conflict fails `subject_in_conflict` (§A3.7).
 - [ ] C14 History preserves every original version and every resolution record (§A7.6).
 - [ ] C15 A second client (different principal and/or transport) retrieves the same conflicted or resolved state (§A3.2).
@@ -95,6 +105,8 @@ suite) can map evidence to them one-to-one.
 - [ ] C25 Unknown conflict id → `not_found`; a conflict already resolved → `conflict_not_open` (§A8.1).
 - [ ] C26 The same idempotency key with *different* parameters is rejected, never treated as a retry (§A8.4).
 - [ ] C27 Resolution start, completion, abort and rejection are audited with actor and correlation id (§A9).
+- [ ] C28 A create racing with a separate_subjects resolution that assigns the same key, or with a release of that key, leaves the subject with one head; the losing write fails `subject_exists` or `subject_collision` and writes nothing (§A8.5).
+- [ ] C29 Merge and separate_subjects versions get server-assigned identifiers fixed in the pending resolution record and reported as `successor_artifact_id` and in `resulting_heads`; `select_winner` writes no version (§A7.3–§A7.5, §A8.2).
 
 
 ### MAK-0006: identity and access control
@@ -180,6 +192,7 @@ suite) can map evidence to them one-to-one.
 - [ ] M37 `mak4i_whoami` always carries `scopes` (null for credentials) and `protocol` (§10.5).
 - [ ] M38 Token, revocation and registration endpoints are rate-limited (§11.1); signing keys, if any, are persisted outside configuration and rotatable (§11.3).
 - [ ] M39 The configuration contract is validated at startup and the implementation refuses to start when it is invalid (§12).
+- [ ] M40 `mak4i_search` with `text` or `subject_key` returns current, authorized records as summaries ranked and tie-broken per §10.5b, at most 20 by default and 100 at most; candidates of an open or resolving conflict carry `conflict_id`; unreadable candidates are not returned. A search with only type, tag and status filters returns the v0.3 result unchanged (§10.5b, §10.6).
 
 ### MAK-0008 §14: change feed and MCP resources (Change feed profile)
 
@@ -209,9 +222,10 @@ suite) can map evidence to them one-to-one.
 - [ ] K7 Unwraps list results; ignores unknown output fields, tested with an added `x_test_` field (§13.5).
 - [ ] K8 Maps every §9 code to a typed error; an unknown code falls back to `retryable` (§13.6).
 - [ ] K9 No automatic retry of non-retryable errors; `stale_head`/`conflict_changed` helpers re-read first (§13.6).
-- [ ] K10 Never sends identity arguments; resolution retries reuse the idempotency key (§13.7).
+- [ ] K10 Never sends identity arguments or a create `artifact_id`; never constructs, derives, parses or orders by record identifiers; create and resolution retries reuse the idempotency key and parameters (§13.7).
 - [ ] K11 Reports the server's protocol version and warns on mismatch (§13.8).
 - [ ] K12 Every tool call's arguments validate against `mcp-tools.schema.json`, and every valid output example in `schemas/examples/mcp-tools/` parses into the client's models (§10.1).
+- [ ] K13 On `subject_exists` the client supersedes the returned head or asks its user, and sets `allow_competing` only on an explicit request; it does not treat a search summary carrying `conflict_id` as settled (§13.9, §10.5b).
 
 ### MAK-0001: artifact packaging metadata (Artifact profile)
 

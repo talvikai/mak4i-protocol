@@ -4,12 +4,12 @@ Related: [Protocol #15](https://github.com/talvikai/mak4i-protocol/issues/15), [
 
 This review draft captures the approved identity requirements for governed project records. It does not change the current protocol or the current MCP schema. The identity contract and P1 search, duplicate and retry behavior ship together.
 
-Status: **review draft**.
-- §1 holds the settled identity rules. §3 has their proposed specification text.
+Status: **decision record**. On 2026-11-11 the owner confirmed S8 and approved landing the text. The normative text now lives in MAK-0004, MAK-0005 and MAK-0008, CONFORMANCE.md and the schemas, as protocol v0.4 (see CHANGELOG.md). Where this document and the standards differ, the standards govern.
+- §1 holds the settled identity rules. §3 has the specification text as proposed.
 - §5 records the owner's direction of 2026-11-10 on the six choices O1–O6, with proposed text for each.
-- §6 lists the narrower questions that direction left open. The owner answered S1–S7 on 2026-11-11, and the text in §3–§5 now follows those answers. Only S8 (the reading of the truncated O5 sentence) is still open.
+- §6 records the owner's answers to S1–S8 (2026-11-11).
 - §7 compares Reference implementation options for O5.
-- Nothing in `standards/` or `schemas/*.schema.json` changes in this PR. The example records added in §4.2 validate against the current v0.3 schemas.
+- The §3.5 schema list and the examples in §4.2 describe the state before the v0.4 schema changes; the schema changes have since been applied.
 
 ## 1. Settled requirements
 
@@ -171,7 +171,7 @@ These validate under the current v0.3 schemas, which shows that the identity rul
 - [`mak4i_history.output.valid-mixed-legacy-and-generated.json`](../schemas/examples/mcp-tools/mak4i_history.output.valid-mixed-legacy-and-generated.json) (cases 2, 4 and 5, shortened)
 - [`valid-merge-generated-successor.json`](../schemas/examples/resolution-record/valid-merge-generated-successor.json) (case 8)
 
-Examples for O1–O6 need the schema changes in §3.5 and are added with them.
+Examples for O1–O6 were added with the v0.4 schema changes (`mak4i_create`, `mak4i_search` and `error` examples).
 
 ## 5. Owner direction 2026-11-10 (O1–O6) and proposed text
 
@@ -264,7 +264,7 @@ No text change: "`lineage_id = artifact_id`". With A8 it becomes the first `art_
 | **S5** | Does tag order matter? | No. A real change to the tags or any other field is a key-reuse error. | A8.8; cases 21c, 22 |
 | **S6** | Which searches get summaries and the 20-result default? | Only searches with `text` or exact `subject_key`, also when combined with type or tag filters. Type/tag-only searches keep their response shape and limit behavior. | §5.6 "Lookup mode"; case 30 |
 | **S7** | Mark open conflicts in search? | Yes, in the new summary response, when the caller may see the conflict. Do not disclose hidden records or change the legacy search response. | §5.6 "Conflicts"; case 29 |
-| **S8** | O5 wording: confirm the reading of the truncated sentence (§5) | **still open** | as written in §5 |
+| **S8** | O5 wording: confirm the reading of the truncated sentence (§5) | Confirmed as written in §5. | MAK-0004 §A8.5 |
 
 Details filled in by Claude Code, for review:
 - **S3:** a replay returns the original version as it is stored now, so `status` may read `superseded` when the record has moved on. The original response is not stored separately.

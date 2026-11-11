@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "subject_exists",
+    "message": "A current record already holds this subject. Nothing was written.",
+    "retryable": false
+  }
+}

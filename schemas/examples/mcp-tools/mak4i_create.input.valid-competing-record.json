@@ -1,0 +1,9 @@
+{
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "title": "Cache",
+  "content": "Use YELLOW",
+  "subject_key": "primary-cache",
+  "idempotency_key": "create-cache-0002",
+  "allow_competing": true
+}

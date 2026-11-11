@@ -1,5 +1,5 @@
 {
-  "artifact_id": "cache-red-v2",
+  "artifact_id": "art_9d4e2f1b-7a6c-4e3d-8b2a-1c0f9e8d7a65",
   "artifact_type": "caching_decision",
   "organization_id": "org_1",
   "project": "prj_1",
@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "version": "2.0",
-  "lineage_id": "cache-red",
-  "supersedes": "cache-red",
+  "lineage_id": "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61",
+  "supersedes": "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61",
   "superseded_by": null,
   "subject_key": "primary-cache",
   "released_subject_key": null,

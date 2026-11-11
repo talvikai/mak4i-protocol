@@ -1,8 +1,8 @@
 # MAK4I Protocol Specification
 
-**Version:** 0.3 (Draft). Changes since the last tag are listed in [CHANGELOG.md](CHANGELOG.md); a release is tagged by a maintainer ([GOVERNANCE.md](GOVERNANCE.md#versioning))  
+**Version:** 0.4 (Draft). Changes since the last tag are listed in [CHANGELOG.md](CHANGELOG.md); a release is tagged by a maintainer ([GOVERNANCE.md](GOVERNANCE.md#versioning))  
 **Status:** Work in Progress  
-**Last updated:** 2026-10-16  
+**Last updated:** 2026-11-11  
 **Author:** Talvik, Inc.  
 **Created:** August 2026  
 **License:** MIT  
