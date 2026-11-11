@@ -156,7 +156,8 @@ In these examples `art_…` stands for a fresh server-assigned identifier. Dates
 | 23 | A different principal uses the same `idempotency_key` string. | Treated as a different request. Keys are scoped to the principal. |
 | 24 | 8 concurrent identical requests with one key. | Exactly one record. All 8 calls return it. |
 | 25 | 8 concurrent *different* ordinary creates (different keys or none) on one free subject. | Exactly one succeeds. 7 fail `subject_exists`. No competing record is persisted, and no conflict appears. |
-| 26 | A create races with a `separate_subjects` resolution that assigns the same key, or with a release. | The subject ends with one head. The losing write fails (`subject_exists`, or `subject_collision` for the resolution) and writes nothing. |
+| 26 | A create races with a `separate_subjects` resolution that assigns the same free key. | Exactly one claim wins. Create first → the resolution fails `subject_collision`; resolution first → the create fails `subject_exists`. The loser writes nothing; one head. |
+| 26b | A create races with a supersession that releases the occupied key. | Order decides. Release first → both succeed and the created version is the one head. Create first → the create fails `subject_exists` and writes nothing, the release succeeds, and the key is free. Never two heads. |
 | 27 | Records without `subject_key`. | Never refused for occupancy. Retries are protected only by `idempotency_key`. |
 | 28 | `mak4i_search` with `text: "Accel"` and no tags. | Returns current, authorized records whose title, subject key, tags or content match, as summaries ranked per §5 (O6). Unreadable projects and other organizations are never searched. |
 | 29 | `mak4i_search` with `subject_key: "primary-cache"` while that subject is in an open conflict. | The exact normalized match, ranked first. Each readable candidate's summary carries the `conflict_id`, so a client does not take one candidate as settled. Hidden candidates are not listed. |
@@ -284,6 +285,8 @@ The Reference has two artifact stores, LocalJSON (one server per installation, b
 Recommendation: **A**. It is atomic on both stores through primitives they already rely on, and it needs no cross-system reconciliation. LocalJSON's cross-process compare-and-set is tested in `test_store_compare_and_set_admits_exactly_one_writer_across_processes`. GCS uses generation preconditions, which are tested today only against the fake client, so a test against a real bucket belongs in the P1 acceptance run. B is the fallback if a claim object in the store is unwanted. C does not meet O5 for GCS.
 
 Revised effort for P1 with O1–O6 as directed: about 6.5–7.5 working days, including protocol text, schemas, vectors and Reference. O5 adds about 1.5 days to the Nov 5 estimate.
+
+**Owner review 2026-11-11 (commit 6ca6b9b):** the real-GCS concurrency test is a **release gate** for the Reference implementation. It must show (a) independent creates for one subject persist exactly one record (P23) and (b) every valid retry of one request returns that same persisted record (P24). The 6.5–7.5 days above is an estimate; readiness is decided by the GCS result, not the estimate. The same review corrected the create-vs-release race rule (MAK-0004 §A8.5, C28/C29; cases 26 and 26b above).
 
 ## 8. Compatibility and rollout notes
 

@@ -38,11 +38,24 @@ examples report `0.4`. The background and decision record is
   conflict, as every create did before. It requires `write` and `read`
   and grants no `resolve`.
 - The occupancy check and the create are atomic: of concurrent ordinary
-  creates on one subject, exactly one succeeds.
+  creates on one subject, exactly one succeeds. A create racing with a
+  resolution that assigns the same key is also a single claim (one wins).
+  A create racing with a release of the key follows the order: release
+  first, both succeed; create first, the create fails `subject_exists`
+  and the release leaves the key free.
 - An optional create `idempotency_key`, scoped to the principal and kept
   for 7 days, makes retries safe. A replay returns the original record,
   unmarked. The same key with different parameters fails with the new
   code `idempotency_key_reused`. Tags are compared as a set.
+
+### Documentation aligned with enforcement
+- MAK-0006 §8.6 lists `subject_exists` and `idempotency_key_reused`
+  among refused-write causes, replacing the reserved `artifact_exists`.
+- README, SPEC.md (reuse discipline) and ROADMAP F-13 say what the
+  server now enforces: duplicate keyed subjects are refused; creates
+  without a `subject_key` are not checked.
+- The DEVELOPER_GUIDE SDK example still passes `artifact_id` to create;
+  it changes with the Reference SDK work.
 
 ### Search lookup (MAK-0008 §10.5b)
 - `mak4i_search` gains `text`, `subject_key`, `limit` and `detail`.
@@ -88,7 +101,9 @@ examples report `0.4`. The background and decision record is
 - New criteria:
   - P17–P22 identifiers and occupancy;
   - P23–P26 independent creates racing versus retries of one request;
-  - C28–C29 resolution races and resolution identifiers;
+  - C28 create vs. key assignment (one claim wins) and C29 create vs.
+    release (outcome follows the order);
+  - C30 resolution identifiers;
   - M40 search lookup;
   - K13 client handling of `subject_exists`.
 - C3, C4, C12 and K10 adjusted. Profiles: Server: Project Records adds

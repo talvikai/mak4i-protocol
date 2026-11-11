@@ -91,7 +91,7 @@ product Phase 2 delivery timing is decided separately.
 | F-10 | Per-record access control, teams, multi-organization membership, SSO/IdP connectors, SCIM | Unscheduled; connectors and SCIM are commercial-product concerns |
 | F-11 | Full MCP 2026-07-28 authorization migration | When target clients require it |
 | F-12 | Published conformance suite and certification process | After protocol v1.0 |
-| F-13 | Normative check-before-create | With F-3 |
+| F-13 | Normative check-before-create | Keyed subjects: server-enforced in protocol v0.4 (MAK-0005 §A5.6). Creates without a `subject_key`: with F-3 |
 | F-14 | Hosted client metadata document for the Python SDK | With a later SDK release |
 | F-15 | Native registry-level MCP | With F-3 |
 | F-16 | Multi-replica / high-availability semantics | Unscheduled; the protocol is unaffected |

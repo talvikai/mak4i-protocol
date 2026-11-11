@@ -105,8 +105,9 @@ suite) can map evidence to them one-to-one.
 - [ ] C25 Unknown conflict id → `not_found`; a conflict already resolved → `conflict_not_open` (§A8.1).
 - [ ] C26 The same idempotency key with *different* parameters is rejected, never treated as a retry (§A8.4).
 - [ ] C27 Resolution start, completion, abort and rejection are audited with actor and correlation id (§A9).
-- [ ] C28 A create racing with a separate_subjects resolution that assigns the same key, or with a release of that key, leaves the subject with one head; the losing write fails `subject_exists` or `subject_collision` and writes nothing (§A8.5).
-- [ ] C29 Merge and separate_subjects versions get server-assigned identifiers fixed in the pending resolution record and reported as `successor_artifact_id` and in `resulting_heads`; `select_winner` writes no version (§A7.3–§A7.5, §A8.2).
+- [ ] C28 **Create vs. key assignment.** A create racing with a separate_subjects resolution that assigns the same free key: exactly one claim wins, in either order. Create first → the resolution fails `subject_collision`; resolution first → the create fails `subject_exists`. The losing write persists nothing and the subject has one head (§A8.5).
+- [ ] C29 **Create vs. release.** A create racing with a supersession that releases the occupied key (MAK-0005 §A5.4): the outcome follows the order, and the test covers both. Release first → both writes succeed and the created version is the one head. Create first → the create fails `subject_exists` and persists nothing, the release succeeds, and the key is left free. No order leaves two heads (§A8.5).
+- [ ] C30 Merge and separate_subjects versions get server-assigned identifiers fixed in the pending resolution record and reported as `successor_artifact_id` and in `resulting_heads`; `select_winner` writes no version (§A7.3–§A7.5, §A8.2).
 
 
 ### MAK-0006: identity and access control

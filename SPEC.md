@@ -33,10 +33,13 @@ distinction matters relative to memory-focused alternatives.
 > matches.
 
 This is a **reuse discipline** that MAK4I supports with protocol
-structure and client guidance. It is not an enforcement guarantee: the
-protocol defines how to look up current knowledge before writing
-([MAK-0008 §13.9](standards/MAK-0008.md#13-client-requirements)), and conflicts make competing writes
-visible ([MAK-0004](standards/MAK-0004.md)), but no standard forces a client to check first.
+structure, client guidance and, for keyed subjects, server enforcement.
+The protocol defines how to look up current knowledge before writing
+([MAK-0008 §13.9](standards/MAK-0008.md#13-client-requirements)). A create naming a subject that already has a
+current record is refused unless the client explicitly asks for a
+competing record ([MAK-0005 §A5.6](standards/MAK-0005.md#a5-subject-keys)), and competing records form a
+visible conflict ([MAK-0004](standards/MAK-0004.md)). Creates without a `subject_key` are not
+checked, so no standard forces a client to search first in that case.
 MAK4I defines how AI knowledge is:
 - **Structured**: project records ([MAK-0005](standards/MAK-0005.md)) and
   distributable artifacts ([MAK-0001](standards/MAK-0001.md), [MAK-0009](standards/MAK-0009.md));
