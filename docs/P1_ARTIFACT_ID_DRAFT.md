@@ -7,7 +7,7 @@ This review draft captures the approved identity requirements for governed proje
 Status: **review draft**.
 - §1 holds the settled identity rules. §3 has their proposed specification text.
 - §5 records the owner's direction of 2026-11-10 on the six choices O1–O6, with proposed text for each.
-- §6 lists the narrower questions that direction leaves open. Text that depends on one of them is marked **[OPEN Sx]**.
+- §6 lists the narrower questions that direction left open. The owner answered S1–S7 on 2026-11-11, and the text in §3–§5 now follows those answers. Only S8 (the reading of the truncated O5 sentence) is still open.
 - §7 compares Reference implementation options for O5.
 - Nothing in `standards/` or `schemas/*.schema.json` changes in this PR. The example records added in §4.2 validate against the current v0.3 schemas.
 
@@ -96,10 +96,10 @@ Consequential edits in MAK-0005:
 | P1: a new lineage's `lineage_id` equals its first `art_` identifier. | O2 |
 | P16, replaced: a create that sends `artifact_id` fails `validation_error`, writes nothing, and reports the server-assigned reason. | O1 |
 | An ordinary create on an occupied subject fails `subject_exists` and writes nothing. Current identifiers are returned only to a caller with `read`. | O3 |
-| A competing create succeeds only when requested and authorized, and forms or extends a conflict. | O3, S1 |
-| The same principal, key and request returns the original record. The same key with a different request fails without writing. N concurrent identical requests create exactly one record. | O4 |
+| A competing create succeeds only when requested by a caller with `write` and `read`, and forms or extends a conflict. A write-only caller asking for one fails without learning the current identifiers. Contributing a competing record grants no `resolve`. | O3, S1 |
+| The same principal, key and request returns the original record, unmarked. The same key with a different request fails without writing; tag order alone is not a difference. N concurrent identical requests create exactly one record. After the 7-day retention window the key is not matched and the create is checked as a new request. | O4, S2, S3, S5 |
 | N concurrent ordinary creates on one free subject: exactly one succeeds and N−1 fail `subject_exists`. No competing record is persisted. Test on every store the implementation supports. | O5 |
-| Search finds a record by exact `subject_key` and by title text without tag knowledge. It returns only current, authorized records as summaries, in the §5 order. | O6 |
+| Search finds a record by exact `subject_key` and by title text without tag knowledge. It returns only current, authorized records as summaries, in the §5 order, with open-conflict candidates marked. A type/tag-only search returns exactly what it returns in v0.3. | O6, S6, S7 |
 
 ### 3.5 Schemas
 
@@ -109,14 +109,14 @@ No schema in `schemas/*.schema.json` changes in this PR. Proposed changes once t
 |---|---|
 | Keep `common.schema.json#/$defs/artifactId` (any non-empty string) for every record field and every reference input. Narrowing it fails 44 existing example checks (tested on a scratch copy). | §1: **no change** |
 | Add `$defs/assignedArtifactId` = `^art_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`. | A8.2 |
-| `mak4i_supersede` output: `artifact_id` uses `assignedArtifactId`. `mak4i_create` output also uses it, except a retry may return a record created before the upgrade **[OPEN S4]**. | A8 |
+| `mak4i_create` and `mak4i_supersede` output: `artifact_id` uses `assignedArtifactId`. A create retry never returns a pre-upgrade record (S4), so create output is always a generated identifier. | A8, S4 |
 | `mak4i_create.input`: remove `artifact_id` (closed inputs then reject it). | O1 |
 | `mak4i_create.input`: add `idempotency_key` (string, 8–200 characters, same as resolutions). | O4 |
 | `mak4i_create.input`: add the competing-record option, e.g. `allow_competing: boolean`, default `false` (name to confirm). | O3 |
-| `mak4i_create.output`: a replay marker, if one is wanted **[OPEN S3]**. The output today is exactly `project-record.schema.json`, so a marker needs a wrapper or an allowed extra field. | O4 |
+| `mak4i_create.output`: **no change** for retries. A replay is not marked (S3), so the output stays exactly `project-record.schema.json`. | O4, S3 |
 | `error.schema.json` and MAK-0008 §9: new codes `subject_exists` and `idempotency_key_reused`. The validator requires the error table and the enum to change together. `artifact_exists` stays in the enum, with the row marked "not produced by `mak4i_create` since this revision". | O1, O3, O4 |
 | `error.schema.json`: an optional `details` object, so `subject_exists` can carry current identifiers for readers. Additive. | O3 |
-| `mak4i_search`: inputs `text`, `subject_key`, `limit`, `detail` (`summary` / `full`); output items `oneOf` a summary record or a full record. | O6 |
+| `mak4i_search`: inputs `text`, `subject_key`, `limit`, `detail` (`summary` / `full`). Output items `oneOf` a summary record (new `$defs`, with optional `conflict_id`) or a full record. The v0.3 output for type/tag-only searches stays valid unchanged (S6). | O6, S6, S7 |
 | `x-mak4i-schema-version` and SPEC.md MAJOR.MINOR bump. | release step |
 
 ## 4. Acceptance examples
@@ -144,18 +144,24 @@ In these examples `art_…` stands for a fresh server-assigned identifier. Dates
 | 15 | A legacy client sends `mak4i_create` with `artifact_id`. | `validation_error`, reason `server_assigned_id`, with a message saying to omit it and read `artifact_id` from the result. Nothing is written. Its legacy IDs still work for lookup and history. |
 | 16 | Create on subject `(cache_decision, primary-cache)`, whose current head is `art_F`. Caller has `write` and `read`. | `subject_exists`, nothing written, `details.current_artifact_ids = ["art_F"]`. The caller supersedes `art_F` instead. |
 | 17 | Same as case 16, but the caller has `write` only. | `subject_exists`, nothing written, no identifiers, titles or content. The subject's existence is disclosed, as in MAK-0004 D-007. |
-| 18 | Same subject as case 16, created with the competing-record option by an authorized caller **[OPEN S1]**. | Succeeds and forms a conflict with `art_F` (today's §A3.6 behavior). |
+| 18 | Same subject as case 16, created with `allow_competing: true` by a caller with `write` and `read`. | Succeeds and forms a conflict with `art_F` (today's §A3.6 behavior). The caller gains no `resolve`; choosing the winner stays with resolvers. |
+| 18a | Same as case 18, but the caller has `write` only. | `access_denied`, nothing written, and no identifier, title or content of `art_F`. |
 | 19 | Create on a subject that is already in an open conflict (two or more heads). | `subject_exists`. `details` lists only the readable candidates, plus `hidden_count`. |
 | 20 | Create on a subject whose only lineage released its key (`released_subject_key` set), or whose lineage was withdrawn. | Succeeds. The subject is free. |
 | 21 | The same create (same principal, `idempotency_key`, parameters) is sent twice because a response was lost. | The second call returns the original record, with the same `artifact_id` and nothing new written, even though the subject is now occupied by that record. The key is checked before the subject. |
-| 22 | The same principal reuses an `idempotency_key` with a different title or content. | `idempotency_key_reused`, nothing written. |
+| 21a | As case 21, but the original record has since been superseded. | Still returns the version the original create persisted, with its original `artifact_id`, under current authorization. Nothing is written, and the response carries no replay marker. |
+| 21b | As case 21, but the retry arrives more than 7 days after the original create. | The key is no longer matched. The create is checked as a new request: on the now occupied subject it fails `subject_exists`, with the current identifiers only for a reader. |
+| 21c | As case 21, with the same tags in a different order. | Same request: returns the original record. |
+| 22 | The same principal reuses an `idempotency_key` with a different title, content or tag set. | `idempotency_key_reused`, nothing written. |
 | 23 | A different principal uses the same `idempotency_key` string. | Treated as a different request. Keys are scoped to the principal. |
 | 24 | 8 concurrent identical requests with one key. | Exactly one record. All 8 calls return it. |
 | 25 | 8 concurrent *different* ordinary creates (different keys or none) on one free subject. | Exactly one succeeds. 7 fail `subject_exists`. No competing record is persisted, and no conflict appears. |
 | 26 | A create races with a `separate_subjects` resolution that assigns the same key, or with a release. | The subject ends with one head. The losing write fails (`subject_exists`, or `subject_collision` for the resolution) and writes nothing. |
 | 27 | Records without `subject_key`. | Never refused for occupancy. Retries are protected only by `idempotency_key`. |
 | 28 | `mak4i_search` with `text: "Accel"` and no tags. | Returns current, authorized records whose title, subject key, tags or content match, as summaries ranked per §5 (O6). Unreadable projects and other organizations are never searched. |
-| 29 | `mak4i_search` with `subject_key: "primary-cache"`. | The exact normalized match, ranked first. Conflict candidates are returned with their conflict marked **[OPEN S7]**. |
+| 29 | `mak4i_search` with `subject_key: "primary-cache"` while that subject is in an open conflict. | The exact normalized match, ranked first. Each readable candidate's summary carries the `conflict_id`, so a client does not take one candidate as settled. Hidden candidates are not listed. |
+| 30 | `mak4i_search` with only `artifact_type` and `tags` (as v0.3 clients send it). | Exactly the v0.3 result: full records, the existing limit behavior, and no `conflict_id` field. |
+| 31 | A create after the upgrade whose `idempotency_key` happens to match nothing, on a subject held by a pre-upgrade record. | No replay (no pre-upgrade keys exist). The ordinary subject check applies: `subject_exists`, with the legacy identifier for a reader. |
 
 ### 4.2 Example records added in this PR
 
@@ -197,7 +203,7 @@ No text change: "`lineage_id = artifact_id`". With A8 it becomes the first `art_
 
 > **A5.6 Occupied subjects.** A subject `(artifact_type, normalized subject_key)` is *occupied* while at least one lineage has a current head carrying that key (MAK-0004 §A3.1), including the candidates of an open or resolving conflict. A lineage that released the key (A5.4), or whose head was withdrawn, does not occupy it. A create naming an occupied subject MUST fail with `subject_exists` and write nothing, unless the request asks for a competing record (A5.7). If the caller holds `read` on the project, the error's `details.current_artifact_ids` lists the current heads of the subject in `artifact_id` order, and `details.hidden_count` counts any heads it cannot read. A caller without `read` receives neither: the subject's occupancy is disclosed, but not its identity (MAK-0004 D-007, MAK-0006 §5.1). A create without a `subject_key` is never refused for occupancy.
 >
-> **A5.7 Competing records.** A create MAY ask for a competing record (`allow_competing: true`). If the caller is authorized for it **[OPEN S1]**, the create succeeds on an occupied subject and creates or extends a conflict exactly as MAK-0004 §A3.6 describes. Otherwise it fails with `access_denied` and writes nothing.
+> **A5.7 Competing records.** A create MAY ask for a competing record (`allow_competing: true`). Such a request requires `write` and `read` on the project. Then the create succeeds on an occupied subject and creates or extends a conflict exactly as MAK-0004 §A3.6 describes. A caller without `read` fails with `access_denied`, writes nothing, and receives no identifier, title or content of the current heads. Contributing a competing record confers no `resolve` permission: choosing among candidates remains a resolution (MAK-0004 §A7.1). On a free subject, `allow_competing` has no effect.
 
 - MAK-0004 §A3.6, replace the last two sentences: "A create that names an occupied subject is refused (MAK-0005 §A5.6), unless it asks for a competing record (§A5.7). A competing record then adds a candidate, creating or extending the conflict. Supersessions are never refused merely because they keep a candidate in conflict."
 - MAK-0008 §9: new row `subject_exists`: "A create named an occupied subject (MAK-0005 §A5.6); nothing was written. Supersede the current record, or request a competing record. Retry: No."
@@ -205,9 +211,13 @@ No text change: "`lineage_id = artifact_id`". With A8 it becomes the first `art_
 
 ### 5.4 O4: MAK-0005 new §A8.8 and MAK-0008 §13.7
 
-> **A8.8 Create retries.** A create MAY carry an `idempotency_key` (8–200 characters). Keys are scoped to (organization, project, authenticated principal). The first create with a key binds the key to the request parameters and the resulting record. A later create with the same key and identical parameters MUST return that record and write nothing, whatever has happened to the subject since. With different parameters it MUST fail with `idempotency_key_reused` and write nothing. Concurrent requests with one key MUST produce at most one record. The key is checked before subject occupancy (A5.6). Keys are retained for **[OPEN S2]**.
+> **A8.8 Create retries.** A create MAY carry an `idempotency_key` (8–200 characters). Keys are scoped to (organization, project, authenticated principal). The first create with a key binds the key to the request parameters and the resulting record. A later create with the same key and identical parameters MUST return that record and write nothing, whatever has happened to the subject since. With different parameters it MUST fail with `idempotency_key_reused` and write nothing. Concurrent requests with one key MUST produce at most one record. The key is checked before subject occupancy (A5.6).
+>
+> A replay returns the version the original create persisted, with its original `artifact_id`, as currently stored and under the caller's current authorization. It persists no new version and assigns no identifier (A8.4). The response is not marked as a replay.
+>
+> A key is retained for 7 days from the original successful create. A replay does not extend that window. After it expires, a create with that key is evaluated as a new request, including the occupancy check of A5.6. Records created before this revision have no key, so a create is never answered as a replay with a pre-upgrade record.
 
-- "Identical parameters" means the normalized create input other than `idempotency_key`: type, title, content, rationale, tags as a set, the normalized subject key, and `allow_competing`. **[OPEN S5]**: whether a tag-order difference counts.
+- "Identical parameters" means the create input other than `idempotency_key`: type, title, content, rationale, tags compared as a set (order and duplicates ignored), the normalized subject key, and `allow_competing`. Text fields are compared exactly. Any other change, including a different tag set, is a different request.
 - MAK-0008 §13.7: "A client SHOULD send an `idempotency_key` on `mak4i_create`, and MUST reuse the same key and parameters when retrying after an unknown outcome." This matches the existing resolution rule.
 - MAK-0008 §9: new row `idempotency_key_reused`: "The key was already used by this principal for a different create; nothing was written. Retry: No."
 
@@ -227,33 +237,39 @@ No text change: "`lineage_id = artifact_id`". With A8 it becomes the first `art_
 >
 > All filters combine with AND. The default `status = "active"` and the authorization rules are unchanged (§10.6). Only projects the caller can `read` are searched.
 >
+> **Lookup mode.** A search that gives `text` or `subject_key` (with or without type, tag or status filters) is a lookup. The ranking, summaries, `limit` default and conflict marking below apply to lookups. A search with neither keeps its v0.3 behavior: full records, the existing order and limit, and no new fields. `detail` and `limit`, when given explicitly, are honored in either mode.
+>
 > **Ranking**, in order:
 > 1. exact `subject_key` match;
 > 2. a `text` match in the title;
 > 3. a match in the subject key or tags;
 > 4. a match in the content only.
 >
-> Ties are broken by `updated_at` (newest first), then by `artifact_id` in ascending order. Without `text` or `subject_key`, results are ordered by `updated_at` (newest first), then `artifact_id`.
+> Ties are broken by `updated_at` (newest first), then by `artifact_id` in ascending order.
 >
 > **A summary** carries `artifact_id`, `lineage_id`, `artifact_type`, `title`, `subject_key`, `tags`, `status`, `version`, `updated_at` and a `snippet` of at most 200 characters of the matching content. Clients retrieve full content with `mak4i_get_current` or `mak4i_history`, or with `detail: "full"`. Matching is deterministic text comparison only; no semantic matching.
+>
+> **Conflicts.** In a lookup, a record that is a candidate of an open or resolving conflict carries that conflict's `conflict_id`. A client MUST NOT treat such a record as the settled answer for its subject (MAK-0004 §A6.1); it reads the conflict with `mak4i_get_conflict`. Candidates the caller cannot read are not returned (MAK-0004 §A6.4). The search `read` requirement equals the one for `mak4i_get_conflict`, so every caller who sees a marked record may read its conflict.
 
-- **[OPEN S6]** Changing the default to summaries changes the result of *every* existing `mak4i_search` call, including type- and tag-only searches that clients read content from today. Two options:
-  1. summaries for every call (one rule, a breaking change listed under O1's upgrade notes);
-  2. summaries only when `text` or `subject_key` is given.
-- `limit` defaults to 20, a breaking change for clients that expect every match today. The same choice applies.
+- Type/tag-only searches are unchanged (S6), so the search change is additive for existing clients.
 
-## 6. Narrower questions the direction leaves open
+## 6. Narrower questions: owner answers 2026-11-11
 
-| | Question | Options | Default used in the text unless changed |
+| | Question | Owner answer | Written into |
 |---|---|---|---|
-| **S1** | Who is "authorized" to request a competing record? | (a) any caller with `write`, by asking explicitly; (b) `write` + `read`, so the caller has seen what it competes with; (c) `write` + `resolve`; (d) a new grant permission | none; marked **[OPEN S1]** |
-| **S2** | Retention of create idempotency keys | (a) for the life of the record, stored with it; (b) a fixed window, e.g. 7 days like the change feed | none; marked **[OPEN S2]** |
-| **S3** | Is a replayed create marked in the result? | (a) no, the same record is returned unchanged; (b) yes, e.g. `replayed: true`, which changes the output schema | none |
-| **S4** | Can a retry return a record created before the upgrade? | Only if old creates carried keys, which they did not, so no. Confirm so the create output can use `assignedArtifactId`. | no |
-| **S5** | Request equality for retries | Tags as a set or an ordered list; whitespace in text | tags as a set, text exact |
-| **S6** | Summary/limit default for searches without `text` or `subject_key` | see §5.6 | none |
-| **S7** | Should search mark conflict candidates? | (a) add a `conflict_id` to summaries; (b) leave to `mak4i_get_current` | none |
-| **S8** | O5 wording: confirm the reading of the truncated sentence (§5) | | as written in §5 |
+| **S1** | Who may request a competing record? | `read` + `write` and an explicit request. `resolve` stays separate: contributing a competing record does not let the caller choose the winner. Without `read`, reject without exposing the existing record's identifier or content. | A5.7; cases 18, 18a |
+| **S2** | Retention of create retry keys | 7 days from the original successful create. A retry after expiry is a new request and goes through the subject check. A replay does not extend the window. | A8.8; case 21b |
+| **S3** | Mark a replay in the result? | No new field in P1. Return the original create result with its original identifier, under current authorization. A replay creates no revision. | A8.8; §3.5; case 21a |
+| **S4** | Can a retry return a pre-upgrade record? | Not as a replay: no stored key matches, and there is no backfill. The ordinary subject check can still find a pre-upgrade record and return its identifier to a reader. | A8.8; §3.5; case 31 |
+| **S5** | Does tag order matter? | No. A real change to the tags or any other field is a key-reuse error. | A8.8; cases 21c, 22 |
+| **S6** | Which searches get summaries and the 20-result default? | Only searches with `text` or exact `subject_key`, also when combined with type or tag filters. Type/tag-only searches keep their response shape and limit behavior. | §5.6 "Lookup mode"; case 30 |
+| **S7** | Mark open conflicts in search? | Yes, in the new summary response, when the caller may see the conflict. Do not disclose hidden records or change the legacy search response. | §5.6 "Conflicts"; case 29 |
+| **S8** | O5 wording: confirm the reading of the truncated sentence (§5) | **still open** | as written in §5 |
+
+Details filled in by Claude Code, for review:
+- **S3:** a replay returns the original version as it is stored now, so `status` may read `superseded` when the record has moved on. The original response is not stored separately.
+- **S6:** `limit` and `detail` given explicitly also apply to type/tag-only searches. That is additive, since no v0.3 client sends them.
+- **S7:** the marker is the existing `conflict_id`. Search already requires `read`, the same as `mak4i_get_conflict`, so every caller who sees the marker may open the conflict.
 
 ## 7. O5: Reference implementation options (comparison, no code)
 
@@ -274,8 +290,8 @@ Revised effort for P1 with O1–O6 as directed: about 6.5–7.5 working days, in
 - The supersede side needs no tool-schema change: §10.5a already makes successor IDs opaque. A client that *predicted* successor names (`x-v3`) was already non-conforming and now visibly breaks.
 - Breaking changes for clients, all in one protocol release and listed in the upgrade notes:
   - create without `artifact_id` (O1);
-  - occupied subjects are refused (O3/O5);
-  - search defaults, depending on S6.
+  - occupied subjects are refused (O3/O5).
+- Search changes are additive: v0.3 type/tag-only searches return what they return today (S6).
 - Legacy data needs no migration. Mixed lineages are normal and permanent. Existing open conflicts are untouched and are resolved as today.
 - Reference runtime changes are out of scope for this PR. Server-generated IDs ship in the Reference together with P1 search-before-create and duplicate handling (talvikai/mak4i-reference#66).
 
