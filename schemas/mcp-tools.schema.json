@@ -249,7 +249,7 @@
             },
             "subject_key": {
               "$ref": "common.schema.json#/$defs/subjectKey",
-              "description": "Lookup: exact match on the normalized subject key."
+              "description": "Lookup: exact match on the normalized subject key (MAK-0005 \u00a7A5.2), so letter case is ignored."
             },
             "limit": {
               "type": "integer",

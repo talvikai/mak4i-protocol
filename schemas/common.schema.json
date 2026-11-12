@@ -66,7 +66,7 @@
       "minLength": 1,
       "maxLength": 512,
       "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
-      "description": "Normalized subject key (MAK-0005 \u00a7A5.2): no leading/trailing whitespace."
+      "description": "Subject key (MAK-0005 \u00a7A5.2): no leading/trailing whitespace. Normalization is NFC, Unicode lowercase, NFC, trim; versions persisted since protocol v0.4 store the normalized form, earlier versions keep their key as stored and are compared in normalized form."
     },
     "conflictId": {
       "type": "string",

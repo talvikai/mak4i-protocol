@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "operation_pending",
+    "message": "The create is committed but not yet complete; retry later with the same idempotency_key.",
+    "retryable": true,
+    "reason": "recovery_blocked",
+    "correlation_id": "evt_7c1e0b42"
+  }
+}
