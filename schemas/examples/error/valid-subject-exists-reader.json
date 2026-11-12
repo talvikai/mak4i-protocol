@@ -1,0 +1,13 @@
+{
+  "error": {
+    "code": "subject_exists",
+    "message": "A current record already holds subject primary-cache. Supersede it, or request a competing record.",
+    "retryable": false,
+    "details": {
+      "current_artifact_ids": [
+        "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61"
+      ],
+      "hidden_count": 0
+    }
+  }
+}

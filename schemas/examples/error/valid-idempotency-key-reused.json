@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "idempotency_key_reused",
+    "message": "This idempotency_key was already used for a different create. Nothing was written.",
+    "retryable": false
+  }
+}

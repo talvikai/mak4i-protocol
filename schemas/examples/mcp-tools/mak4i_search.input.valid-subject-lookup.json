@@ -1,0 +1,6 @@
+{
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "subject_key": "primary-cache",
+  "detail": "full"
+}

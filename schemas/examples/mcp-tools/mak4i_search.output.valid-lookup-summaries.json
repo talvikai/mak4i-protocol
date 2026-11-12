@@ -1,0 +1,34 @@
+{
+  "result": [
+    {
+      "artifact_id": "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61",
+      "lineage_id": "art_6c2d1e9a-4f3b-4a8e-b1c7-2d9e0f4a5b61",
+      "artifact_type": "caching_decision",
+      "title": "Cache for dev",
+      "subject_key": "primary-cache",
+      "tags": [
+        "cache"
+      ],
+      "status": "active",
+      "version": "1.0",
+      "updated_at": "2026-11-12T09:30:00Z",
+      "snippet": "Use cache YELLOW in dev",
+      "conflict_id": "cfl_0123456789abcdef0123456789abcdef"
+    },
+    {
+      "artifact_id": "cache-red",
+      "lineage_id": "cache-red",
+      "artifact_type": "caching_decision",
+      "title": "Cache",
+      "subject_key": "primary-cache",
+      "tags": [
+        "cache"
+      ],
+      "status": "active",
+      "version": "1.0",
+      "updated_at": "2026-10-10T12:00:00Z",
+      "snippet": "Use cache RED",
+      "conflict_id": "cfl_0123456789abcdef0123456789abcdef"
+    }
+  ]
+}

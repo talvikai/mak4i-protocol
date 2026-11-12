@@ -8,6 +8,107 @@ implementation's release version.
 
 Nothing yet.
 
+## v0.4 (Draft) — proposed in #18, not yet merged or tagged
+
+P1: server-assigned record identifiers and search-before-create
+(issue #15, talvikai/mak4i-reference#66). Owner decisions of 2026-11-05
+(identifier policy), 2026-11-10 (O1–O6) and 2026-11-11 (S1–S8). Every
+schema's `x-mak4i-schema-version` is `0.4.0`, and `protocolInfo.version`
+examples report `0.4`. The background and decision record is
+[docs/P1_ARTIFACT_ID_DRAFT.md](docs/P1_ARTIFACT_ID_DRAFT.md).
+
+### Record identifiers (MAK-0005 §A8)
+- The server assigns every persisted version an opaque `art_<uuid>`
+  identifier: on create, on supersession, and for merge and
+  separate-subjects versions. Identifiers carry no title, subject, date
+  or version.
+- A new lineage's `lineage_id` is its first `art_` identifier.
+- A multi-step write fixes the successor identifier before its first
+  durable step; retries and recovery reuse it.
+- Servers resolve references by exact match only; they never strip or
+  increment identifiers.
+- `created_at` / `updated_at` are unchanged. No date field is added.
+
+### Duplicate handling (MAK-0005 §A5.6–§A5.7, §A8.8; MAK-0004 §A3.6, §A8.5)
+- An ordinary create on an occupied subject fails with the new code
+  `subject_exists`. A caller with `read` gets the current identifiers in
+  the new error `details`; a write-only caller learns only that the
+  subject is occupied.
+- `allow_competing: true` creates a competing record and forms a
+  conflict, as every create did before. It requires `write` and `read`
+  and grants no `resolve`.
+- The occupancy check and the create are atomic: of concurrent ordinary
+  creates on one subject, exactly one succeeds. A create racing with a
+  resolution that assigns the same key is also a single claim (one wins).
+  A create racing with a release of the key follows the order: release
+  first, both succeed; create first, the create fails `subject_exists`
+  and the release leaves the key free.
+- An optional create `idempotency_key`, scoped to the principal and kept
+  for 7 days, makes retries safe. A replay returns the original record,
+  unmarked. The same key with different parameters fails with the new
+  code `idempotency_key_reused`. Tags are compared as a set.
+
+### Documentation aligned with enforcement
+- MAK-0006 §8.6 lists `subject_exists` and `idempotency_key_reused`
+  among refused-write causes, replacing the reserved `artifact_exists`.
+- README, SPEC.md (reuse discipline) and ROADMAP F-13 say what the
+  server now enforces: duplicate keyed subjects are refused; creates
+  without a `subject_key` are not checked.
+- The DEVELOPER_GUIDE SDK example still passes `artifact_id` to create;
+  it changes with the Reference SDK work.
+
+### Search lookup (MAK-0008 §10.5b)
+- `mak4i_search` gains `text`, `subject_key`, `limit` and `detail`.
+- A lookup (text or subject key) returns summaries, ranked with an exact
+  subject match first and a stable tie-breaker, at most 20 by default.
+  Conflict candidates carry `conflict_id`.
+
+### Compatibility and upgrade notes
+- **Breaking: `mak4i_create` no longer accepts `artifact_id`.** A v0.3
+  client that sends one receives `validation_error` with reason
+  `server_assigned_id`, and nothing is written. Affected:
+  - CLIs and SDKs whose create command or method takes an identifier;
+  - stored scripts and prompts that pass one;
+  - clients that predicted successor names (for example `x-v3`). This
+    was already non-conforming under MAK-0008 §10.5a.
+
+  Clients that build arguments from the live MCP tool schema adapt
+  without change.
+- **Breaking: duplicate subjects are refused.** An ordinary create that
+  formed a conflict in v0.3 fails with `subject_exists` in v0.4. To keep
+  the old behavior, a client must request a competing record and hold
+  `read`.
+- **New error codes** `subject_exists` and `idempotency_key_reused`.
+  Older clients handle them through `retryable` (MAK-0008 §9.5).
+  `artifact_exists` is reserved and no longer produced.
+- **Additive:** create `idempotency_key` and `allow_competing`; the
+  search lookup inputs; `common.schema.json` `assignedArtifactId` and
+  `idempotencyKey`; the `project-record.schema.json` summary; error
+  `reason` `server_assigned_id` and `details`.
+- **Unchanged:**
+  - every stored identifier, lineage and history link; no migration;
+  - legacy identifiers stay valid in every reference (`artifactId` is
+    not narrowed);
+  - continuing lineages mix legacy and `art_` identifiers;
+  - existing open conflicts;
+  - type/tag-only searches, which return exactly the v0.3 result.
+- **Switch-over:** there is no per-request version negotiation, so the
+  behavior changes when a server is upgraded. Operators publish these
+  notes to client owners before upgrading.
+
+### Conformance
+- P1 amended. P16 replaced: create rejects `artifact_id`.
+- New criteria:
+  - P17–P22 identifiers and occupancy;
+  - P23–P26 independent creates racing versus retries of one request;
+  - C28 create vs. key assignment (one claim wins) and C29 create vs.
+    release (outcome follows the order);
+  - C30 resolution identifiers;
+  - M40 search lookup;
+  - K13 client handling of `subject_exists`.
+- C3, C4, C12 and K10 adjusted. Profiles: Server: Project Records adds
+  M40; Client/SDK becomes K1–K13.
+
 ## v0.3 (Draft) — prepared, not yet tagged
 
 Everything merged since v0.2: the v2 alignment (#7, #9), the change feed

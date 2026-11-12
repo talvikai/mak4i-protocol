@@ -1,0 +1,54 @@
+{
+  "resolution_id": "res_2",
+  "conflict_id": "cfl_fad03ef607726c7b27dbbf36be8af997",
+  "organization_id": "org_1",
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "subject_key": "primary-cache",
+  "generation": 0,
+  "action": "merge",
+  "parameters": {
+    "into_artifact_id": "cache-red",
+    "content": "RED in prod, YELLOW in dev",
+    "title": "Cache"
+  },
+  "reason": "RED approved",
+  "candidate_artifact_ids": [
+    "art_c41e7b90-5a3f-4d28-8e16-9b2d0f4a7c35",
+    "cache-red"
+  ],
+  "actor": {
+    "principal_id": "prn_alice",
+    "principal_type": "human",
+    "agent_id": null,
+    "display_name": "Alice",
+    "auth_method": "oauth",
+    "credential_id": null,
+    "oauth_client_id": "https://claude.ai/oauth/claude-code-client-metadata",
+    "client": null,
+    "recorded_at": "2026-10-10T12:00:00Z"
+  },
+  "permission": "resolve",
+  "effects": [
+    {
+      "artifact_id": "cache-red",
+      "effect": "superseded",
+      "successor_artifact_id": "art_e07f3a12-9c84-4b51-a6d2-3d8c5b1e9f70"
+    },
+    {
+      "artifact_id": "art_c41e7b90-5a3f-4d28-8e16-9b2d0f4a7c35",
+      "effect": "withdrawn",
+      "successor_artifact_id": null
+    }
+  ],
+  "resulting_heads": [
+    {
+      "subject_key": "primary-cache",
+      "artifact_id": "art_e07f3a12-9c84-4b51-a6d2-3d8c5b1e9f70"
+    }
+  ],
+  "state": "completed",
+  "idempotency_key": "merge-cache-0002",
+  "created_at": "2026-10-10T12:00:00Z",
+  "completed_at": "2026-10-10T12:00:01Z"
+}

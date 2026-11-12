@@ -1,0 +1,11 @@
+{
+  "project": "prj_1",
+  "artifact_type": "caching_decision",
+  "title": "Cache",
+  "content": "Use RED",
+  "subject_key": "primary-cache",
+  "tags": [
+    "cache"
+  ],
+  "idempotency_key": "create-cache-0001"
+}
