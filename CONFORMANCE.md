@@ -33,7 +33,7 @@ described as "MAK4I Certified".
 | **Transport: HTTP + OAuth** (`transport-http-oauth`) | Servers offering the OAuth service | All M criteria not listed elsewhere, including M16 (two real clients) |
 | **OAuth option: CIMD** (`oauth-cimd`) / **DCR** (`oauth-dcr`) | Servers enabling these registration modes | M12, M32 for the enabled mode |
 | **Server: Change feed** (`server-change-feed`), optional | Servers offering the change feed and MCP resources (MAK-0008 §14) | F1–F14, plus the server profile |
-| **Client/SDK** (`client-sdk`) | Clients and SDKs | K1–K13 |
+| **Client/SDK** (`client-sdk`) | Clients and SDKs | K1–K14 |
 | **Artifact** (`artifact`) | MAK-0001 packaging metadata documents | A1–A4 |
 
 Architecture-defined standards and Drafts (In Progress) (below) belong to no profile.
@@ -69,11 +69,16 @@ suite) can map evidence to them one-to-one.
 - [ ] P19 A superseded identifier, legacy or server-assigned, used as `old_id` fails `artifact_not_active`. A transformed identifier (suffix stripped or incremented) is treated as unknown, never mapped to a head (§A8.6).
 - [ ] P20 A crash or retry of a multi-step supersession or resolution completes with the successor identifier fixed before the first durable step; no lineage gains two successors. Refused writes, `select_winner` and reservations assign no identifier (§A8.4).
 - [ ] P21 An ordinary create on an occupied subject fails `subject_exists` and writes nothing. A caller with `read` gets `details.current_artifact_ids` and `details.hidden_count`; a write-only caller gets no `details`. Creates without a subject key, and on a subject whose lineage released the key or was withdrawn, are not refused (§A5.6).
-- [ ] P22 A create with `allow_competing: true` by a caller with `write` and `read` succeeds on an occupied subject and forms or extends a conflict; the caller gains no `resolve`. Without `read` it fails `access_denied`, writes nothing and discloses nothing about the current heads (§A5.7).
+- [ ] P22 A create with `allow_competing: true` by a caller with `write` and `read` succeeds on an occupied subject and forms or extends a conflict; the caller gains no `resolve`. Without `read` it fails `access_denied`, writes nothing and discloses nothing about the current heads, on a free subject as well as an occupied one (§A5.7).
 - [ ] P23 **Independent creates racing.** N ≥ 2 concurrent ordinary creates on one free subject, each from a different principal, or from one principal without a key or with different keys: exactly one version is persisted, the other N−1 fail `subject_exists`, and no conflict forms. Tested on every store and deployment shape the implementation claims, including several server instances where supported (§A5.6, MAK-0004 §A8.5).
 - [ ] P24 **Retries of one request.** N ≥ 2 creates with the same principal, `idempotency_key` and identical parameters, sent concurrently or one after another within 7 days: exactly one version is persisted and every call returns it with the same `artifact_id`. None fails `subject_exists`, and the result carries no replay marker (§A8.8).
 - [ ] P25 **Race or retry: boundary cases.** (a) The same `idempotency_key` from two different principals is two independent creates (P23 outcome). (b) The same principal and key with different parameters persist at most one version; the other request fails `idempotency_key_reused`. (c) A create repeated *without* a key after a lost response is an independent create and fails `subject_exists` (with the identifier for a reader). (d) The same request with its tags in a different order is a replay (§A8.8).
 - [ ] P26 A replay returns the original version as currently stored, also after it was superseded, and writes nothing. A create with a key bound more than 7 days earlier is a new request and goes through the occupancy check. A replay never returns a version created before the upgrade (§A8.8).
+- [ ] P27 **Subject-key case.** Keys that differ only in letter case name one subject: a create with `Release-Plan` on a subject occupied by `release-plan` fails `subject_exists`. A new version stores the lowercased key; a version stored before v0.4 with uppercase letters is never rewritten and is compared, occupied and looked up in lowercase form. Lowercasing is not case folding ("ß" stays "ß"). Titles, content and tags keep their case (§A5.2).
+- [ ] P28 **Interrupted supersession.** A supersession interrupted after its commit point is completed (by retry or recovery) with the successor identifier fixed in its intent; while pending, the lineage occupies its subject, is not reported `zero_active`, and another supersession or release of the same head fails `stale_head` without overwriting. One interrupted before the commit point leaves the lineage unchanged. A timer never frees the subject (§A4.5, §A5.6, §A7).
+- [ ] P29 **Uncertain storage outcome.** When a storage write of a supersession reports a failure after it may have taken effect, the implementation decides from the persisted operation identity: its own write → success with no second write; another operation's write → `stale_head`; unverifiable → `operation_pending` (`outcome_unverified`). Matching actor or content alone is never treated as proof (§A4.5).
+- [ ] P30 **Committed but incomplete.** A committed create or supersession that cannot complete within the request fails `operation_pending` (`recovery_blocked`), never `internal_error`, and later completes with the same identifier; a create retried with the same `idempotency_key` returns that identifier. While the original is pending, the same key with different parameters fails `idempotency_key_reused` at once (§A8.4, §A8.8).
+- [ ] P31 **Retry comparison.** With the same principal and `idempotency_key`, omitted, `null` and `""` rationale are the same request, and omitted, `null` and `[]` tags are the same request; a non-empty rationale where the original had none fails `idempotency_key_reused`. The stored values are unchanged (§A8.8).
 
 
 ### MAK-0004 Part A: subject conflicts
@@ -105,9 +110,11 @@ suite) can map evidence to them one-to-one.
 - [ ] C25 Unknown conflict id → `not_found`; a conflict already resolved → `conflict_not_open` (§A8.1).
 - [ ] C26 The same idempotency key with *different* parameters is rejected, never treated as a retry (§A8.4).
 - [ ] C27 Resolution start, completion, abort and rejection are audited with actor and correlation id (§A9).
-- [ ] C28 **Create vs. key assignment.** A create racing with a separate_subjects resolution that assigns the same free key: exactly one claim wins, in either order. Create first → the resolution fails `subject_collision`; resolution first → the create fails `subject_exists`. The losing write persists nothing and the subject has one head (§A8.5).
+- [ ] C28 **Create vs. key assignment.** A create racing with a separate_subjects resolution that assigns the same free key: exactly one claim wins, in either order. Create first → the resolution fails `subject_collision`; resolution first → the create fails `subject_exists`. The losing write persists nothing (no version, head change or live reservation) and the subject has one head; a losing resolution leaves only an `aborted` record with no effects (§A8.5).
 - [ ] C29 **Create vs. release.** A create racing with a supersession that releases the occupied key (MAK-0005 §A5.4): the outcome follows the order, and the test covers both. Release first → both writes succeed and the created version is the one head. Create first → the create fails `subject_exists` and persists nothing, the release succeeds, and the key is left free. No order leaves two heads (§A8.5).
 - [ ] C30 Merge and separate_subjects versions get server-assigned identifiers fixed in the pending resolution record and reported as `successor_artifact_id` and in `resulting_heads`; `select_winner` writes no version (§A7.3–§A7.5, §A8.2).
+- [ ] C31 **Create vs. pending key assignment.** A create naming a key that a pending separate_subjects resolution is assigning writes nothing and never discloses the planned successor identifier. After the implementation drives the resolution: completed → `subject_exists` (identifiers only to a reader); aborted → the create is evaluated as on a free key; still pending → `operation_pending` (`reservation_pending`) (§A8.5, MAK-0005 §A5.6).
+- [ ] C32 A resolution whose recovery cannot complete stays `pending`, is visible to operators, and requests that meet it fail `operation_pending` (`recovery_blocked`); no timer aborts it after reservation (§A8.2).
 
 
 ### MAK-0006: identity and access control
@@ -227,6 +234,7 @@ suite) can map evidence to them one-to-one.
 - [ ] K11 Reports the server's protocol version and warns on mismatch (§13.8).
 - [ ] K12 Every tool call's arguments validate against `mcp-tools.schema.json`, and every valid output example in `schemas/examples/mcp-tools/` parses into the client's models (§10.1).
 - [ ] K13 On `subject_exists` the client supersedes the returned head or asks its user, and sets `allow_competing` only on an explicit request; it does not treat a search summary carrying `conflict_id` as settled (§13.9, §10.5b).
+- [ ] K14 `operation_pending` is never handled as "nothing written": a create is retried only with the same `idempotency_key` and parameters, or the client re-reads first; no keyless create is sent for the same intent (§13.6).
 
 ### MAK-0001: artifact packaging metadata (Artifact profile)
 

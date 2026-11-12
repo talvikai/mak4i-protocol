@@ -109,6 +109,58 @@ examples report `0.4`. The background and decision record is
 - C3, C4, C12 and K10 adjusted. Profiles: Server: Project Records adds
   M40; Client/SDK becomes K1–K13.
 
+### Clarifications before the tag (owner decisions of 2026-11-12)
+Found while planning the Reference implementation (owner answers Q1–Q13
+and D1–D7, recorded in the P1 Reference implementation plan). They land
+in v0.4 itself because v0.4 is not tagged yet.
+- **Subject keys are lowercased** (MAK-0005 §A5.2, MAK-0004 §A2, §A4.1).
+  - Normalization is NFC, Unicode default lowercase, NFC, trim. This is
+    lowercasing, not case folding.
+  - Versions persisted from v0.4 store the normalized key. Earlier
+    stored keys are never rewritten and are compared in normalized
+    form, so case-only duplicates become one subject (a conflict, never
+    merged automatically).
+  - `conflict_id` uses the normalized key. A conflict on a key with
+    uppercase letters gets a new identifier.
+  - Length is counted in Unicode code points.
+- **Interrupted supersession** (MAK-0005 §A4.5, §A5.6, §A7).
+  - A multi-step supersession records an intent, the commit point,
+    before marking the old head. After that point it is completed with
+    the fixed successor identifier, never cancelled.
+  - While pending, the lineage keeps its head, occupies its subject and
+    is not `zero_active`. Other writes to that head fail `stale_head`.
+  - An uncertain storage outcome is settled from the persisted operation
+    identity, not from matching actor or content.
+- **New retryable code `operation_pending`** (MAK-0008 §9), with reasons
+  `reservation_pending`, `recovery_blocked` and `outcome_unverified`.
+  It means "not settled yet", not "nothing written".
+  - `internal_error` now covers only failures that committed nothing.
+  - A committed create or supersession that cannot complete returns
+    `operation_pending` (MAK-0005 §A8.4).
+  - A resolution whose recovery is blocked stays pending and is shown to
+    operators (MAK-0004 §A8.2).
+  - Clients retry with the same `idempotency_key`, or re-read first
+    (MAK-0008 §13.6).
+- **Reserved keys** (MAK-0005 §A5.6, MAK-0004 §A8.5).
+  - A create naming a key that a pending resolution is assigning never
+    sees the planned identifier.
+  - After a bounded wait the create gets `subject_exists`, proceeds, or
+    gets `operation_pending` (`reservation_pending`).
+  - "Persists nothing" means no version, head change or live
+    reservation. An aborted resolution record stays as audit evidence.
+- **Create retries** (MAK-0005 §A8.8).
+  - A key is bound from the commit point, also while pending.
+  - The retry comparison treats omitted, `null` and `""` rationale as
+    equal, and omitted, `null` and `[]` tags as equal.
+- **Competing records:** `allow_competing` needs `read` on a free subject
+  too (MAK-0005 §A5.7).
+- **Search lookup:** `subject_key` matching ignores case. Rank 1 compares
+  `text` under the text rules. The snippet limit is 200 code points
+  (MAK-0008 §10.5b).
+- **Conformance:**
+  - P22 and C28 amended.
+  - New criteria P27–P31, C31, C32 and K14; Client/SDK becomes K1–K14.
+
 ## v0.3 (Draft) — prepared, not yet tagged
 
 Everything merged since v0.2: the v2 alignment (#7, #9), the change feed
