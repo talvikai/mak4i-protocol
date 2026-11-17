@@ -288,6 +288,13 @@ Revised effort for P1 with O1–O6 as directed: about 6.5–7.5 working days, in
 
 **Owner review 2026-11-11 (commit 6ca6b9b):** the real-GCS concurrency test is a **release gate** for the Reference implementation. It must show (a) independent creates for one subject persist exactly one record (P23) and (b) every valid retry of one request returns that same persisted record (P24). The 6.5–7.5 days above is an estimate; readiness is decided by the GCS result, not the estimate. The same review corrected the create-vs-release race rule (MAK-0004 §A8.5, C28/C29; cases 26 and 26b above).
 
+**Owner decision 2026-11-12 (Q1 of the Reference implementation plan): roll forward, no takeover.** Option A stays, but the claim is never taken over from a crashed or slow writer. A slow writer cannot be told apart from a crashed one, so a takeover could leave two current records. Instead:
+- The pending claim holds the complete intended record, with its fixed identifier.
+- Whoever meets the claim completes that exact write with the same identifier.
+- Once the claim is written, the create is committed. If it cannot complete within the request, the server reports `operation_pending`, not an error that implies nothing was written.
+
+Plain supersessions follow the same rule through a supersession intent (MAK-0005 §A4.5). The clarifications that went into v0.4 before the tag are listed in [CHANGELOG.md](../CHANGELOG.md).
+
 ## 8. Compatibility and rollout notes
 
 - The supersede side needs no tool-schema change: §10.5a already makes successor IDs opaque. A client that *predicted* successor names (`x-v3`) was already non-conforming and now visibly breaks.

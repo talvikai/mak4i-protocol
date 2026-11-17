@@ -36,6 +36,7 @@
             "conflict_not_open",
             "subject_collision",
             "cursor_expired",
+            "operation_pending",
             "rate_limited",
             "internal_error"
           ]
@@ -54,7 +55,10 @@
           "pattern": "^[a-z_]+$",
           "examples": [
             "client_not_permitted",
-            "server_assigned_id"
+            "server_assigned_id",
+            "reservation_pending",
+            "recovery_blocked",
+            "outcome_unverified"
           ],
           "description": "More specific cause within `code` (MAK-0008 \u00a79.2). Clients ignore unknown reasons."
         },
